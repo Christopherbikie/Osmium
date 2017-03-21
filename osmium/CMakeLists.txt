@@ -6,13 +6,22 @@ set(CMAKE_CXX_STANDARD 14)
 include_directories(
     ../deps/glad/include
     ../deps/glfw/include
+    ../deps/imgui
+    imgui
 )
 
-file(GLOB DEPS_SOURCES ../deps/glad/src/glad.c)
+file(GLOB DEPS_SOURCES
+        ../deps/glad/src/glad.c
+        ../deps/imgui/*.h
+        ../deps/imgui/*.cpp
+)
 
 set(SOURCE_FILES
-    osmium.cpp
-    osmium.h
+        osmium.cpp
+        osmium.h
+        graphics/Window.h
+        graphics/Window.cpp
+        imgui/imgui_impl_glfw_gl3.cpp
 )
 
 add_library(${PROJECT_NAME} ${SOURCE_FILES} ${DEPS_SOURCES})

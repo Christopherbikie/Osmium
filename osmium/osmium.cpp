@@ -1,4 +1,6 @@
 #include "osmium.h"
+#include "imgui.h"
+#include "imgui/imgui_impl_glfw_gl3.h"
 
 #include <iostream>
 #include <glad/glad.h>
@@ -44,6 +46,8 @@ namespace os
 			return false;
 		}
 
+        ImGui_ImplGlfwGL3_Init(window, true);
+
 		return true;
 	}
 
@@ -56,9 +60,16 @@ namespace os
 
 			glfwPollEvents();
 
+            ImGui_ImplGlfwGL3_NewFrame();
+
+            ImGui::ShowTestWindow();
+
+            ImGui::Render();
+
 			glfwSwapBuffers(window);
 		}
 
+        ImGui_ImplGlfwGL3_Shutdown();
 		glfwDestroyWindow(window);
 		glfwTerminate();
 	}

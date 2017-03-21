@@ -3,7 +3,7 @@ project(sandbox)
 
 set(CMAKE_CXX_STANDARD 14)
 
-include_directories(GLOB ../osmium)
+include_directories(GLOB ../osmium ../osmium/*)
 
 set(SOURCE_FILES
     main.cpp
