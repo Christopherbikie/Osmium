@@ -1,8 +1,15 @@
-#include "osmium.h"
+#include <cstdlib>
+#include "app/AppManager.h"
+#include "TestApp.h"
+
+using namespace os;
 
 int main()
 {
-	os::init();
-	os::run();
-	return 0;
+	if(!AppManager::init<TestApp>())
+		return EXIT_FAILURE;
+	AppManager::instance()->run();
+	AppManager::deinit();
+
+	return EXIT_SUCCESS;
 }

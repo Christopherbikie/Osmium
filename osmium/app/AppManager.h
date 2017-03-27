@@ -1,0 +1,38 @@
+#pragma once
+
+#include "App.h"
+
+namespace os
+{
+	class AppManager
+	{
+	public:
+		template <typename T>
+		static bool init();
+		static void deinit();
+
+		static App* instance();
+
+	private:
+		static App *appSingleton;
+
+		AppManager();
+		AppManager(AppManager const&);
+		App& operator=(AppManager const&);
+	};
+
+	template <typename T>
+	bool AppManager::init()
+	{
+		if (!appSingleton)
+		{
+			appSingleton = new T;
+			if (!appSingleton->initGL())
+			{
+				delete appSingleton;
+				return false;
+			}
+		}
+		return true;
+	}
+}

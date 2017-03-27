@@ -4,10 +4,11 @@ project(osmium)
 set(CMAKE_CXX_STANDARD 14)
 
 include_directories(
-    ../deps/glad/include
-    ../deps/glfw/include
-    ../deps/imgui
-    imgui
+        ../deps/glad/include
+        ../deps/glfw/include
+        ../deps/glm
+        ../deps/imgui
+        imgui
 )
 
 file(GLOB DEPS_SOURCES
@@ -17,12 +18,9 @@ file(GLOB DEPS_SOURCES
 )
 
 set(SOURCE_FILES
-        osmium.cpp
-        osmium.h
-        graphics/Window.h
-        graphics/Window.cpp
         imgui/imgui_impl_glfw_gl3.cpp
-)
+        app/AppManager.cpp
+        app/App.cpp)
 
 add_library(${PROJECT_NAME} ${SOURCE_FILES} ${DEPS_SOURCES})
 target_link_libraries(${PROJECT_NAME} glfw ${GLFW_LIBRARIES})

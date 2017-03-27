@@ -3,11 +3,15 @@ project(sandbox)
 
 set(CMAKE_CXX_STANDARD 14)
 
-include_directories(GLOB ../osmium ../osmium/*)
+include_directories(GLOB
+        ../osmium
+        ../osmium/*
+        ../deps/imgui
+        ../deps/glad/include)
 
 set(SOURCE_FILES
-    main.cpp
-)
+        main.cpp
+        TestApp.cpp)
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 target_link_libraries(${PROJECT_NAME} osmium)
