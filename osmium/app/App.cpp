@@ -1,17 +1,15 @@
-#include "App.h"
-#include <iostream>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <imgui.h>
-#include <imgui_impl_glfw_gl3.h>
-
+#include "imgui_impl_glfw_gl3.h"
+#include "App.h"
+#include <iostream>
 namespace os
 {
-	App::App()
-			: mWindow(nullptr), mInitialised(false)
+	App::App() : mWindow(nullptr), mInitialised(false)
 	{
 	}
-
+		
 	App::~App()
 	{
 		ImGui_ImplGlfwGL3_Shutdown();
