@@ -1,4 +1,5 @@
 #include "AppManager.h"
+#include "Settings.h"
 
 namespace os
 {
@@ -16,5 +17,11 @@ namespace os
 
 	AppManager::AppManager()
 	{
+	}
+
+	void AppManager::framebufferSizeCallback(GLFWwindow *window, int width, int height)
+	{
+		if (window == appSingleton->getWindow())
+			settings::setViewport(glm::vec2(width, height));
 	}
 }

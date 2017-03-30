@@ -19,6 +19,8 @@ namespace os
 	protected:
 		GLFWwindow *mWindow;
 
+		void newFrame();
+
 	private:
 		bool mInitialised;
 	};

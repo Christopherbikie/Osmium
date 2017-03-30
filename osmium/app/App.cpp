@@ -3,7 +3,10 @@
 #include <imgui.h>
 #include "imgui_impl_glfw_gl3.h"
 #include "App.h"
+#include "AppManager.h"
+#include "Settings.h"
 #include <iostream>
+
 namespace os
 {
 	App::App() : mWindow(nullptr), mInitialised(false)
@@ -52,6 +55,8 @@ namespace os
 			return false;
 		}
 
+		glfwSetFramebufferSizeCallback(mWindow, AppManager::framebufferSizeCallback);
+
 		ImGui_ImplGlfwGL3_Init(mWindow, true);
 
 		if (!init())
@@ -72,5 +77,18 @@ namespace os
 	GLFWwindow *App::getWindow()
 	{
 		return mWindow;
+	}
+
+	void App::newFrame()
+	{
+		glfwSetWindowTitle(mWindow, settings::getWindowTitle().c_str());
+
+		glm::vec3 clearColour = settings::getClearColour();
+		glClearColor(clearColour.r, clearColour.g, clearColour.b, 1.0f);
+		glClear(settings::getClearBits());
+
+		glfwPollEvents();
+
+		ImGui_ImplGlfwGL3_NewFrame();
 	}
 }

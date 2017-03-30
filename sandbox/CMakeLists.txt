@@ -7,7 +7,8 @@ include_directories(GLOB
         ../osmium
         ../osmium/*
         ../deps/imgui
-        ../deps/glad/include)
+        ../deps/glad/include
+        ../deps/glm)
 
 set(SOURCE_FILES
         main.cpp

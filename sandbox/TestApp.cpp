@@ -1,21 +1,34 @@
 #include "TestApp.h"
+#include <string>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <imgui.h>
 #include <imgui/imgui_impl_glfw_gl3.h>
+#include <glm/vec2.hpp>
+#include "app/Settings.h"
+
+using namespace os;
 
 void TestApp::run()
 {
 	while (!glfwWindowShouldClose(mWindow))
 	{
-		glClearColor(0.3f, 0.1f, 0.5f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		newFrame();
 
-		glfwPollEvents();
+		ImGui::Text("Hello, world!");
+		glm::vec2 viewport = settings::getViewport();
+		ImGui::Text(("Viewport: x: " + std::to_string(viewport.x) + " y: " + std::to_string(viewport.y)).c_str());
 
-		ImGui_ImplGlfwGL3_NewFrame();
+		static char buf[64] = "";
+		ImGui::InputText("Window Title", buf, 64);
+		if (ImGui::Button("Set"))
+			settings::setWindowTitle(buf);
 
-		ImGui::ShowTestWindow();
+		glm::vec3 clearColor = settings::getClearColour();
+		ImGui::ColorEdit3("Clear color", (float*)&clearColor);
+		settings::setClearColour(clearColor);
+
+		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 
 		ImGui::Render();
 

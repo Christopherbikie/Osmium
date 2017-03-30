@@ -1,5 +1,6 @@
 #pragma once
 
+//#include <GLFW/glfw3.h>
 #include "App.h"
 
 namespace os
@@ -12,6 +13,8 @@ namespace os
 		static void deinit();
 
 		static App* instance();
+
+		static void framebufferSizeCallback(GLFWwindow* window, int width, int height);
 
 	private:
 		static App *appSingleton;
