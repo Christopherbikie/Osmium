@@ -21,7 +21,10 @@ set(SOURCE_FILES
         imgui/imgui_impl_glfw_gl3.cpp
         app/AppManager.cpp
         app/App.cpp
-        app/Settings.cpp)
+        app/Settings.cpp
+		render/entity/Entity.cpp
+		render/entity/components/BaseComponent.cpp
+		)
 
 add_library(${PROJECT_NAME} ${SOURCE_FILES} ${DEPS_SOURCES})
 target_link_libraries(${PROJECT_NAME} glfw ${GLFW_LIBRARIES})
