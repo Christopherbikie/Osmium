@@ -16,6 +16,14 @@ namespace os {
 		return this->components.at(componentIdentifier);
 	}
 
+	void Entity::remove() {
+		this->markedForDelete = true;
+	}
+
+	bool Entity::shouldDelete() {
+		return this->markedForDelete;
+	}
+
 	Entity::Entity()
 	{
 
