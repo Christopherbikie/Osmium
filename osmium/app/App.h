@@ -18,6 +18,7 @@ namespace os
 		GLFWwindow* getWindow();
 
 		void setWindowSize(glm::vec2 dimensions);
+		virtual void windowResizeCallback(glm::vec2 dimensions);
 
 	protected:
 		GLFWwindow *mWindow;

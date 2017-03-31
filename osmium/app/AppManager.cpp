@@ -24,7 +24,9 @@ namespace os
 		if (window == appSingleton->getWindow())
 		{
 			glViewport(0, 0, width, height);
-			settings::setViewport(glm::vec2(width, height));
+			glm::vec2 dimensions = glm::vec2(width, height);
+			settings::setViewport(dimensions);
+			appSingleton->windowResizeCallback(dimensions);
 		}
 	}
 }

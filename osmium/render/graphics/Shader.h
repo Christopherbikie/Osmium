@@ -51,7 +51,7 @@ namespace os
 		void loadUniform(std::string name, glm::vec2 vector) const;
 		void loadUniform(std::string name, glm::vec3 vector) const;
 		void loadUniform(std::string name, glm::vec4 vector) const;
-		void loadUniform(std::string name, glm::mat4x4 matrix) const;
+		void loadUniform(std::string name, glm::mat4 matrix) const;
 
 		void drawArrays(int32_t first, int32_t count, GLenum primitiveType = GL_TRIANGLES) const;
 		void drawElements(int32_t count, GLenum primitiveType = GL_TRIANGLES) const;

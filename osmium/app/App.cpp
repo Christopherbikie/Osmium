@@ -55,6 +55,7 @@ namespace os
 			return false;
 		}
 
+		glEnable(GL_DEPTH_TEST);
 		glfwSetFramebufferSizeCallback(mWindow, AppManager::framebufferSizeCallback);
 
 		ImGui_ImplGlfwGL3_Init(mWindow, true);
@@ -85,5 +86,9 @@ namespace os
 	{
 		if (dimensions.x > 0 && dimensions.y > 0)
 			glfwSetWindowSize(mWindow, (int) dimensions.x, (int) dimensions.y);
+	}
+
+	void App::windowResizeCallback(glm::vec2 dimensions)
+	{
 	}
 }
