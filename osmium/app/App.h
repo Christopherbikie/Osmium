@@ -11,7 +11,6 @@ namespace os
 		~App();
 
 		bool initGL();
-		virtual bool init();
 		virtual void run() = 0;
 
 		GLFWwindow* getWindow();

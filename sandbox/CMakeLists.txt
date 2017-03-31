@@ -3,6 +3,8 @@ project(sandbox)
 
 set(CMAKE_CXX_STANDARD 14)
 
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/${PROJECT_NAME}/build)
+
 include_directories(GLOB
         ../osmium
         ../osmium/*
