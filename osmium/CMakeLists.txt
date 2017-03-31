@@ -22,6 +22,8 @@ set(SOURCE_FILES
         app/AppManager.cpp
         app/App.cpp
         app/Settings.cpp
+        render/entity/Entity.cpp
+        render/entity/components/BaseComponent.cpp
         render/Shader.cpp
         util/Loader.cpp)
 
