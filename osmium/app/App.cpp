@@ -59,18 +59,7 @@ namespace os
 
 		ImGui_ImplGlfwGL3_Init(mWindow, true);
 
-		if (!init())
-		{
-			std::cerr << "ERROR: App::init() returned false\n";
-			return false;
-		}
-
 		mInitialised = true;
-		return true;
-	}
-
-	bool App::init()
-	{
 		return true;
 	}
 
