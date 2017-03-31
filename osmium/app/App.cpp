@@ -80,4 +80,10 @@ namespace os
 
 		ImGui_ImplGlfwGL3_NewFrame();
 	}
+
+	void App::setWindowSize(glm::vec2 dimensions)
+	{
+		if (dimensions.x > 0 && dimensions.y > 0)
+			glfwSetWindowSize(mWindow, (int) dimensions.x, (int) dimensions.y);
+	}
 }

@@ -4,6 +4,7 @@
 #include <glm/vec3.hpp>
 #include <string>
 #include <glad/glad.h>
+#include <cmath>
 
 namespace os
 {
@@ -11,6 +12,7 @@ namespace os
 	{
 		const glm::vec2 &getViewport();
 		void setViewport(const glm::vec2 &newViewportSize);
+		const float_t getAspectRatio();
 
 		const std::string &getWindowTitle();
 		void setWindowTitle(const std::string &newWindowTitle);

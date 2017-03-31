@@ -21,6 +21,11 @@ namespace os
 			viewportSize = newViewportSize;
 		}
 
+		const float_t getAspectRatio()
+		{
+			return viewportSize.x / viewportSize.y;
+		}
+
 		const glm::vec3 &getClearColour()
 		{
 			return clearColour;
