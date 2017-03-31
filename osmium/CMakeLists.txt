@@ -24,8 +24,10 @@ set(SOURCE_FILES
         app/Settings.cpp
         render/entity/Entity.cpp
         render/entity/components/BaseComponent.cpp
-        render/Shader.cpp
-        util/Loader.cpp)
+        render/graphics/Shader.cpp
+        render/graphics/VAO.cpp
+        util/Loader.cpp
+)
 
 add_library(${PROJECT_NAME} ${SOURCE_FILES} ${DEPS_SOURCES})
 target_link_libraries(${PROJECT_NAME} glfw ${GLFW_LIBRARIES})
