@@ -3,6 +3,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <imgui.h>
 #include <imgui/imgui_impl_glfw_gl3.h>
+#include <iostream>
 #include "app/Settings.h"
 
 using namespace os;
@@ -14,49 +15,102 @@ void TestApp::run()
 	shader->addSource(FRAGMENT_SHADER, "res/shaders/fragment.frag");
 	shader->link();
 
-	float_t vertices[] = {
-			-1.0f, -1.0f, 1.0f,
-			1.0f, -1.0f, 1.0f,
-			1.0f, 1.0f, 1.0f,
-			-1.0f, 1.0f, 1.0f,
-			-1.0f, -1.0f, -1.0f,
-			1.0f, -1.0f, -1.0f,
-			1.0f, 1.0f, -1.0f,
-			-1.0f, 1.0f, -1.0f,
+	GLfloat vertices[] = {
+			-0.5f, -0.5f, -0.5f,
+			0.5f, -0.5f, -0.5f,
+			0.5f,  0.5f, -0.5f,
+			0.5f,  0.5f, -0.5f,
+			-0.5f,  0.5f, -0.5f,
+			-0.5f, -0.5f, -0.5f,
+
+			-0.5f, -0.5f,  0.5f,
+			0.5f, -0.5f,  0.5f,
+			0.5f,  0.5f,  0.5f,
+			0.5f,  0.5f,  0.5f,
+			-0.5f,  0.5f,  0.5f,
+			-0.5f, -0.5f,  0.5f,
+
+			-0.5f,  0.5f,  0.5f,
+			-0.5f,  0.5f, -0.5f,
+			-0.5f, -0.5f, -0.5f,
+			-0.5f, -0.5f, -0.5f,
+			-0.5f, -0.5f,  0.5f,
+			-0.5f,  0.5f,  0.5f,
+
+			0.5f,  0.5f,  0.5f,
+			0.5f,  0.5f, -0.5f,
+			0.5f, -0.5f, -0.5f,
+			0.5f, -0.5f, -0.5f,
+			0.5f, -0.5f,  0.5f,
+			0.5f,  0.5f,  0.5f,
+
+			-0.5f, -0.5f, -0.5f,
+			0.5f, -0.5f, -0.5f,
+			0.5f, -0.5f,  0.5f,
+			0.5f, -0.5f,  0.5f,
+			-0.5f, -0.5f,  0.5f,
+			-0.5f, -0.5f, -0.5f,
+
+			-0.5f,  0.5f, -0.5f,
+			0.5f,  0.5f, -0.5f,
+			0.5f,  0.5f,  0.5f,
+			0.5f,  0.5f,  0.5f,
+			-0.5f,  0.5f,  0.5f,
+			-0.5f,  0.5f, -0.5f,
 	};
-	float_t colours[] = {
-			1.0f, 0.0f, 0.0f,
-			0.0f, 1.0f, 0.0f,
-			0.0f, 0.0f, 1.0f,
-			1.0f, 1.0f, 1.0f,
-			1.0f, 0.0f, 0.0f,
-			0.0f, 1.0f, 0.0f,
-			0.0f, 0.0f, 1.0f,
-			1.0f, 1.0f, 1.0f,
-	};
-	uint32_t indices[] = {
-			0, 1, 2,
-			2, 3, 0,
-			1, 5, 6,
-			6, 2, 1,
-			7, 6, 5,
-			5, 4, 7,
-			4, 0, 3,
-			3, 7, 4,
-			4, 5, 1,
-			1, 0, 4,
-			3, 2, 6,
-			6, 7, 3,
+	float_t texCoords[] = {
+			0.0f, 0.0f,
+			1.0f, 0.0f,
+			1.0f, 1.0f,
+			1.0f, 1.0f,
+			0.0f, 1.0f,
+			0.0f, 0.0f,
+
+			0.0f, 0.0f,
+			1.0f, 0.0f,
+			1.0f, 1.0f,
+			1.0f, 1.0f,
+			0.0f, 1.0f,
+			0.0f, 0.0f,
+
+			1.0f, 0.0f,
+			1.0f, 1.0f,
+			0.0f, 1.0f,
+			0.0f, 1.0f,
+			0.0f, 0.0f,
+			1.0f, 0.0f,
+
+			1.0f, 0.0f,
+			1.0f, 1.0f,
+			0.0f, 1.0f,
+			0.0f, 1.0f,
+			0.0f, 0.0f,
+			1.0f, 0.0f,
+
+			0.0f, 1.0f,
+			1.0f, 1.0f,
+			1.0f, 0.0f,
+			1.0f, 0.0f,
+			0.0f, 0.0f,
+			0.0f, 1.0f,
+
+			0.0f, 1.0f,
+			1.0f, 1.0f,
+			1.0f, 0.0f,
+			1.0f, 0.0f,
+			0.0f, 0.0f,
+			0.0f, 1.0f
 	};
 
 	vao = new VAO;
-	vao->storeInBuffer(0, 3, 8, vertices);
-	vao->storeInBuffer(1, 3, 8, colours);
-	vao->storeInElementBuffer(36, indices);
+	vao->storeInBuffer(0, 3, 36, vertices);
+	vao->storeInBuffer(1, 2, 36, texCoords);
 
-	modelMat = glm::rotate(modelMat, -55.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+	modelMat = glm::mat4();
 	viewMat = glm::translate(viewMat, glm::vec3(0.0f, 0.0f, -3.0f));
 	projectionMat = glm::perspective(glm::radians(60.0f), settings::getAspectRatio(), 0.3f, 100.0f);
+
+	texture = new Texture("res/images/default.png");
 
 	while (!glfwWindowShouldClose(mWindow))
 	{
@@ -67,14 +121,16 @@ void TestApp::run()
 
 		shader->use();
 
-		modelMat = glm::rotate(modelMat, delta / 200, glm::vec3(0.1f, 0.2f, 0.3f));
+		modelMat = glm::rotate(modelMat, delta / 200, glm::vec3(0.1f, sin(glfwGetTime()), 0.3f));
 		shader->loadUniform("model", modelMat);
 		shader->loadUniform("view", viewMat);
 		shader->loadUniform("projection", projectionMat);
 
+		texture->bind(shader, "diffuse");
 		vao->bind();
-		shader->drawElements(36);
+		shader->drawArrays(0, 36);
 		vao->unbind();
+		texture->unbind();
 
 		// GUI
 
@@ -102,6 +158,7 @@ void TestApp::run()
 
 	delete shader;
 	delete vao;
+	delete texture;
 }
 
 void TestApp::windowResizeCallback(glm::vec2 dimensions)

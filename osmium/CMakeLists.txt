@@ -8,7 +8,7 @@ include_directories(
         ../deps/glfw/include
         ../deps/glm
         ../deps/imgui
-        imgui
+        ../deps/Simple-OpenGL-Image-Library/src
 )
 
 file(GLOB DEPS_SOURCES
@@ -25,9 +25,10 @@ set(SOURCE_FILES
         render/entity/Entity.cpp
         render/entity/components/BaseComponent.cpp
         render/graphics/Shader.cpp
+        render/graphics/Texture.cpp
         render/graphics/VAO.cpp
         util/Loader.cpp
 )
 
 add_library(${PROJECT_NAME} ${SOURCE_FILES} ${DEPS_SOURCES})
-target_link_libraries(${PROJECT_NAME} glfw ${GLFW_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} glfw ${GLFW_LIBRARIES} SOIL ${SOIL_LIBRARIES})

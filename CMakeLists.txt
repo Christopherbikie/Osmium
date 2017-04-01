@@ -8,5 +8,7 @@ option(GLFW_BUILD_EXAMPLES OFF)
 option(GLFW_BUILD_TESTS OFF)
 add_subdirectory(deps/glfw)
 
+add_subdirectory(deps/Simple-OpenGL-Image-Library)
+
 add_subdirectory(osmium)
 add_subdirectory(sandbox)
