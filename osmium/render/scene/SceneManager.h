@@ -18,6 +18,7 @@ namespace os {
 		entityList &getEntities();
 		void addEntity(Entity& ent, std::string entId);
 		void removeEntity(int32_t entIdentifier);
+		void removeEntity(std::shared_ptr<Entity> ent);
 		void removeEntityId(std::string entIdentifier);
 	};
 }

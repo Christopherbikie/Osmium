@@ -20,7 +20,7 @@ namespace os {
 		this->markedForDelete = true;
 	}
 
-	bool Entity::shouldDelete() {
+	bool Entity::isMarkedForRemoval() {
 		return this->markedForDelete;
 	}
 

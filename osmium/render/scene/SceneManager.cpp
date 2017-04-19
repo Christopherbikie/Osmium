@@ -9,6 +9,11 @@ namespace os {
 		this->entities.push_back(entityContainer(entId, std::make_shared<Entity>(ent)));
 	}
 	void Scene::removeEntity(int32_t entIdentifier) {
+		std::get<1>(this->entities.at(entIdentifier))->remove();
+	}
+	void Scene::removeEntity(std::shared_ptr<Entity> ent) {
+		for (auto k : this->entities) {
 
+		}
 	}
 }
