@@ -22,6 +22,11 @@ namespace os
 	void AppManager::framebufferSizeCallback(GLFWwindow *window, int width, int height)
 	{
 		if (window == appSingleton->getWindow())
-			settings::setViewport(glm::vec2(width, height));
+		{
+			glViewport(0, 0, width, height);
+			glm::vec2 dimensions = glm::vec2(width, height);
+			settings::setViewport(dimensions);
+			appSingleton->windowResizeCallback(dimensions);
+		}
 	}
 }

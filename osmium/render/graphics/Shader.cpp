@@ -1,5 +1,5 @@
 #include "Shader.h"
-#include "../util/Loader.h"
+#include "../../util/Loader.h"
 #include <iostream>
 #include <algorithm>
 #include <glm/gtc/type_ptr.hpp>
@@ -181,6 +181,16 @@ namespace os
 	{
 		GLint uniformLocation = glGetUniformLocation(mProgram, name.c_str());
 		glUniformMatrix4fv(uniformLocation, 1, GL_FALSE, glm::value_ptr(matrix));
+	}
+
+	void Shader::drawArrays(int32_t first, int32_t count, GLenum primitiveType) const
+	{
+		glDrawArrays(primitiveType, first, count);
+	}
+
+	void Shader::drawElements(int32_t count, GLenum primitiveType) const
+	{
+		glDrawElements(primitiveType, count, GL_UNSIGNED_INT, 0);
 	}
 
 	GLuint Shader::getLocation() const

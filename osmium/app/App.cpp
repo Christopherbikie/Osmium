@@ -1,10 +1,10 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <imgui.h>
-#include "imgui_impl_glfw_gl3.h"
 #include "App.h"
 #include "AppManager.h"
 #include "Settings.h"
+#include "../imgui/imgui_impl_glfw_gl3.h"
 #include <iostream>
 
 namespace os
@@ -55,6 +55,7 @@ namespace os
 			return false;
 		}
 
+		glEnable(GL_DEPTH_TEST);
 		glfwSetFramebufferSizeCallback(mWindow, AppManager::framebufferSizeCallback);
 
 		ImGui_ImplGlfwGL3_Init(mWindow, true);
@@ -79,5 +80,15 @@ namespace os
 		glfwPollEvents();
 
 		ImGui_ImplGlfwGL3_NewFrame();
+	}
+
+	void App::setWindowSize(glm::vec2 dimensions)
+	{
+		if (dimensions.x > 0 && dimensions.y > 0)
+			glfwSetWindowSize(mWindow, (int) dimensions.x, (int) dimensions.y);
+	}
+
+	void App::windowResizeCallback(glm::vec2 dimensions)
+	{
 	}
 }
