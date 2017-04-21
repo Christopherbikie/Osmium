@@ -1,9 +1,9 @@
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
 #include <imgui.h>
-#include "App.h"
+
 #include "AppManager.h"
+#include "App.h"
 #include "Settings.h"
+
 #include "../imgui/imgui_impl_glfw_gl3.h"
 #include <iostream>
 
