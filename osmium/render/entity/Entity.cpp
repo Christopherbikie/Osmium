@@ -1,9 +1,11 @@
 #include "Entity.h"
 
-namespace os {
+namespace os
+{
 	void Entity::addComponent(std::string componentIdentifier, std::shared_ptr<BaseComponent> componentPtr)
 	{
 		this->components.insert(std::pair<std::string, std::shared_ptr<BaseComponent>>(componentIdentifier, componentPtr));
+		componentPtr->SetParent(*this);
 	}
 
 	void Entity::removeComponent(const std::string& componentIdentifier)
@@ -16,11 +18,13 @@ namespace os {
 		return this->components.at(componentIdentifier);
 	}
 
-	void Entity::remove() {
+	void Entity::remove()
+	{
 		this->markedForDelete = true;
 	}
 
-	bool Entity::isMarkedForRemoval() {
+	bool Entity::isMarkedForRemoval()
+	{
 		return this->markedForDelete;
 	}
 
