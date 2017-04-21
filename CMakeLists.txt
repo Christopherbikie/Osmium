@@ -12,3 +12,4 @@ add_subdirectory(deps/Simple-OpenGL-Image-Library)
 
 add_subdirectory(osmium)
 add_subdirectory(sandbox)
+add_subdirectory(nbody)
