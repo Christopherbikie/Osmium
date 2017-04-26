@@ -1,17 +1,19 @@
 #pragma once
 
-#include "../Entity.h"
 #include <memory>
+#include "../messages/Message.h"
 
-namespace os
-{
+namespace os {
+	class Entity;
+
 	class BaseComponent
 	{
 	private:
 		std::shared_ptr<Entity> parent;
-	
 	public:
-		void SetParent(Entity& parent);
-		std::shared_ptr<Entity> GetParent();
+		void setParent(Entity& parent);
+		std::shared_ptr<Entity> getParent();
+		void ReceiveMessage(BaseMessage);
+		void ReceiveMessage(NewComponent);
 	};
 }

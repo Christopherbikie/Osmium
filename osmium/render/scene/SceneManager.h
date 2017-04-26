@@ -16,9 +16,9 @@ namespace os {
 		entityList entities;
 	public:
 		entityList &getEntities();
-		void addEntity(Entity& ent, std::string entId);
-		void removeEntity(int32_t entIdentifier);
+		entityList::iterator addEntity(Entity& ent, std::string entId);
+		void removeEntity(entityList::iterator entIdentifier);
 		void removeEntity(std::shared_ptr<Entity> ent);
-		void removeEntityId(std::string entIdentifier);
+		void removeEntity(std::string entIdentifier);
 	};
 }
