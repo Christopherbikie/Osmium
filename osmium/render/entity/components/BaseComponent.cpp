@@ -15,11 +15,7 @@ namespace os
 		return this->parent;
 	}
 
-	void BaseComponent::ReceiveMessage(BaseMessage message) {
-
-	}
-
-	void BaseComponent::ReceiveMessage(NewComponent message) {
+	void BaseComponent::receiveMessage(BaseMessage message) {
 
 	}
 }

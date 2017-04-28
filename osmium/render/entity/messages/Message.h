@@ -11,7 +11,4 @@ namespace os {
 		std::string messageName = "Base Message";
 	public:
 	};
-	class NewComponent : BaseMessage {
-
-	};
 }
