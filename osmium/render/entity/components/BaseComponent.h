@@ -4,15 +4,15 @@
 #include "../messages/Message.h"
 
 namespace os {
-	class Entity;
+	class LogicalEntity;
 
 	class BaseComponent
 	{
 	private:
-		std::shared_ptr<Entity> parent;
+		std::shared_ptr<LogicalEntity> parent;
 	public:
-		void setParent(Entity& parent);
-		std::shared_ptr<Entity> getParent();
+		void setParent(LogicalEntity& parent);
+		std::shared_ptr<LogicalEntity> getParent();
 		void ReceiveMessage(BaseMessage);
 		void ReceiveMessage(NewComponent);
 	};

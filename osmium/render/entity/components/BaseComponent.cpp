@@ -1,16 +1,16 @@
 #include "BaseComponent.h"
-#include "../Entity.h"
+#include "../LogicalEntity.h"
 
 
 namespace os
 {
 
-	void BaseComponent::setParent(Entity& parent)
+	void BaseComponent::setParent(LogicalEntity& parent)
 	{
-		this->parent = std::make_shared<Entity>(parent);
+		this->parent = std::make_shared<LogicalEntity>(parent);
 	}
 
-	std::shared_ptr<Entity> BaseComponent::getParent()
+	std::shared_ptr<LogicalEntity> BaseComponent::getParent()
 	{
 		return this->parent;
 	}
