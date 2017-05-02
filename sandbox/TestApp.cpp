@@ -127,8 +127,8 @@ void TestApp::run()
 
 //		cameraTransform->setPosition(glm::vec3(0.0f, 0.0f, time + 3.0f));
 
-		shader->loadUniform("model", transform->getTransformMatrix());
-		shader->loadUniform("view", cameraTransform->getTransformMatrix());
+		shader->loadUniform("model", transform->getMatrix());
+		shader->loadUniform("view", cameraTransform->getMatrix());
 		shader->loadUniform("projection", camera->getMatrix());
 
 		texture->bind(shader, "diffuse");

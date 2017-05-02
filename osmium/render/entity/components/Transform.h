@@ -21,7 +21,7 @@ namespace os
 			mScale = glm::vec<D, float>(1);
 		}
 
-		glm::mat<D + 1, D + 1, T> getTransformMatrix()
+		glm::mat<D + 1, D + 1, T> getMatrix()
 		{
 			if (D == 2)
 			{
