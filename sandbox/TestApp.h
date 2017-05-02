@@ -5,6 +5,7 @@
 #include <render/graphics/VAO.h>
 #include <render/graphics/Texture.h>
 #include <render/entity/components/Transform.h>
+#include <render/entity/components/CameraPerspective.h>
 
 class GLFWwindow;
 
@@ -21,5 +22,5 @@ private:
 	os::Texture *texture;
 	os::Transform<3, double_t> *transform;
 	os::Transform<3, float_t> *cameraTransform;
-	glm::mat4 projectionMat;
+	os::CameraPerspective* camera;
 };

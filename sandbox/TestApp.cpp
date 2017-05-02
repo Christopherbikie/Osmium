@@ -106,7 +106,8 @@ void TestApp::run()
 
 	transform = new Transform<3, double_t>();
 	(cameraTransform = new Transform<3, float_t>())->setPosition(glm::vec3(0.0f, 0.0f, 3.0f));
-	projectionMat = glm::perspective(glm::radians(60.0f), settings::getAspectRatio(), 0.3f, 100.0f);
+
+	camera = new CameraPerspective(60.0f, settings::getAspectRatio(), 0.3f, 100.0f);
 
 	texture = new Texture("res/images/default.png");
 
@@ -128,7 +129,7 @@ void TestApp::run()
 
 		shader->loadUniform("model", transform->getTransformMatrix());
 		shader->loadUniform("view", cameraTransform->getTransformMatrix());
-		shader->loadUniform("projection", projectionMat);
+		shader->loadUniform("projection", camera->getMatrix());
 
 		texture->bind(shader, "diffuse");
 		vao->bind();
@@ -169,9 +170,10 @@ void TestApp::run()
 	delete texture;
 	delete transform;
 	delete cameraTransform;
+	delete camera;
 }
 
 void TestApp::windowResizeCallback(glm::vec2 dimensions)
 {
-	projectionMat = glm::perspective(glm::radians(60.0f), settings::getAspectRatio(), 0.3f, 100.0f);
+	camera->setAspectRatio(settings::getAspectRatio());
 }

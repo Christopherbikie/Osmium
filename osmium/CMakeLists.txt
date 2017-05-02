@@ -25,6 +25,8 @@ set(SOURCE_FILES
         render/entity/Entity.cpp
 		render/entity/components/BaseComponent.cpp
 		render/entity/components/Transform.h
+		render/entity/components/Camera.cpp
+		render/entity/components/CameraPerspective.cpp
 		render/graphics/Shader.cpp
         render/graphics/Texture.cpp
         render/graphics/VAO.cpp
