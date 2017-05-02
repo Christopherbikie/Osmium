@@ -8,7 +8,7 @@ namespace os {
 	{
 		entityList::iterator endIterator = this->entities.end();
 		this->entities.push_back(entityContainer(entId, std::make_shared<Entity>(ent)));
-		return endIterator
+		return endIterator;
 	}
 	void Scene::removeEntity(entityList::iterator entIdentifier) {
 		this->entities.erase(entIdentifier);

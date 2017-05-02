@@ -25,7 +25,6 @@ target_link_libraries(${PROJECT_NAME} osmium)
 include_directories(GLOB /deps/glm)
 
 set(PT_SOURCE_FILES
-        src/math/GLMHelpers.h
         src/math/Physics.h
 		src/math/PhysicsTest.cpp)
 

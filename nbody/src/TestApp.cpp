@@ -2,6 +2,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <imgui.h>
 #include <imgui/imgui_impl_glfw_gl3.h>
+#include <render/entity/components/Transform.h>
 #include "app/Settings.h"
 
 using namespace os;
@@ -10,127 +11,10 @@ void TestApp::run()
 {
 	settings::setWindowTitle("n-body simulation by Chris and Matt");
 
-	shader = new os::Shader;
-	shader->addSource(VERTEX_SHADER, "res/shaders/vertex.vert");
-	shader->addSource(FRAGMENT_SHADER, "res/shaders/fragment.frag");
-	shader->link();
-
-	GLfloat vertices[] = {
-			-0.5f, -0.5f, -0.5f,
-			0.5f, -0.5f, -0.5f,
-			0.5f,  0.5f, -0.5f,
-			0.5f,  0.5f, -0.5f,
-			-0.5f,  0.5f, -0.5f,
-			-0.5f, -0.5f, -0.5f,
-
-			-0.5f, -0.5f,  0.5f,
-			0.5f, -0.5f,  0.5f,
-			0.5f,  0.5f,  0.5f,
-			0.5f,  0.5f,  0.5f,
-			-0.5f,  0.5f,  0.5f,
-			-0.5f, -0.5f,  0.5f,
-
-			-0.5f,  0.5f,  0.5f,
-			-0.5f,  0.5f, -0.5f,
-			-0.5f, -0.5f, -0.5f,
-			-0.5f, -0.5f, -0.5f,
-			-0.5f, -0.5f,  0.5f,
-			-0.5f,  0.5f,  0.5f,
-
-			0.5f,  0.5f,  0.5f,
-			0.5f,  0.5f, -0.5f,
-			0.5f, -0.5f, -0.5f,
-			0.5f, -0.5f, -0.5f,
-			0.5f, -0.5f,  0.5f,
-			0.5f,  0.5f,  0.5f,
-
-			-0.5f, -0.5f, -0.5f,
-			0.5f, -0.5f, -0.5f,
-			0.5f, -0.5f,  0.5f,
-			0.5f, -0.5f,  0.5f,
-			-0.5f, -0.5f,  0.5f,
-			-0.5f, -0.5f, -0.5f,
-
-			-0.5f,  0.5f, -0.5f,
-			0.5f,  0.5f, -0.5f,
-			0.5f,  0.5f,  0.5f,
-			0.5f,  0.5f,  0.5f,
-			-0.5f,  0.5f,  0.5f,
-			-0.5f,  0.5f, -0.5f,
-	};
-	float_t texCoords[] = {
-			0.0f, 0.0f,
-			1.0f, 0.0f,
-			1.0f, 1.0f,
-			1.0f, 1.0f,
-			0.0f, 1.0f,
-			0.0f, 0.0f,
-
-			0.0f, 0.0f,
-			1.0f, 0.0f,
-			1.0f, 1.0f,
-			1.0f, 1.0f,
-			0.0f, 1.0f,
-			0.0f, 0.0f,
-
-			1.0f, 0.0f,
-			1.0f, 1.0f,
-			0.0f, 1.0f,
-			0.0f, 1.0f,
-			0.0f, 0.0f,
-			1.0f, 0.0f,
-
-			1.0f, 0.0f,
-			1.0f, 1.0f,
-			0.0f, 1.0f,
-			0.0f, 1.0f,
-			0.0f, 0.0f,
-			1.0f, 0.0f,
-
-			0.0f, 1.0f,
-			1.0f, 1.0f,
-			1.0f, 0.0f,
-			1.0f, 0.0f,
-			0.0f, 0.0f,
-			0.0f, 1.0f,
-
-			0.0f, 1.0f,
-			1.0f, 1.0f,
-			1.0f, 0.0f,
-			1.0f, 0.0f,
-			0.0f, 0.0f,
-			0.0f, 1.0f
-	};
-
-	vao = new VAO;
-	vao->storeInBuffer(0, 3, 36, vertices);
-	vao->storeInBuffer(1, 2, 36, texCoords);
-
-	modelMat = glm::mat4();
-	viewMat = glm::translate(viewMat, glm::vec3(0.0f, 0.0f, -3.0f));
-	projectionMat = glm::perspective(glm::radians(60.0f), settings::getAspectRatio(), 0.3f, 100.0f);
-
-	texture = new Texture("res/images/default.png");
-
 	while (!glfwWindowShouldClose(mWindow))
 	{
 		newFrame();
 		float_t delta = 1000.0f / ImGui::GetIO().Framerate;
-
-		// Cube
-
-		shader->use();
-
-		modelMat = glm::rotate(modelMat, delta / 200, glm::vec3(0.1f, sin(glfwGetTime()), 0.3f));
-		shader->loadUniform("model", modelMat);
-		shader->loadUniform("view", viewMat);
-		shader->loadUniform("projection", projectionMat);
-
-		texture->bind(shader, "diffuse");
-		vao->bind();
-		shader->drawArrays(0, 36);
-		vao->unbind();
-		texture->unbind();
 
 		// GUI
 
@@ -155,13 +39,4 @@ void TestApp::run()
 
 		glfwSwapBuffers(mWindow);
 	}
-
-	delete shader;
-	delete vao;
-	delete texture;
-}
-
-void TestApp::windowResizeCallback(glm::vec2 dimensions)
-{
-	projectionMat = glm::perspective(glm::radians(60.0f), settings::getAspectRatio(), 0.3f, 100.0f);
 }

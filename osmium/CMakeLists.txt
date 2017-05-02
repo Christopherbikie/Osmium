@@ -23,8 +23,9 @@ set(SOURCE_FILES
         app/App.cpp
         app/Settings.cpp
         render/entity/Entity.cpp
-        render/entity/components/BaseComponent.cpp
-        render/graphics/Shader.cpp
+		render/entity/components/BaseComponent.cpp
+		render/entity/components/Transform.h
+		render/graphics/Shader.cpp
         render/graphics/Texture.cpp
         render/graphics/VAO.cpp
         util/Loader.cpp

@@ -2,7 +2,7 @@
 #include <iostream>
 #include <vector>
 #include <thread>
-#include "GLMHelpers.h"
+#include <util/GLMHelpers.h>
 #include "Physics.h"
 
 #ifdef _WIN32
@@ -56,12 +56,12 @@ int main()
 	while (true)
 	{
 		// Sum forces for each object
-		for (int i = 0; i < objects.size(); ++i)
+		for (auto i = objects.begin(); i != objects.end(); ++i)
 		{
-			for (int j = i + 1; j < objects.size(); ++j)
+			for (auto j = (i+1); j != objects.end(); ++j)
 			{
-				object *obj1 = objects[i];
-				object *obj2 = objects[j];
+				object *obj1 = *i;
+				object *obj2 = *j;
 
 				dvec2 force = physics::getGravityForce(obj1->mass, obj2->mass, obj1->position, obj2->position);
 				obj1->force += force;

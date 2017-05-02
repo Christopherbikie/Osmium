@@ -1,9 +1,7 @@
 #include "TestApp.h"
 #include <GLFW/glfw3.h>
-#include <glm/gtc/matrix_transform.hpp>
 #include <imgui.h>
 #include <imgui/imgui_impl_glfw_gl3.h>
-#include <iostream>
 #include "app/Settings.h"
 
 using namespace os;
@@ -106,8 +104,8 @@ void TestApp::run()
 	vao->storeInBuffer(0, 3, 36, vertices);
 	vao->storeInBuffer(1, 2, 36, texCoords);
 
-	modelMat = glm::mat4();
-	viewMat = glm::translate(viewMat, glm::vec3(0.0f, 0.0f, -3.0f));
+	transform = new Transform<3, double_t>();
+	(cameraTransform = new Transform<3, float_t>())->setPosition(glm::vec3(0.0f, 0.0f, 3.0f));
 	projectionMat = glm::perspective(glm::radians(60.0f), settings::getAspectRatio(), 0.3f, 100.0f);
 
 	texture = new Texture("res/images/default.png");
@@ -115,15 +113,21 @@ void TestApp::run()
 	while (!glfwWindowShouldClose(mWindow))
 	{
 		newFrame();
-		float_t delta = 1000.0f / ImGui::GetIO().Framerate;
+		double_t delta = 1000.0f / ImGui::GetIO().Framerate;
 
 		// Cube
 
 		shader->use();
 
-		modelMat = glm::rotate(modelMat, delta / 200, glm::vec3(0.1f, sin(glfwGetTime()), 0.3f));
-		shader->loadUniform("model", modelMat);
-		shader->loadUniform("view", viewMat);
+		double_t time = glfwGetTime();
+		transform->setPosition(glm::dvec3(sin(5 * time), cos(4 * time), tan(time)));
+//		transform->setRotation(glm::dvec3(0.0, time, sin(time)));
+//		transform->setScale(glm::dvec3(sin(time * 3.0)));
+
+//		cameraTransform->setPosition(glm::vec3(0.0f, 0.0f, time + 3.0f));
+
+		shader->loadUniform("model", transform->getTransformMatrix());
+		shader->loadUniform("view", cameraTransform->getTransformMatrix());
 		shader->loadUniform("projection", projectionMat);
 
 		texture->bind(shader, "diffuse");
@@ -149,6 +153,9 @@ void TestApp::run()
 
 		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", delta, ImGui::GetIO().Framerate);
 
+		ImGui::InputFloat3("Cube position", (GLfloat *) &transform->getPosition());
+		ImGui::InputFloat3("Camera position", (GLfloat *) &cameraTransform->getPosition());
+
 		ImGui::Render();
 
 		// Swap buffers
@@ -159,6 +166,8 @@ void TestApp::run()
 	delete shader;
 	delete vao;
 	delete texture;
+	delete transform;
+	delete cameraTransform;
 }
 
 void TestApp::windowResizeCallback(glm::vec2 dimensions)

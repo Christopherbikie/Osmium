@@ -4,6 +4,7 @@
 #include <render/graphics/Shader.h>
 #include <render/graphics/VAO.h>
 #include <render/graphics/Texture.h>
+#include <render/entity/components/Transform.h>
 
 class GLFWwindow;
 
@@ -18,7 +19,7 @@ private:
 	os::Shader *shader;
 	os::VAO *vao;
 	os::Texture *texture;
-	glm::mat4 modelMat;
-	glm::mat4 viewMat;
+	os::Transform<3, double_t> *transform;
+	os::Transform<3, float_t> *cameraTransform;
 	glm::mat4 projectionMat;
 };
