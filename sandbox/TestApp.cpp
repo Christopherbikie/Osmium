@@ -153,7 +153,8 @@ void TestApp::run()
 
 		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", delta, ImGui::GetIO().Framerate);
 
-		ImGui::InputFloat3("Cube position", (GLfloat *) &transform->getPosition());
+		glm::vec3 temp = transform->getPosition(); // must create variable for this one because we have to cast to fvec3
+		ImGui::InputFloat3("Cube position", (GLfloat *) &temp);
 		ImGui::InputFloat3("Camera position", (GLfloat *) &cameraTransform->getPosition());
 
 		ImGui::Render();
