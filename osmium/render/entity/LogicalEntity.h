@@ -9,23 +9,29 @@
 // Include Messages
 #include "messages/Message.h"
 
+
 namespace os {
+	typedef std::shared_ptr<BaseComponent> componentPtr;
+	typedef std::unordered_map<std::string, std::shared_ptr<BaseComponent>> componentMap;
+
 	class LogicalEntity {
-		void addComponent(std::string, std::shared_ptr<BaseComponent>);
+		void addComponent(std::string, componentPtr);
 		void removeComponent(const std::string& componentIdentifier);
+		void removeAllComponents();
 
 		std::shared_ptr<BaseComponent> getComponent(const std::string& componentIdentifier);
+		
 		void remove();
-		bool isMarkedForRemoval();
+		bool shouldRemove();
 
 		template <class T>
 		inline void DispatchMessage(T message) {
 			for (auto& i : components) {
-				i.second->ReceiveMessage(message);
+				i.second->receiveMessage(message);
 			}
 		}
 	private:
 		bool markedForDelete = false;
-		std::unordered_map<std::string, std::shared_ptr<BaseComponent>> components;
+		componentMap components;
 	};
 }

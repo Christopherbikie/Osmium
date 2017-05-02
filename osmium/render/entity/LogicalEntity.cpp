@@ -23,7 +23,7 @@ namespace os
 		this->markedForDelete = true;
 	}
 
-	bool LogicalEntity::isMarkedForRemoval()
+	bool LogicalEntity::shouldRemove()
 	{
 		return this->markedForDelete;
 	}

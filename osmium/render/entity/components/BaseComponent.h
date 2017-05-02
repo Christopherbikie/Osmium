@@ -13,7 +13,6 @@ namespace os {
 	public:
 		void setParent(LogicalEntity& parent);
 		std::shared_ptr<LogicalEntity> getParent();
-		void ReceiveMessage(BaseMessage);
-		void ReceiveMessage(NewComponent);
+		void receiveMessage(BaseMessage);
 	};
 }
