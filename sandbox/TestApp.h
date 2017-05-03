@@ -23,8 +23,7 @@ private:
 	os::Shader *shader;
 	os::VAO *vao;
 	os::Texture *texture;
-	std::shared_ptr<os::Transform<3, double_t>> transform;
-	os::Transform<3, float_t> *cameraTransform;
+	os::Scene world;
 	os::CameraPerspective* camera;  // Perspective camera
 //	os::CameraOrthographic* camera; // Orthographic camera
 };

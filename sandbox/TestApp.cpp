@@ -105,22 +105,20 @@ void TestApp::run()
 	vao->storeInBuffer(0, 3, 36, vertices);
 	vao->storeInBuffer(1, 2, 36, texCoords);
 
-	Scene World = Scene();
-	Entity ent = *World.addEntity();
+	world = Scene();
+	Entity ent = *world.addEntity();
+	Entity cam = *world.addEntity("camera");
 
-	//os::componentPtr transform = std::make_shared<os::BaseComponent>(new Transform<3, double_t>());
-
-
-	std::shared_ptr<Transform<3, double_t>> transformPtr = std::make_shared<Transform<3, double_t>>(Transform<3, double_t>());
-
-	ent.addComponent("Transform", transformPtr);
-
-
-	transform = std::static_pointer_cast<Transform<3, double_t>>(ent.getComponent("Transform"));
+	std::shared_ptr<Transform<3, double_t>> transform = std::make_shared<Transform<3, double_t>>(Transform<3, double_t>());
+	ent.addComponent("Transform", transform);
 	
-	(cameraTransform = new Transform<3, float_t>())->setPosition(glm::vec3(0.0f, 0.0f, 3.0f));
+	std::shared_ptr<Transform<3, double_t>> cameraTransform = std::make_shared<Transform<3, double_t>>(Transform<3, double_t>());
+	std::shared_ptr<CameraPerspective> camera = std::make_shared<CameraPerspective>(CameraPerspective(60.0f, settings::getAspectRatio(), 0.3f, 100.0f));
 
-	camera = new CameraPerspective(60.0f, settings::getAspectRatio(), 0.3f, 100.0f);                 // Perspective camera
+	cam.addComponent("Transform", cameraTransform);
+	cam.addComponent("Camera", camera);
+
+	//camera = new CameraPerspective(60.0f, settings::getAspectRatio(), 0.3f, 100.0f);                 // Perspective camera
 //	camera = new CameraOrthographic(glm::vec2(0.0), settings::getViewport() / 100.0f, 0.3f, 100.0f); // Orthographic camera
 
 	texture = new Texture("res/images/default.png");
@@ -182,8 +180,6 @@ void TestApp::run()
 	delete shader;
 	delete vao;
 	delete texture;
-	delete cameraTransform;
-	delete camera;
 }
 
 void TestApp::windowResizeCallback(glm::vec2 dimensions)
