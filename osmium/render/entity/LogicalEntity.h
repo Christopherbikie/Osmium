@@ -15,6 +15,7 @@ namespace os {
 	typedef std::unordered_map<std::string, std::shared_ptr<BaseComponent>> componentMap;
 
 	class LogicalEntity {
+	public:
 		void addComponent(std::string, componentPtr);
 		void removeComponent(const std::string& componentIdentifier);
 		void removeAllComponents();

@@ -4,6 +4,7 @@
 #include <imgui/imgui_impl_glfw_gl3.h>
 #include "app/Settings.h"
 
+
 using namespace os;
 
 void TestApp::run()
@@ -104,7 +105,19 @@ void TestApp::run()
 	vao->storeInBuffer(0, 3, 36, vertices);
 	vao->storeInBuffer(1, 2, 36, texCoords);
 
-	transform = new Transform<3, double_t>();
+	Scene World = Scene();
+	Entity ent = *World.addEntity();
+
+	//os::componentPtr transform = std::make_shared<os::BaseComponent>(new Transform<3, double_t>());
+
+
+	std::shared_ptr<Transform<3, double_t>> transformPtr = std::make_shared<Transform<3, double_t>>(Transform<3, double_t>());
+
+	ent.addComponent("Transform", transformPtr);
+
+
+	transform = std::static_pointer_cast<Transform<3, double_t>>(ent.getComponent("Transform"));
+	
 	(cameraTransform = new Transform<3, float_t>())->setPosition(glm::vec3(0.0f, 0.0f, 3.0f));
 
 	camera = new CameraPerspective(60.0f, settings::getAspectRatio(), 0.3f, 100.0f);
@@ -168,7 +181,6 @@ void TestApp::run()
 	delete shader;
 	delete vao;
 	delete texture;
-	delete transform;
 	delete cameraTransform;
 	delete camera;
 }

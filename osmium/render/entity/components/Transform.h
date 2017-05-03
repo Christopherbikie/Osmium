@@ -5,7 +5,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <cmath>
 #include <glm/vec3.hpp>
-#include <util/GLMHelpers.h>
+#include "../../../util/GLMHelpers.h"
 #include <glm/gtx/quaternion.hpp>
 
 namespace os

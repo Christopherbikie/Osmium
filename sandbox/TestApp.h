@@ -6,6 +6,8 @@
 #include <render/graphics/Texture.h>
 #include <render/entity/components/Transform.h>
 #include <render/entity/components/CameraPerspective.h>
+#include <render/entity/Entity.h>
+#include <render/scene/SceneManager.h>
 
 class GLFWwindow;
 
@@ -20,7 +22,7 @@ private:
 	os::Shader *shader;
 	os::VAO *vao;
 	os::Texture *texture;
-	os::Transform<3, double_t> *transform;
+	std::shared_ptr<os::Transform<3, double_t>> transform;
 	os::Transform<3, float_t> *cameraTransform;
 	os::CameraPerspective* camera;
 };

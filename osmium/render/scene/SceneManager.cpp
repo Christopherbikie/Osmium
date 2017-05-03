@@ -1,21 +1,17 @@
 #include "SceneManager.h"
 
-namespace os {
-	entityList& Scene::getEntities() {
-		return this->entities;
-	}
-	entityList::iterator Scene::addEntity(Entity& ent, std::string entId)
-	{
-		entityList::iterator endIterator = this->entities.end();
-		this->entities.push_back(entityContainer(entId, std::make_shared<Entity>(ent)));
-		return endIterator;
-	}
-	void Scene::removeEntity(entityList::iterator entIdentifier) {
-		this->entities.erase(entIdentifier);
-	}
-	void Scene::removeEntity(std::shared_ptr<Entity> ent) {
-		for (auto k : this->entities) {
+std::shared_ptr<os::Entity> os::Scene::addEntity(std::string tag) {
+	os::Entity ent;
 
-		}
-	}
+	this->World.push_back(worldEnt(tag, std::make_shared<os::Entity>(ent)));
+
+	return std::make_shared<os::Entity>(ent);
+}
+
+std::shared_ptr<os::LogicalEntity> os::Scene::addLogical(std::string tag) {
+	os::LogicalEntity ent;
+
+	this->Logic.push_back(logicEnt(tag, std::make_shared<os::LogicalEntity>(ent)));
+
+	return std::make_shared<os::LogicalEntity>(ent);
 }

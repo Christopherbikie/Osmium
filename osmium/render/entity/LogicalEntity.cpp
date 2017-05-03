@@ -27,9 +27,4 @@ namespace os
 	{
 		return this->markedForDelete;
 	}
-
-	LogicalEntity::LogicalEntity()
-	{
-
-	}
 }
