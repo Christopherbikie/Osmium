@@ -120,7 +120,8 @@ void TestApp::run()
 	
 	(cameraTransform = new Transform<3, float_t>())->setPosition(glm::vec3(0.0f, 0.0f, 3.0f));
 
-	camera = new CameraPerspective(60.0f, settings::getAspectRatio(), 0.3f, 100.0f);
+	camera = new CameraPerspective(60.0f, settings::getAspectRatio(), 0.3f, 100.0f);                 // Perspective camera
+//	camera = new CameraOrthographic(glm::vec2(0.0), settings::getViewport() / 100.0f, 0.3f, 100.0f); // Orthographic camera
 
 	texture = new Texture("res/images/default.png");
 
@@ -187,5 +188,6 @@ void TestApp::run()
 
 void TestApp::windowResizeCallback(glm::vec2 dimensions)
 {
-	camera->setAspectRatio(settings::getAspectRatio());
+	camera->setAspectRatio(settings::getAspectRatio()); // Perspective camera
+//	camera->setDimensions(dimensions / 100.0f);         // Orthographic camera
 }

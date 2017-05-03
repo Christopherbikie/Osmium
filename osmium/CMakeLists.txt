@@ -25,6 +25,7 @@ set(SOURCE_FILES
         render/entity/Entity.cpp
 		render/entity/components/BaseComponent.cpp
 		render/entity/components/Camera.cpp
+		render/entity/components/CameraOrthographic.cpp
 		render/entity/components/CameraPerspective.cpp
 		render/entity/LogicalEntity.cpp
 		render/scene/SceneManager.cpp
