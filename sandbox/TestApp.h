@@ -6,6 +6,7 @@
 #include <render/graphics/Texture.h>
 #include <render/entity/components/Transform.h>
 #include <render/entity/components/CameraPerspective.h>
+#include <render/entity/components/CameraOrthographic.h>
 
 class GLFWwindow;
 
@@ -22,5 +23,6 @@ private:
 	os::Texture *texture;
 	os::Transform<3, double_t> *transform;
 	os::Transform<3, float_t> *cameraTransform;
-	os::CameraPerspective* camera;
+	os::CameraPerspective* camera;  // Perspective camera
+//	os::CameraOrthographic* camera; // Orthographic camera
 };
