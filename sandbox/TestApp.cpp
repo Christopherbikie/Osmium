@@ -184,6 +184,9 @@ void TestApp::run()
 
 void TestApp::windowResizeCallback(glm::vec2 dimensions)
 {
+
+	std::shared_ptr<CameraPerspective> camera = std::static_pointer_cast<CameraPerspective>(mainCamera->getComponent("Camera"));
+
 	camera->setAspectRatio(settings::getAspectRatio()); // Perspective camera
 //	camera->setDimensions(dimensions / 100.0f);         // Orthographic camera
 }

@@ -24,6 +24,6 @@ private:
 	os::VAO *vao;
 	os::Texture *texture;
 	os::Scene world;
-	os::CameraPerspective* camera;  // Perspective camera
+	std::shared_ptr<os::Entity> mainCamera;
 //	os::CameraOrthographic* camera; // Orthographic camera
 };
