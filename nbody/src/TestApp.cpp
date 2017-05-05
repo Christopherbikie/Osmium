@@ -3,6 +3,7 @@
 #include <imgui.h>
 #include <imgui/imgui_impl_glfw_gl3.h>
 #include <render/entity/components/Transform.h>
+#include <GLFW/glfw3.h>
 #include "app/Settings.h"
 
 using namespace os;
