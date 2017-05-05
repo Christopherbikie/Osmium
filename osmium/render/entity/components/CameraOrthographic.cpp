@@ -1,10 +1,9 @@
 #include "CameraOrthographic.h"
-#include <glm/gtc/matrix_transform.hpp>
 
 namespace os
 {
-	CameraOrthographic::CameraOrthographic(glm::vec2 center, glm::vec2 dimensions, float_t near, float_t far) :
-		Camera(near, far),
+	CameraOrthographic::CameraOrthographic(std::shared_ptr<Transform<3, float_t>> transform, glm::vec2 center, glm::vec2 dimensions, float_t near, float_t far) :
+		Camera(transform, near, far),
 	    mCenter(center),
 	    mDimensions(dimensions)
 	{ }

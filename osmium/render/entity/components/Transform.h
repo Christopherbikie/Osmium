@@ -31,10 +31,12 @@ namespace os
 			else if (D == 3)
 			{
 				glm::mat4 trans;
-				trans = glm::translate(trans, -((glm::vec3) mPosition));
+
+				trans = glm::translate(trans, (glm::vec3) mPosition);
 				if (mRotation.x != 0 || mRotation.y != 0 || mRotation.z != 0)
 					trans *= glm::toMat4(glm::quat(mRotation));
 				trans = glm::scale(trans, (glm::vec3) mScale);
+
 				return trans;
 			}
 		}

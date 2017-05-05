@@ -7,7 +7,7 @@ namespace os
 	class CameraPerspective : public Camera
 	{
 	public:
-		CameraPerspective(float_t fov, float_t aspectRatio, float_t near, float_t far);
+		CameraPerspective(std::shared_ptr<Transform<3, float_t>> transform, float_t fov, float_t aspectRatio, float_t near, float_t far);
 
 		float_t getFov() const;
 		void setFov(float_t fov);

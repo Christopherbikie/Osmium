@@ -22,12 +22,15 @@ set(SOURCE_FILES
         app/AppManager.cpp
         app/App.cpp
         app/Settings.cpp
+		input/Keyboard.cpp
+		input/Mouse.cpp
         render/entity/Entity.cpp
 		render/entity/components/BaseComponent.cpp
 		render/entity/components/Camera.cpp
 		render/entity/components/CameraOrthographic.cpp
 		render/entity/components/CameraPerspective.cpp
 		render/entity/components/Mesh.cpp
+		render/entity/components/PlayerControlFPV.cpp
 		render/entity/LogicalEntity.cpp
 		render/scene/SceneManager.cpp
 		render/graphics/Shader.cpp

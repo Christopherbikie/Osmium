@@ -1,10 +1,9 @@
 #include "CameraPerspective.h"
-#include <glm/gtc/matrix_transform.hpp>
 
 namespace os
 {
-	CameraPerspective::CameraPerspective(float_t fov, float_t aspectRatio, float_t near, float_t far) :
-		Camera(near, far),
+	CameraPerspective::CameraPerspective(std::shared_ptr<Transform<3, float_t>> transform, float_t fov, float_t aspectRatio, float_t near, float_t far) :
+		Camera(transform, near, far),
 	    mFOV(glm::radians(fov)),
 	    mAspectRatio(aspectRatio)
 	{ }

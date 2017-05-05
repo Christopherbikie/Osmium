@@ -1,3 +1,4 @@
+#include <glad/glad.h>
 #include "AppManager.h"
 #include "Settings.h"
 

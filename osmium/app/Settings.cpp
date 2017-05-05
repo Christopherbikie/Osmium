@@ -1,4 +1,5 @@
 #include "Settings.h"
+#include <glad/glad.h>
 
 namespace os
 {

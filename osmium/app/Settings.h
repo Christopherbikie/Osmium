@@ -3,8 +3,9 @@
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 #include <string>
-#include <glad/glad.h>
 #include <cmath>
+
+typedef unsigned int GLbitfield;
 
 namespace os
 {

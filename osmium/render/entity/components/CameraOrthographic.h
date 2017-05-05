@@ -8,7 +8,7 @@ namespace os
 	{
 	public:
 		// Origin is top left corner
-		CameraOrthographic(glm::vec2 center, glm::vec2 dimensions, float_t near, float_t far);
+		CameraOrthographic(std::shared_ptr<Transform<3, float_t>> transform, glm::vec2 center, glm::vec2 dimensions, float_t near, float_t far);
 
 		const glm::vec2 &getCenter() const;
 		void setCenter(const glm::vec2 &mCenter);

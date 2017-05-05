@@ -1,17 +1,19 @@
-#include <imgui.h>
-
-#include "AppManager.h"
 #include "App.h"
+#include "AppManager.h"
 #include "Settings.h"
-
-#include "../imgui/imgui_impl_glfw_gl3.h"
+#include <glad/glad.h>
 #include <iostream>
+#include <imgui.h>
+#include "../imgui/imgui_impl_glfw_gl3.h"
+#include "../input/Mouse.h"
+#include "../input/Keyboard.h"
 
 namespace os
 {
-	App::App() : mWindow(nullptr), mInitialised(false)
-	{
-	}
+	App::App() :
+			mWindow(nullptr),
+			mInitialised(false)
+	{ }
 		
 	App::~App()
 	{
@@ -56,9 +58,14 @@ namespace os
 		}
 
 		glEnable(GL_DEPTH_TEST);
-		glfwSetFramebufferSizeCallback(mWindow, AppManager::framebufferSizeCallback);
 
-		ImGui_ImplGlfwGL3_Init(mWindow, true);
+		ImGui_ImplGlfwGL3_Init(mWindow, false);
+
+		glfwSetFramebufferSizeCallback(mWindow, AppManager::framebufferSizeCallback);
+		glfwSetKeyCallback(mWindow, keyboard::keyCallback);
+		glfwSetCursorPosCallback(mWindow, mouse::mouseMoveCallback);
+		glfwSetScrollCallback(mWindow, ImGui_ImplGlfwGL3_ScrollCallback);
+		glfwSetCharCallback(mWindow, ImGui_ImplGlfwGL3_CharCallback);
 
 		mInitialised = true;
 		return true;
@@ -77,6 +84,7 @@ namespace os
 		glClearColor(clearColour.r, clearColour.g, clearColour.b, 1.0f);
 		glClear(settings::getClearBits());
 
+		mouse::update();
 		glfwPollEvents();
 
 		ImGui_ImplGlfwGL3_NewFrame();
