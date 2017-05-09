@@ -1,10 +1,13 @@
+
+
+#include <imgui.h>
+#include "../imgui/imgui_impl_glfw_gl3.h"
+#include <glad/glad.h>
 #include "App.h"
 #include "AppManager.h"
 #include "Settings.h"
-#include <glad/glad.h>
 #include <iostream>
-#include <imgui.h>
-#include "../imgui/imgui_impl_glfw_gl3.h"
+
 #include "../input/Mouse.h"
 #include "../input/Keyboard.h"
 

@@ -2,6 +2,9 @@
 #include "../../../input/Keyboard.h"
 #include "../../../input/Mouse.h"
 
+#define _USE_MATH_DEFINES
+#include <math.h>
+
 namespace os
 {
 	PlayerControlFPV::PlayerControlFPV(std::shared_ptr<Transform<3, float_t>> transform) :
