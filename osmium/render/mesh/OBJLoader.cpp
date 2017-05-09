@@ -44,7 +44,7 @@ namespace os {
 			assert(line.size() > 0);
 			assert(line[0] == 'v');
 
-			std::regex vertexRegex("v (\\d+\.\\d+) (\d+\.\\d+) (\\d+\\.\\d+)");
+			std::regex vertexRegex("v (\\d+\.\\d+) (\\d+\\.\\d+) (\\d+\\.\\d+)");
 			std::smatch vertexMatch;
 
 			if (std::regex_match(line, vertexMatch, vertexRegex))
@@ -78,7 +78,7 @@ namespace os {
 			assert(line.size() > 0);
 			assert(line[0] == 'f');
 
-			std::regex faceRegex("f (\\d+\.\\d+) (\d+\.\\d+) (\\d+\\.\\d+)");
+			std::regex faceRegex("f (\\d+) (\\d+) (\\d+)");
 			std::smatch faceMatch;
 
 			if (std::regex_match(line, faceMatch, faceRegex))
