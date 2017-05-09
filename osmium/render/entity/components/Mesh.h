@@ -8,15 +8,10 @@
 
 namespace os
 {
-
 	template <int D, typename T>
-	class Mesh : public BaseComponent {
+	class MeshComponent : public BaseComponent {
 	private:
 		std::vector<glm::vec<D, T>> vertices;
 	public:
-		void draw()
-		{
-			
-		}
 	};
 }
