@@ -1,17 +1,33 @@
 #include "SceneManager.h"
 
-std::shared_ptr<os::Entity> os::Scene::addEntity(std::string tag) {
-	os::Entity ent;
+namespace os
+{
+	std::shared_ptr<Entity> Scene::addEntity(std::string tag)
+	{
+		std::shared_ptr<Entity> vecptr = std::make_shared<Entity>();
+		std::shared_ptr<Entity> returnptr = vecptr;
 
-	this->World.push_back(worldEnt(tag, std::make_shared<os::Entity>(ent)));
+		this->worldEnts.push_back(worldEnt(tag, vecptr));
 
-	return std::make_shared<os::Entity>(ent);
-}
+		return returnptr;
+	}
 
-std::shared_ptr<os::LogicalEntity> os::Scene::addLogical(std::string tag) {
-	os::LogicalEntity ent;
+	std::shared_ptr<LogicalEntity> Scene::addLogical(std::string tag)
+	{
+		LogicalEntity ent;
 
-	this->Logic.push_back(logicEnt(tag, std::make_shared<os::LogicalEntity>(ent)));
+		this->logicalEnts.push_back(logicEnt(tag, std::make_shared<LogicalEntity>(ent)));
 
-	return std::make_shared<os::LogicalEntity>(ent);
+		return std::make_shared<LogicalEntity>(ent);
+	}
+
+	worldList Scene::getWorldEnts()
+	{
+		return worldEnts;
+	}
+
+	logicalList Scene::getLogicalEnts()
+	{
+		return logicalEnts;
+	}
 }
