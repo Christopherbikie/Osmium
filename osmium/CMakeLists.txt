@@ -33,6 +33,8 @@ set(SOURCE_FILES
 		render/entity/components/PlayerControlFPV.cpp
 		render/entity/LogicalEntity.cpp
 		render/scene/SceneManager.cpp
+		render/mesh/Mesh.cpp
+		render/mesh/OBJLoader.cpp
 		render/graphics/Shader.cpp
         render/graphics/Texture.cpp
         render/graphics/VAO.cpp

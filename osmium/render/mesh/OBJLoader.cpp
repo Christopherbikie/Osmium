@@ -26,11 +26,14 @@ namespace os {
 				switch (c)
 				{
 				case '#':
+					
 					break;
 				case 'f':
+					parseFace(lineToParse, generatedMesh);
 					break;
 				case 'v':
 					break;
+					parseVertex(lineToParse, generatedMesh);
 				default:
 					break;
 				}
