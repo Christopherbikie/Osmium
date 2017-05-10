@@ -13,8 +13,10 @@ include_directories(GLOB
         ../deps/glm)
 
 set(SOURCE_FILES
+        src/components/PhysicsComponent.h
 		src/main.cpp
-		src/TestApp.cpp)
+		src/TestApp.cpp
+)
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 target_link_libraries(${PROJECT_NAME} osmium)

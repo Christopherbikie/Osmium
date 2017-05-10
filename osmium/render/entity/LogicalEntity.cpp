@@ -15,7 +15,10 @@ namespace os
 
 	std::shared_ptr<BaseComponent> LogicalEntity::getComponent(const std::string& componentIdentifier)
 	{
-		return this->components.at(componentIdentifier);
+		auto t = components.find(componentIdentifier);
+		if (t == components.end())
+			return nullptr;
+		return t->second;
 	}
 
 	void LogicalEntity::remove()

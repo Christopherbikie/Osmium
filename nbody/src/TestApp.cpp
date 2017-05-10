@@ -4,7 +4,9 @@
 #include <render/entity/components/CameraPerspective.h>
 #include <render/entity/components/PlayerControlFPV.h>
 #include <input/Mouse.h>
-#include "app/Settings.h"
+#include <app/Settings.h>
+#include "components/PhysicsComponent.h"
+#include "math/Physics.h"
 
 using namespace os;
 
@@ -41,19 +43,65 @@ void TestApp::run()
 		for (int z = 0; z < 10; z++)
 		{
 			auto entity = scene.addEntity("ent" + std::to_string(x) + std::to_string(z));
+
 			auto transform = std::make_shared<Transform<3, double_t>>(Transform<3, double_t>());
 			transform->setPosition(glm::vec3(x, 0.0f, z));
 			entity->addComponent("Transform", transform);
+
+			auto physics = std::make_shared<PhysicsComponent<3, double_t>>(transform, 10);
+			entity->addComponent("Physics", physics);
 		}
+
+	// Get list of entities to apply physics operations to
+	std::vector<std::shared_ptr<Entity>> physicsEnts;
+	for (worldEnt ent : scene.getWorldEnts())
+		if (std::get<1>(ent)->getComponent("Physics") != nullptr)
+			physicsEnts.push_back(std::get<1>(ent));
 
 	keyboard::addKeyHandler(GLFW_KEY_ESCAPE, this);
 
 	while (!glfwWindowShouldClose(mWindow))
 	{
 		newFrame();
-		float_t delta = 1000.0f / ImGui::GetIO().Framerate;
+		double_t delta = 1000.0f / ImGui::GetIO().Framerate;
 
-		control->update(delta);
+		control->update((float_t) delta);
+
+		// Do physics
+
+		// Set all forces to 0
+		for (auto &&ent : physicsEnts)
+			std::static_pointer_cast<PhysicsComponent<3, double_t>>(ent->getComponent("Physics"))->setForce(glm::dvec3(0));
+
+		// Sum forces for each entity
+		for (auto i = physicsEnts.begin(); i != physicsEnts.end(); ++i)
+		{
+			for (auto j = (i + 1); j != physicsEnts.end(); ++j)
+			{
+				std::shared_ptr<Entity> ent1 = *i;
+				auto phys1 = std::static_pointer_cast<PhysicsComponent<3, double_t>>(ent1->getComponent("Physics"));
+				auto trans1 = std::static_pointer_cast<Transform<3, double_t>>(ent1->getComponent("Transform"));
+
+				std::shared_ptr<Entity> ent2 = *j;
+				auto phys2 = std::static_pointer_cast<PhysicsComponent<3, double_t>>(ent2->getComponent("Physics"));
+				auto trans2 = std::static_pointer_cast<Transform<3, double_t>>(ent2->getComponent("Transform"));
+
+				glm::dvec3 force = physics::getGravityForce(phys1->getMass(), phys2->getMass(), trans1->getPosition(), trans2->getPosition());
+				phys1->getForce() += force;
+				phys2->getForce() -= force;
+			}
+		}
+
+		// Calculate acceleration, velocity and position for each entity
+		for (auto &&ent : physicsEnts)
+		{
+			auto phys = std::static_pointer_cast<PhysicsComponent<3, double_t>>(ent->getComponent("Physics"));
+			auto trans = std::static_pointer_cast<Transform<3, double_t>>(ent->getComponent("Transform"));
+
+			glm::dvec3 acceleration = physics::getAcceleration(phys->getForce(), phys->getMass());
+			phys->setVelocity(physics::getNextVelocity(delta, acceleration, phys->getVelocity()));
+			trans->setPosition(physics::getNextPosition(delta, trans->getPosition(), phys->getVelocity()));
+		}
 
 		// Render dots
 
