@@ -26,14 +26,13 @@ namespace os {
 				switch (c)
 				{
 				case '#':
-					
 					break;
 				case 'f':
 					parseFace(lineToParse, generatedMesh);
 					break;
 				case 'v':
-					break;
 					parseVertex(lineToParse, generatedMesh);
+					break;
 				default:
 					break;
 				}
@@ -47,7 +46,7 @@ namespace os {
 			assert(line.size() > 0);
 			assert(line[0] == 'v');
 
-			std::regex vertexRegex("v (\\d+\.\\d+) (\\d+\\.\\d+) (\\d+\\.\\d+)");
+			std::regex vertexRegex("v (-?\\d+\\.\\d+) (-?\\d+\\.\\d+) (-?\\d+\\.\\d+)");
 			std::smatch vertexMatch;
 
 			if (std::regex_match(line, vertexMatch, vertexRegex))

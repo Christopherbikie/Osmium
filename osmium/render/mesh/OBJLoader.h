@@ -3,10 +3,11 @@
 #include <string>
 
 
-namespace os {
+namespace os
+{
 	namespace OBJLoader
 	{
-		Mesh& loadOBJ();
+		Mesh& loadOBJ(std::string filePath);
 		void parseVertex(std::string line, Mesh& mesh);
 		void parseFace(std::string line, Mesh& mesh);
 	};
