@@ -9,7 +9,7 @@
 namespace os {
 	namespace OBJLoader
 	{
-		Mesh& loadOBJ(std::string filePath)
+		Mesh loadOBJ(std::string filePath)
 		{
 			std::ifstream objFile;
 			objFile.open(filePath);
@@ -18,7 +18,9 @@ namespace os {
 			auto generatedMesh = Mesh();
 			while (getline(objFile, lineToParse))
 			{
-				assert(lineToParse.length() > 0);
+				if (lineToParse.length() <= 0)
+					continue;
+
 				auto c = lineToParse[0];
 
 				assert(c != EOF);
@@ -39,6 +41,8 @@ namespace os {
 			}
 
 			objFile.close();
+
+			return generatedMesh;
 		}
 
 		void parseVertex(std::string line, Mesh& mesh)
@@ -55,9 +59,9 @@ namespace os {
 
 				double_t x, y, z;
 
-				std::istringstream xPosStream(vertexMatch[0]);
-				std::istringstream yPosStream(vertexMatch[1]);
-				std::istringstream zPosStream(vertexMatch[2]);
+				std::istringstream xPosStream(vertexMatch[1]);
+				std::istringstream yPosStream(vertexMatch[2]);
+				std::istringstream zPosStream(vertexMatch[3]);
 
 				if (!(xPosStream >> newVertex.position.x)) {
 					assert(false);
@@ -77,17 +81,39 @@ namespace os {
 
 		void parseFace(std::string line, Mesh& mesh)
 		{
-			assert(line.size() > 0);
-			assert(line[0] == 'f');
+			std::regex indexNormalRegex("f (\\d+)//\\d+ (\\d+)//\\d+ (\\d+)//\\d+");
+			std::regex indexNormalTexRegex("f (\\d+)/\\d+/\\d+ (\\d+)/\\d+/\\d+ (\\d+)/\\d+/\\d+");
+			std::regex indexRegex("f (\\d+) (\\d+) (\\d+)");
+			std::smatch indexMatch;
 
-			std::regex faceRegex("f (\\d+) (\\d+) (\\d+)");
-			std::smatch faceMatch;
 
-			if (std::regex_match(line, faceMatch, faceRegex))
+			if (std::regex_match(line, indexMatch, indexNormalRegex))
 			{
-				for (auto submatch : faceMatch)
+				
+				for (size_t i = 1; i < 4; i++)
 				{
-					std::istringstream numConverter(submatch);
+					std::istringstream numConverter(indexMatch[i]);
+
+					uint32_t index;
+					numConverter >> index;
+					mesh.getIndices().push_back(index);
+				}
+			}
+			else if (std::regex_match(line, indexMatch, indexRegex)) {
+				for (size_t i = 1; i < 4; i++)
+				{
+					std::istringstream numConverter(indexMatch[i]);
+
+					uint32_t index;
+					numConverter >> index;
+					mesh.getIndices().push_back(index);
+				}
+			}
+			else if (std::regex_match(line, indexMatch, indexNormalTexRegex)) {
+				for (size_t i = 1; i < 4; i++)
+				{
+					std::istringstream numConverter(indexMatch[i]);
+
 					uint32_t index;
 					numConverter >> index;
 					mesh.getIndices().push_back(index);
