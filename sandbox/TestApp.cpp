@@ -20,97 +20,6 @@ void TestApp::run()
 	shader->addSource(FRAGMENT_SHADER, "res/shaders/fragment.frag");
 	shader->link();
 
-	GLfloat vertices[] = {
-			-0.5f, -0.5f, -0.5f,
-			0.5f, -0.5f, -0.5f,
-			0.5f,  0.5f, -0.5f,
-			0.5f,  0.5f, -0.5f,
-			-0.5f,  0.5f, -0.5f,
-			-0.5f, -0.5f, -0.5f,
-
-			-0.5f, -0.5f,  0.5f,
-			0.5f, -0.5f,  0.5f,
-			0.5f,  0.5f,  0.5f,
-			0.5f,  0.5f,  0.5f,
-			-0.5f,  0.5f,  0.5f,
-			-0.5f, -0.5f,  0.5f,
-
-			-0.5f,  0.5f,  0.5f,
-			-0.5f,  0.5f, -0.5f,
-			-0.5f, -0.5f, -0.5f,
-			-0.5f, -0.5f, -0.5f,
-			-0.5f, -0.5f,  0.5f,
-			-0.5f,  0.5f,  0.5f,
-
-			0.5f,  0.5f,  0.5f,
-			0.5f,  0.5f, -0.5f,
-			0.5f, -0.5f, -0.5f,
-			0.5f, -0.5f, -0.5f,
-			0.5f, -0.5f,  0.5f,
-			0.5f,  0.5f,  0.5f,
-
-			-0.5f, -0.5f, -0.5f,
-			0.5f, -0.5f, -0.5f,
-			0.5f, -0.5f,  0.5f,
-			0.5f, -0.5f,  0.5f,
-			-0.5f, -0.5f,  0.5f,
-			-0.5f, -0.5f, -0.5f,
-
-			-0.5f,  0.5f, -0.5f,
-			0.5f,  0.5f, -0.5f,
-			0.5f,  0.5f,  0.5f,
-			0.5f,  0.5f,  0.5f,
-			-0.5f,  0.5f,  0.5f,
-			-0.5f,  0.5f, -0.5f,
-	};
-	float_t texCoords[] = {
-			0.0f, 0.0f,
-			1.0f, 0.0f,
-			1.0f, 1.0f,
-			1.0f, 1.0f,
-			0.0f, 1.0f,
-			0.0f, 0.0f,
-
-			0.0f, 0.0f,
-			1.0f, 0.0f,
-			1.0f, 1.0f,
-			1.0f, 1.0f,
-			0.0f, 1.0f,
-			0.0f, 0.0f,
-
-			1.0f, 0.0f,
-			1.0f, 1.0f,
-			0.0f, 1.0f,
-			0.0f, 1.0f,
-			0.0f, 0.0f,
-			1.0f, 0.0f,
-
-			1.0f, 0.0f,
-			1.0f, 1.0f,
-			0.0f, 1.0f,
-			0.0f, 1.0f,
-			0.0f, 0.0f,
-			1.0f, 0.0f,
-
-			0.0f, 1.0f,
-			1.0f, 1.0f,
-			1.0f, 0.0f,
-			1.0f, 0.0f,
-			0.0f, 0.0f,
-			0.0f, 1.0f,
-
-			0.0f, 1.0f,
-			1.0f, 1.0f,
-			1.0f, 0.0f,
-			1.0f, 0.0f,
-			0.0f, 0.0f,
-			0.0f, 1.0f
-	};
-
-	vao = new VAO;
-	vao->storeInBuffer(0, 3, 36, vertices);
-	vao->storeInBuffer(1, 2, 36, texCoords);
-
 	world = Scene();
 	Entity ent = *world.addEntity();
 	mainCamera = world.addEntity("camera");
@@ -147,17 +56,16 @@ void TestApp::run()
 		double_t time = glfwGetTime();
 //		transform->setPosition(glm::dvec3(sin(time), 0.0f, 0.0f));
 //		transform->setRotation(glm::dvec3(0.0, time, sin(time)));
-		transform->setScale(glm::dvec3(sin(time * 2.0), sin(time * 3.0), sin(time * 4.0)));
+		//transform->setScale(glm::dvec3(sin(time * 2.0), sin(time * 3.0), sin(time * 4.0)));
 
 		shader->loadUniform("model", transform->getMatrix());
 		shader->loadUniform("view", camera->getViewMatrix());
 		shader->loadUniform("projection", camera->getProjMatrix());
 
-		texture->bind(shader, "diffuse");
-		vao->bind();
-		shader->drawArrays(0, 36);
-		vao->unbind();
-		texture->unbind();
+		//texture->bind(shader, "diffuse");
+		glFrontFace(GL_CW);
+		test.draw(shader);
+		//texture->unbind();
 
 		// GUI
 
@@ -201,7 +109,6 @@ void TestApp::run()
 	}
 
 	delete shader;
-	delete vao;
 	delete texture;
 }
 

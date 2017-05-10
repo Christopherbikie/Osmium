@@ -8,5 +8,5 @@ uniform sampler2D diffuse;
 
 void main()
 {
-    color = texture(diffuse, pass_texCoord);
+    color = vec3(1.0f);
 }

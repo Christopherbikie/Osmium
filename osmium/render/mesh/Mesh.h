@@ -2,6 +2,8 @@
 #include <vector>
 
 #include <glm/glm.hpp>
+#include "../graphics/Shader.h"
+#include "../graphics/VAO.h"
 
 
 // We're going to assume all meshes will be 3 Dimensional
@@ -19,8 +21,13 @@ namespace os
 	{
 		std::vector<vertex> vertices;
 		std::vector<uint32_t> indices;
+		VAO* meshVAO;
+		bool loaded = false;
 	public:
+		Mesh();
+		~Mesh();
 		std::vector<vertex>& getVertices();
 		std::vector<uint32_t>& getIndices();
+		void draw(Shader * shader);
 	};
 }
