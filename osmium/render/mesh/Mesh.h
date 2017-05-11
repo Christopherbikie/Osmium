@@ -1,5 +1,7 @@
 #pragma once
 #include <vector>
+#include <memory>
+
 
 #include <glm/glm.hpp>
 #include "../graphics/Shader.h"
@@ -21,7 +23,7 @@ namespace os
 	{
 		std::vector<vertex> vertices;
 		std::vector<uint32_t> indices;
-		VAO* meshVAO;
+		std::shared_ptr<VAO> meshVAO;
 		bool loaded = false;
 	public:
 		Mesh();

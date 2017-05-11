@@ -7,8 +7,8 @@ namespace os
 {
 	namespace OBJLoader
 	{
-		Mesh loadOBJ(std::string filePath);
-		void parseVertex(std::string line, Mesh& mesh);
-		void parseFace(std::string line, Mesh& mesh);
+		std::shared_ptr<Mesh> loadOBJ(std::string filePath);
+		inline void parseVertex(std::string line, std::shared_ptr<Mesh> mesh);
+		inline void parseFace(std::string line, std::shared_ptr<Mesh> mesh);
 	};
 }

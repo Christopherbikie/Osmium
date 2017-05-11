@@ -13,7 +13,7 @@ using namespace os;
 
 void TestApp::run()
 {
-	auto test = OBJLoader::loadOBJ("res/models/cube.obj");
+	auto test = OBJLoader::loadOBJ("res/utah_teapot.obj");
 
 	shader = new os::Shader;
 	shader->addSource(VERTEX_SHADER, "res/shaders/vertex.vert");
@@ -64,7 +64,7 @@ void TestApp::run()
 
 		//texture->bind(shader, "diffuse");
 		glFrontFace(GL_CW);
-		test.draw(shader);
+		test->draw(shader);
 		//texture->unbind();
 
 		// GUI

@@ -15,7 +15,7 @@ namespace os
 
 	Mesh::Mesh()
 	{
-		this->meshVAO = new VAO();
+		this->meshVAO = std::make_shared<VAO>();
 	}
 
 	void Mesh::draw(Shader * shader)
@@ -45,7 +45,6 @@ namespace os
 
 	Mesh::~Mesh()
 	{
-		delete this->meshVAO;
 	}
 
 }

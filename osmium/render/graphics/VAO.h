@@ -2,6 +2,7 @@
 
 #include <map>
 #include <cmath>
+#include <unordered_map>
 
 namespace os
 {
@@ -20,11 +21,11 @@ namespace os
 		void bindEBO() const;
 
 		uint32_t getVertexCount() const;
-
+		
 	private:
 		uint32_t mLocation;
 		uint32_t mEBO;
-		std::map<int32_t, uint32_t> mVBOs;
+		std::unordered_map<uint32_t, uint32_t> mVBOs;
 		uint32_t mVertexCount = 0;
 		
 	};

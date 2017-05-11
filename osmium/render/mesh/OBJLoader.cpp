@@ -9,13 +9,13 @@
 namespace os {
 	namespace OBJLoader
 	{
-		Mesh loadOBJ(std::string filePath)
+		std::shared_ptr<Mesh> loadOBJ(std::string filePath)
 		{
 			std::ifstream objFile;
 			objFile.open(filePath);
 
 			std::string lineToParse = "";
-			auto generatedMesh = Mesh();
+			auto generatedMesh = std::make_shared<Mesh>();
 			while (getline(objFile, lineToParse))
 			{
 				if (lineToParse.length() <= 0)
@@ -33,6 +33,8 @@ namespace os {
 					parseFace(lineToParse, generatedMesh);
 					break;
 				case 'v':
+					if (lineToParse[1] != ' ')
+						break;
 					parseVertex(lineToParse, generatedMesh);
 					break;
 				default:
@@ -45,41 +47,34 @@ namespace os {
 			return generatedMesh;
 		}
 
-		void parseVertex(std::string line, Mesh& mesh)
+		void parseVertex(std::string line, std::shared_ptr<Mesh> mesh)
 		{
 			assert(line.size() > 0);
 			assert(line[0] == 'v');
+			assert(line[1] == ' ');
 
-			std::regex vertexRegex("v (-?\\d+\\.\\d+) (-?\\d+\\.\\d+) (-?\\d+\\.\\d+)");
-			std::smatch vertexMatch;
+			line = line.substr(1);
+			std::istringstream posStream(line);
 
-			if (std::regex_match(line, vertexMatch, vertexRegex))
+			vertex newVertex;
+
+			if (!(posStream >> newVertex.position.x))
 			{
-				vertex newVertex;
-
-				double_t x, y, z;
-
-				std::istringstream xPosStream(vertexMatch[1]);
-				std::istringstream yPosStream(vertexMatch[2]);
-				std::istringstream zPosStream(vertexMatch[3]);
-
-				if (!(xPosStream >> newVertex.position.x)) {
-					assert(false);
-				}
-				if (!(yPosStream >> newVertex.position.y))
-				{
-					assert(false);
-				}
-				if (!(zPosStream >> newVertex.position.z))
-				{
-					assert(false);
-				}
-
-				mesh.getVertices().push_back(newVertex);
+				assert(false);
 			}
+			if (!(posStream >> newVertex.position.y))
+			{
+				assert(false);
+			}
+			if (!(posStream >> newVertex.position.z))
+			{
+				assert(false);
+			}
+
+			mesh->getVertices().push_back(newVertex);
 		}
 
-		void parseFace(std::string line, Mesh& mesh)
+		void parseFace(std::string line, std::shared_ptr<Mesh> mesh)
 		{
 			std::regex indexNormalRegex("f (\\d+)//\\d+ (\\d+)//\\d+ (\\d+)//\\d+");
 			std::regex indexNormalTexRegex("f (\\d+)/\\d+/\\d+ (\\d+)/\\d+/\\d+ (\\d+)/\\d+/\\d+");
@@ -96,7 +91,8 @@ namespace os {
 
 					uint32_t index;
 					numConverter >> index;
-					mesh.getIndices().push_back(index);
+					index--;
+					mesh->getIndices().push_back(index);
 				}
 			}
 			else if (std::regex_match(line, indexMatch, indexRegex)) {
@@ -106,7 +102,8 @@ namespace os {
 
 					uint32_t index;
 					numConverter >> index;
-					mesh.getIndices().push_back(index);
+					index--;
+					mesh->getIndices().push_back(index);
 				}
 			}
 			else if (std::regex_match(line, indexMatch, indexNormalTexRegex)) {
@@ -116,7 +113,8 @@ namespace os {
 
 					uint32_t index;
 					numConverter >> index;
-					mesh.getIndices().push_back(index);
+					index--;
+					mesh->getIndices().push_back(index);
 				}
 			}
 		}
