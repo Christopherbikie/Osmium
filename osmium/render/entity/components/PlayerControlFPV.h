@@ -13,6 +13,12 @@ namespace os
 
 		void update(float_t delta);
 
+		float_t getMoveSpeed() const;
+		float_t getSensitivity() const;
+
+		void setMoveSpeed(float_t mMoveSpeed);
+		void setSensitivity(float_t mSensitivity);
+
 	private:
 		std::shared_ptr<Transform<3, float_t>> mTransform;
 		float_t mMoveSpeed;

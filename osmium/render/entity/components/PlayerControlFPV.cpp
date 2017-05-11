@@ -52,4 +52,24 @@ namespace os
 		if (keyboard::isKeyDown(GLFW_KEY_LEFT_SHIFT))
 			mTransform->getPosition().y -= delta * mMoveSpeed;
 	}
+
+	float_t PlayerControlFPV::getMoveSpeed() const
+	{
+		return mMoveSpeed;
+	}
+
+	void PlayerControlFPV::setMoveSpeed(float_t mMoveSpeed)
+	{
+		PlayerControlFPV::mMoveSpeed = mMoveSpeed;
+	}
+
+	float_t PlayerControlFPV::getSensitivity() const
+	{
+		return mSensitivity;
+	}
+
+	void PlayerControlFPV::setSensitivity(float_t mSensitivity)
+	{
+		PlayerControlFPV::mSensitivity = mSensitivity;
+	}
 }
