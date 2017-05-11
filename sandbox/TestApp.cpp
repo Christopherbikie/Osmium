@@ -13,7 +13,7 @@ using namespace os;
 
 void TestApp::run()
 {
-	auto test = OBJLoader::loadOBJ("res/utah_teapot.obj");
+	auto test = OBJLoader::loadOBJ("res/sponza.obj");
 
 	shader = new os::Shader;
 	shader->addSource(VERTEX_SHADER, "res/shaders/vertex.vert");

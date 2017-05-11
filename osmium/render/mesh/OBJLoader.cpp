@@ -4,6 +4,7 @@
 #include <cassert>
 #include <regex>
 #include <sstream>
+#include <algorithm>
 
 
 namespace os {
@@ -76,47 +77,87 @@ namespace os {
 
 		void parseFace(std::string line, std::shared_ptr<Mesh> mesh)
 		{
-			std::regex indexNormalRegex("f (\\d+)//\\d+ (\\d+)//\\d+ (\\d+)//\\d+");
-			std::regex indexNormalTexRegex("f (\\d+)/\\d+/\\d+ (\\d+)/\\d+/\\d+ (\\d+)/\\d+/\\d+");
-			std::regex indexRegex("f (\\d+) (\\d+) (\\d+)");
-			std::smatch indexMatch;
+			if (line.find("//") != std::string::npos) {
+				const uint16_t numElements = 2;
+
+				for (auto& c : line)
+				{
+					if (c == '/')
+					{
+						c = ' ';
+					}
+				}
+
+				std::istringstream numParser(line.substr(1));
+
+				for (int i = 0; i < 3 * numElements; i++) {
+					if (i % numElements == 0) {
+						uint32_t num;
+						numParser >> num;
+						mesh->getIndices().push_back(num - 1);
+					}
+					else
+					{
+						uint32_t temp;
+						numParser >> temp;
+					}
+				}
+			}
+			else if (line.find("/") != std::string::npos) {
+				/*
+				 *	 f v1/vt1 v2/vt2 v3/vt3
+				 *   f 3/1 4/2 5/3
+				 *   
+				 *   f v1/vt1/vn1 v2/vt2/vn2 v3/vt3/vn3
+				 *   f 6/4/1 3/5/3 7/6/5
+				 */
 
 
-			if (std::regex_match(line, indexMatch, indexNormalRegex))
-			{
+				/*
+				const uint16_t numElements = 3;
 				
-				for (size_t i = 1; i < 4; i++)
+				for (auto& c : line)
 				{
-					std::istringstream numConverter(indexMatch[i]);
+					if (c == '/')
+					{
+						c = ' ';
+					}
+				}
 
-					uint32_t index;
-					numConverter >> index;
-					index--;
-					mesh->getIndices().push_back(index);
+				std::istringstream numParser(line.substr(1));
+
+				for (int i = 0; i < 3 * numElements; i++)
+				{
+					if (i % numElements == 0)
+					{
+						uint32_t num;
+						numParser >> num;
+						mesh->getIndices().push_back(num - 1);
+					}
+					else if (i % numElements == 1)
+					{
+						uint32_t num;
+						numParser >> num;
+					}
+					else
+					{
+						uint32_t num;
+						numParser >> num;
+					}
+
 				}
 			}
-			else if (std::regex_match(line, indexMatch, indexRegex)) {
-				for (size_t i = 1; i < 4; i++)
+			else {
+				const uint16_t numElements = 1;
+				std::istringstream numParser(line.substr(1));
+				for (int i = 0; i < 3 * numElements; i++)
 				{
-					std::istringstream numConverter(indexMatch[i]);
-
-					uint32_t index;
-					numConverter >> index;
-					index--;
-					mesh->getIndices().push_back(index);
+					int num;
+					numParser >> num;
+					mesh->getIndices().push_back(num - 1);
 				}
 			}
-			else if (std::regex_match(line, indexMatch, indexNormalTexRegex)) {
-				for (size_t i = 1; i < 4; i++)
-				{
-					std::istringstream numConverter(indexMatch[i]);
-
-					uint32_t index;
-					numConverter >> index;
-					index--;
-					mesh->getIndices().push_back(index);
-				}
-			}
+				*/
 		}
 	};
 }
