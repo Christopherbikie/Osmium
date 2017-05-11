@@ -7,7 +7,7 @@ namespace ui
 {
 	static int32_t entitySelectionIndex = 0;
 
-	void update(std::shared_ptr<os::Scene> scene, TimeState *timeState)
+	void update(std::shared_ptr<os::Scene> scene, TimeState *timeState, int32_t *exp)
 	{
 		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", timeState->delta, ImGui::GetIO().Framerate);
 
@@ -47,13 +47,18 @@ namespace ui
 			}
 			ImGui::Text(deltaString, timeState->delta * timeState->deltaMultiplier);
 
-			ImGui::SliderFloat("Speed", &timeState->deltaMultiplier, 0.0f, 1e8f, "%.3e seconds/second", 10);
+			ImGui::SliderFloat("Speed", &timeState->deltaMultiplier, 0.0f, 1e12f, "%.3e seconds/second", 10);
 
 			if (ImGui::Button("Toggle pause"))
 				timeState->paused = !timeState->paused;
 			ImGui::SameLine();
 			if (ImGui::Button("Toggle reverse"))
 				timeState->reversed = !timeState->reversed;
+		}
+
+		if (ImGui::CollapsingHeader("Physics Settings"))
+		{
+			ImGui::InputInt("Exp", exp, 1);
 		}
 
 		if (ImGui::CollapsingHeader("Entity Details"))

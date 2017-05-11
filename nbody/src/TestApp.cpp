@@ -48,6 +48,8 @@ void TestApp::run()
 		cameraEntity->addComponent("Control", control);
 	}
 
+	int32_t exp = -2;
+
 	{
 		auto entity = scene->addEntity("Earth");
 
@@ -69,7 +71,7 @@ void TestApp::run()
 		entity->addComponent("Transform", transform);
 
 		auto physics = std::make_shared<PhysicsComponent<3, double_t>>(transform, moonMass);
-		physics->setVelocity(glm::dvec3(0.0, 0.0, physics::getStableOrbitVelocity(earthMass, moonOrbitalRadius)));
+		physics->setVelocity(glm::dvec3(0.0, 0.0, physics::getStableOrbitVelocity(earthMass, moonOrbitalRadius, exp)));
 		entity->addComponent("Physics", physics);
 	}
 
@@ -115,7 +117,7 @@ void TestApp::run()
 				auto phys2 = std::static_pointer_cast<PhysicsComponent<3, double_t>>(ent2->getComponent("Physics"));
 				auto trans2 = std::static_pointer_cast<Transform<3, double_t>>(ent2->getComponent("Transform"));
 
-				glm::dvec3 force = physics::getGravityForce(phys1->getMass(), phys2->getMass(), trans1->getPosition(), trans2->getPosition());
+				glm::dvec3 force = physics::getGravityForce(phys1->getMass(), phys2->getMass(), trans1->getPosition(), trans2->getPosition(), exp);
 				phys1->getForce() += force;
 				phys2->getForce() -= force;
 			}
@@ -150,7 +152,7 @@ void TestApp::run()
 		}
 
 		// GUI
-		ui::update(scene, &timeState);
+		ui::update(scene, &timeState, &exp);
 
 		// Swap buffers
 

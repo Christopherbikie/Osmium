@@ -13,5 +13,5 @@ namespace ui
 		bool reversed;
 	};
 
-	void update(std::shared_ptr<os::Scene> scene, TimeState *timeState);
+	void update(std::shared_ptr<os::Scene> scene, TimeState *timeState, int32_t *exp);
 }
