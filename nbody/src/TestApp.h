@@ -19,6 +19,6 @@ public:
 	void pressKey(uint32_t key) override;
 
 private:
-	os::Scene scene;
+	std::shared_ptr<os::Scene> scene;
 	std::shared_ptr<os::LogicalEntity> cameraEntity;
 };

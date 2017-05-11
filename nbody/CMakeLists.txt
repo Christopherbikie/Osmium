@@ -16,6 +16,7 @@ set(SOURCE_FILES
         src/components/PhysicsComponent.h
 		src/main.cpp
 		src/TestApp.cpp
+		src/UI.cpp
 )
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
