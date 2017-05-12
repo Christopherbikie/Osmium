@@ -13,23 +13,22 @@
 
 namespace os
 {
-	struct vertex
+	namespace Model
 	{
-		glm::vec3 position;
-		glm::vec3 normal;
-	};
-
+		struct parsedshape
+		{
+			std::string name;
+			std::vector<uint32_t> vertex_indices;
+		};
+	}
 	class Mesh
 	{
-		std::vector<vertex> vertices;
-		std::vector<uint32_t> indices;
 		std::shared_ptr<VAO> meshVAO;
-		bool loaded = false;
+		std::vector<Model::parsedshape> parsedShapes;
 	public:
 		Mesh();
+		Mesh(const char* objPath);
 		~Mesh();
-		std::vector<vertex>& getVertices();
-		std::vector<uint32_t>& getIndices();
 		void draw(Shader * shader);
 	};
 }

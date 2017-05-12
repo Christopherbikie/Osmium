@@ -23,21 +23,21 @@ namespace os
 		glBindVertexArray(0);
 	}
 
-	void VAO::storeInBuffer(uint32_t location, uint32_t componentsPerVertex, uint32_t vertexCount, float_t *data)
+	void VAO::storeInBuffer(uint32_t location, uint32_t componentsPerVertex, uint32_t dataSize, float_t *data)
 	{
 		bind();
 
 		glGenBuffers(1, &mVBOs[location]);
 		glBindBuffer(GL_ARRAY_BUFFER, mVBOs[location]);
-		glBufferData(GL_ARRAY_BUFFER, vertexCount * componentsPerVertex * sizeof(float_t), data, GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, dataSize * sizeof(float_t), data, GL_STATIC_DRAW);
 
-		glVertexAttribPointer(location, componentsPerVertex, GL_FLOAT, GL_FALSE, componentsPerVertex * sizeof(float_t), (void *) 0);
+		glVertexAttribPointer(location, componentsPerVertex, GL_FLOAT, GL_FALSE, 0, (void *) 0);
 		glEnableVertexAttribArray(location);
 
 		unbind();
 
-		if (vertexCount > mVertexCount)
-			mVertexCount = vertexCount;
+		if (dataSize > mVertexCount)
+			mVertexCount = dataSize;
 	}
 
 	void VAO::storeInElementBuffer(uint32_t vertexCount, uint32_t *data)

@@ -4,8 +4,8 @@
 #include <imgui/imgui_impl_glfw_gl3.h>
 #include <render/entity/components/PlayerControlFPV.h>
 #include <render/entity/components/CameraPerspective.h>
-#include <render/mesh/OBJLoader.h>
 #include <input/Mouse.h>
+#include <render/mesh/Mesh.h>
 #include <app/Settings.h>
 
 
@@ -13,7 +13,7 @@ using namespace os;
 
 void TestApp::run()
 {
-	auto test = OBJLoader::loadOBJ("res/sponza.obj");
+	auto test = Mesh("res/models/cube.obj");
 
 	shader = new os::Shader;
 	shader->addSource(VERTEX_SHADER, "res/shaders/vertex.vert");
@@ -63,8 +63,8 @@ void TestApp::run()
 		shader->loadUniform("projection", camera->getProjMatrix());
 
 		//texture->bind(shader, "diffuse");
-		glFrontFace(GL_CW);
-		test->draw(shader);
+		glFrontFace(GL_CCW);
+		test.draw(shader);
 		//texture->unbind();
 
 		// GUI

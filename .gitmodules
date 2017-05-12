@@ -15,3 +15,6 @@
 [submodule "deps/Simple-OpenGL-Image-Library"]
 	path = deps/Simple-OpenGL-Image-Library
 	url = https://github.com/kbranigan/Simple-OpenGL-Image-Library
+[submodule "deps/tinyobjloader"]
+	path = deps/tinyobjloader
+	url = https://github.com/syoyo/tinyobjloader

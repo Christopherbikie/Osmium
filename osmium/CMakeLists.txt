@@ -9,12 +9,14 @@ include_directories(
         ../deps/glm
         ../deps/imgui
         ../deps/Simple-OpenGL-Image-Library/src
+		../deps/tinyobjloader
 )
 
 file(GLOB DEPS_SOURCES
         ../deps/glad/src/glad.c
         ../deps/imgui/*.h
         ../deps/imgui/*.cpp
+		../deps/tinyobjloader/tiny_obj_loader.cc
 )
 
 set(SOURCE_FILES
@@ -34,7 +36,6 @@ set(SOURCE_FILES
 		render/entity/LogicalEntity.cpp
 		render/scene/SceneManager.cpp
 		render/mesh/Mesh.cpp
-		render/mesh/OBJLoader.cpp
 		render/graphics/Shader.cpp
         render/graphics/Texture.cpp
         render/graphics/VAO.cpp
