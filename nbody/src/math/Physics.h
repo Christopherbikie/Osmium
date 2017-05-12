@@ -41,8 +41,8 @@ namespace physics
 	}
 
 	template <typename type>
-	type getStableOrbitVelocity(type m, type r)
+	type getStableOrbitVelocity(type m, type r, float_t exp = -2.0f)
 	{
-		return sqrt(G * m / r);
+		return sqrt(G * m * pow(r, exp + 1));
 	};
 }

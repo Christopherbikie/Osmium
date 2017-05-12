@@ -5,14 +5,23 @@
 #include <render/entity/components/PlayerControlFPV.h>
 #include <input/Mouse.h>
 #include <app/Settings.h>
+#include <render/mesh/OBJLoader.h>
 #include "components/PhysicsComponent.h"
 #include "math/Physics.h"
+#include "UI.h"
 
 using namespace os;
+
+const double_t earthMass = 5.97219e24;
+const double_t earthRadius = 6'371'000;
+const double_t moonMass = 7.34767309e22;
+const double_t moonRadius = 1'737'000;
+const double_t moonOrbitalRadius = 3.85e8;
 
 void TestApp::run()
 {
 	settings::setWindowTitle("n-body simulation by Chris and Matt");
+	setWindowSize(glm::ivec2(1600, 900));
 
 	glEnable(GL_PROGRAM_POINT_SIZE);
 
@@ -21,51 +30,73 @@ void TestApp::run()
 	shader->addSource(FRAGMENT_SHADER, "res/shaders/fragment.frag");
 	shader->link();
 
-	float_t pointVertices[] = {
-			0.0f, 0.0f, 0.0f
-	};
+	auto mesh = OBJLoader::loadOBJ("res/models/sphere.obj");
 
-	std::unique_ptr<VAO> vao = std::make_unique<VAO>();
-	vao->storeInBuffer(0, 3, 1, pointVertices);
+	scene = std::make_shared<Scene>();
 
-	scene = Scene();
-	cameraEntity = scene.addLogical("Camera");
+	{
+		cameraEntity = scene->addLogical("Camera");
 
-	auto cameraTransform = std::make_shared<Transform<3, float_t>>(Transform<3, float_t>());
-	auto camera = std::make_shared<CameraPerspective>(CameraPerspective(cameraTransform, 60.0f, settings::getAspectRatio(), 0.3f, 100.0f));
-	auto control = std::make_shared<PlayerControlFPV>(PlayerControlFPV(cameraTransform));
+		auto cameraTransform = std::make_shared<Transform<3, float_t>>(Transform<3, float_t>());
+		cameraTransform->setPosition(glm::dvec3(moonOrbitalRadius, 0.0, 0.0));
+		auto camera = std::make_shared<CameraPerspective>(CameraPerspective(cameraTransform, 60.0f, settings::getAspectRatio(), 10000.0f, 10'000'000'000.0f));
+		auto control = std::make_shared<PlayerControlFPV>(PlayerControlFPV(cameraTransform));
+		control->setMoveSpeed(50000000.0f);
 
-	cameraEntity->addComponent("Transform", cameraTransform);
-	cameraEntity->addComponent("Camera", camera);
-	cameraEntity->addComponent("Control", control);
+		cameraEntity->addComponent("Transform", cameraTransform);
+		cameraEntity->addComponent("Camera", camera);
+		cameraEntity->addComponent("Control", control);
+	}
 
-	for (int x = 0; x < 10; x++)
-		for (int z = 0; z < 10; z++)
-		{
-			auto entity = scene.addEntity("ent" + std::to_string(x) + std::to_string(z));
+	int32_t exp = -2;
 
-			auto transform = std::make_shared<Transform<3, double_t>>(Transform<3, double_t>());
-			transform->setPosition(glm::vec3(x, 0.0f, z));
-			entity->addComponent("Transform", transform);
+	{
+		auto entity = scene->addEntity("Earth");
 
-			auto physics = std::make_shared<PhysicsComponent<3, double_t>>(transform, 10);
-			entity->addComponent("Physics", physics);
-		}
+		auto transform = std::make_shared<Transform<3, double_t>>(Transform<3, double_t>());
+		transform->setPosition(glm::dvec3(0.0));
+		transform->setScale(glm::vec3(earthRadius));
+		entity->addComponent("Transform", transform);
+
+		auto physics = std::make_shared<PhysicsComponent<3, double_t>>(transform, earthMass);
+		entity->addComponent("Physics", physics);
+	}
+
+	{
+		auto entity = scene->addEntity("Moon");
+
+		auto transform = std::make_shared<Transform<3, double_t>>(Transform<3, double_t>());
+		transform->setPosition(glm::dvec3(moonOrbitalRadius, 0.0, 0.0));
+		transform->setScale(glm::vec3(moonRadius));
+		entity->addComponent("Transform", transform);
+
+		auto physics = std::make_shared<PhysicsComponent<3, double_t>>(transform, moonMass);
+		physics->setVelocity(glm::dvec3(0.0, 0.0, physics::getStableOrbitVelocity(earthMass, moonOrbitalRadius, exp)));
+		entity->addComponent("Physics", physics);
+	}
 
 	// Get list of entities to apply physics operations to
 	std::vector<std::shared_ptr<Entity>> physicsEnts;
-	for (worldEnt ent : scene.getWorldEnts())
+	for (worldEnt ent : scene->getWorldEnts())
 		if (std::get<1>(ent)->getComponent("Physics") != nullptr)
 			physicsEnts.push_back(std::get<1>(ent));
 
 	keyboard::addKeyHandler(GLFW_KEY_ESCAPE, this);
 
+	ui::TimeState timeState;
+	timeState.deltaMultiplier = 1.0f;
+	timeState.paused = false;
+	timeState.reversed = false;
+
 	while (!glfwWindowShouldClose(mWindow))
 	{
 		newFrame();
-		double_t delta = 1000.0f / ImGui::GetIO().Framerate;
+		timeState.delta = 1000.0f / ImGui::GetIO().Framerate;
+		timeState.scaledDelta = timeState.paused ? 0.0 : timeState.delta * timeState.deltaMultiplier / 1000.0;
+		if (timeState.reversed) timeState.scaledDelta *= -1;
 
-		control->update((float_t) delta);
+		auto control = std::static_pointer_cast<PlayerControlFPV>(cameraEntity->getComponent("Control"));
+		control->update((float_t) timeState.delta);
 
 		// Do physics
 
@@ -86,7 +117,7 @@ void TestApp::run()
 				auto phys2 = std::static_pointer_cast<PhysicsComponent<3, double_t>>(ent2->getComponent("Physics"));
 				auto trans2 = std::static_pointer_cast<Transform<3, double_t>>(ent2->getComponent("Transform"));
 
-				glm::dvec3 force = physics::getGravityForce(phys1->getMass(), phys2->getMass(), trans1->getPosition(), trans2->getPosition());
+				glm::dvec3 force = physics::getGravityForce(phys1->getMass(), phys2->getMass(), trans1->getPosition(), trans2->getPosition(), exp);
 				phys1->getForce() += force;
 				phys2->getForce() -= force;
 			}
@@ -99,51 +130,29 @@ void TestApp::run()
 			auto trans = std::static_pointer_cast<Transform<3, double_t>>(ent->getComponent("Transform"));
 
 			glm::dvec3 acceleration = physics::getAcceleration(phys->getForce(), phys->getMass());
-			phys->setVelocity(physics::getNextVelocity(delta, acceleration, phys->getVelocity()));
-			trans->setPosition(physics::getNextPosition(delta, trans->getPosition(), phys->getVelocity()));
+			phys->setAcceleration(acceleration); // Not used for calculations, just saved to be displayed to user
+			phys->setVelocity(physics::getNextVelocity(timeState.scaledDelta, acceleration, phys->getVelocity()));
+			trans->setPosition(physics::getNextPosition(timeState.scaledDelta, trans->getPosition(), phys->getVelocity()));
 		}
 
 		// Render dots
 
 		shader->use();
+		auto camera = std::static_pointer_cast<CameraPerspective>(cameraEntity->getComponent("Camera"));
 		shader->loadUniform("view", camera->getViewMatrix());
 		shader->loadUniform("projection", camera->getProjMatrix());
 
-		for (worldEnt ent : scene.getWorldEnts())
+		for (worldEnt ent : scene->getWorldEnts())
 		{
 			if (std::get<0>(ent) == "Camera")
 				continue;
 			auto transform = std::static_pointer_cast<Transform<3, double_t>>(std::get<1>(ent)->getComponent("Transform"));
 			shader->loadUniform("model", transform->getMatrix());
-			vao->bind();
-			shader->drawArrays(0, 1, GL_POINTS);
-			vao->unbind();
+			mesh->draw(shader.get());
 		}
 
 		// GUI
-
-		ImGui::Text("Hello, world!");
-		glm::vec2 viewport = settings::getViewport();
-		ImGui::Text("Viewport: x: %.0f y: %.0f", viewport.x, viewport.y);
-
-		static GLchar buf[64] = "";
-		ImGui::InputText("Window Title", buf, 64);
-		if (ImGui::Button("Set"))
-			settings::setWindowTitle(buf);
-
-		glm::vec3 clearColor = settings::getClearColour();
-		ImGui::ColorEdit3("Clear color", (GLfloat *) &clearColor);
-		settings::setClearColour(clearColor);
-
-		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", delta, ImGui::GetIO().Framerate);
-
-		glm::vec3 temp = cameraTransform->getPosition();
-		ImGui::InputFloat3("Camera position", (GLfloat *) &temp);
-		cameraTransform->setPosition(temp);
-		temp = cameraTransform->getRotation();
-		ImGui::InputFloat3("Camera rotation", (GLfloat *) &temp);
-		cameraTransform->setRotation(temp);
-		ImGui::Render();
+		ui::update(scene, &timeState, &exp);
 
 		// Swap buffers
 

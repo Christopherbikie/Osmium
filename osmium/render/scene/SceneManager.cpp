@@ -14,11 +14,12 @@ namespace os
 
 	std::shared_ptr<LogicalEntity> Scene::addLogical(std::string tag)
 	{
-		LogicalEntity ent;
+		std::shared_ptr<LogicalEntity> vecptr = std::make_shared<LogicalEntity>();
+		std::shared_ptr<LogicalEntity> returnptr = vecptr;
 
-		this->logicalEnts.push_back(logicEnt(tag, std::make_shared<LogicalEntity>(ent)));
+		this->logicalEnts.push_back(logicEnt(tag, vecptr));
 
-		return std::make_shared<LogicalEntity>(ent);
+		return returnptr;
 	}
 
 	worldList Scene::getWorldEnts()
