@@ -6,6 +6,7 @@
 #include <input/Mouse.h>
 #include <app/Settings.h>
 #include <render/mesh/OBJLoader.h>
+#include "components/PathComponent.h"
 #include "components/PhysicsComponent.h"
 #include "math/Physics.h"
 #include "UI.h"
@@ -23,14 +24,20 @@ void TestApp::run()
 	settings::setWindowTitle("n-body simulation by Chris and Matt");
 	setWindowSize(glm::ivec2(1600, 900));
 
-	glEnable(GL_PROGRAM_POINT_SIZE);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	std::shared_ptr<Shader> shader = std::make_shared<Shader>();
 	shader->addSource(VERTEX_SHADER, "res/shaders/vertex.vert");
 	shader->addSource(FRAGMENT_SHADER, "res/shaders/fragment.frag");
 	shader->link();
 
-	auto mesh = OBJLoader::loadOBJ("res/models/sphere.obj");
+	std::shared_ptr<Shader> pathShader = std::make_shared<Shader>();
+	pathShader->addSource(VERTEX_SHADER, "res/shaders/path.vert");
+	pathShader->addSource(FRAGMENT_SHADER, "res/shaders/path.frag");
+	pathShader->link();
+
+	auto mesh = Mesh("res/models/sphere.obj");
 
 	scene = std::make_shared<Scene>();
 
@@ -60,6 +67,9 @@ void TestApp::run()
 
 		auto physics = std::make_shared<PhysicsComponent<3, double_t>>(transform, earthMass);
 		entity->addComponent("Physics", physics);
+
+		auto path = std::make_shared<PathComponent<3, double_t>>(transform);
+		entity->addComponent("Path", path);
 	}
 
 	{
@@ -73,6 +83,9 @@ void TestApp::run()
 		auto physics = std::make_shared<PhysicsComponent<3, double_t>>(transform, moonMass);
 		physics->setVelocity(glm::dvec3(0.0, 0.0, physics::getStableOrbitVelocity(earthMass, moonOrbitalRadius, exp)));
 		entity->addComponent("Physics", physics);
+
+		auto path = std::make_shared<PathComponent<3, double_t>>(transform);
+		entity->addComponent("Path", path);
 	}
 
 	// Get list of entities to apply physics operations to
@@ -135,7 +148,7 @@ void TestApp::run()
 			trans->setPosition(physics::getNextPosition(timeState.scaledDelta, trans->getPosition(), phys->getVelocity()));
 		}
 
-		// Render dots
+		// Render entities
 
 		shader->use();
 		auto camera = std::static_pointer_cast<CameraPerspective>(cameraEntity->getComponent("Camera"));
@@ -148,7 +161,21 @@ void TestApp::run()
 				continue;
 			auto transform = std::static_pointer_cast<Transform<3, double_t>>(std::get<1>(ent)->getComponent("Transform"));
 			shader->loadUniform("model", transform->getMatrix());
-			mesh->draw(shader.get());
+			mesh.draw(shader.get());
+		}
+
+		// Render paths / trails
+
+		pathShader->use();
+		pathShader->loadUniform("view", camera->getViewMatrix());
+		pathShader->loadUniform("projection", camera->getProjMatrix());
+
+		for (worldEnt ent : scene->getWorldEnts())
+		{
+			auto path = std::static_pointer_cast<PathComponent<3, double_t>>(std::get<1>(ent)->getComponent("Path"));
+			if (path == nullptr) continue;
+			path->updatePath();
+			path->renderPath(pathShader);
 		}
 
 		// GUI

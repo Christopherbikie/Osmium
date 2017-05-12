@@ -13,7 +13,7 @@ using namespace os;
 
 void TestApp::run()
 {
-	auto test = Mesh("res/models/crytek_sponza.obj");
+	auto test = Mesh("res/models/sponza.obj");
 
 	shader = new os::Shader;
 	shader->addSource(VERTEX_SHADER, "res/shaders/vertex.vert");

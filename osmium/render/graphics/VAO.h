@@ -15,8 +15,9 @@ namespace os
 		void bind() const;
 		static void unbind();
 
-		void storeInBuffer(uint32_t location, uint32_t componentsPerVertex, uint32_t vertexCount, float_t *data);
+		void storeInBuffer(uint32_t location, uint32_t componentsPerVertex, uint32_t dataSize, float_t *data);
 		void storeInElementBuffer(uint32_t vertexCount, uint32_t *data);
+		void subBuffer(uint32_t location, float_t *data, uint32_t componentsPerVertex, uint32_t vertexCount, uint32_t offset = 0);
 
 		void bindEBO() const;
 
