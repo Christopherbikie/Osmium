@@ -31,56 +31,52 @@ namespace os
 		std::vector<tinyobj::material_t> materials;
 
 		std::string err;
-		
-		std::vector<float_t> correctedVertices;
-		std::vector<float_t> correctedNormals;
-		std::vector<uint32_t> correctedTexCoords;
-
 
 		tinyobj::LoadObj(&attrib, &shapes, &materials, &err, objPath, "res/materials/", true);
-
-		
-		std::vector<uint32_t> indices;
-
 		// correctedVertices has to have an individual vertex for each vertex-normal pair
 		// loop through the shapes and then loop through indices take the vertex index and the normal index as 'i'
 		// take attrib.vertices[i] and attrib.normals[i]
 		//
 
-		std::map<std::pair<uint32_t, uint32_t>, uint32_t> uniquePairs;
+		std::vector<glm::vec3> correctedVectors;
+		std::vector<glm::vec3> correctedNormals;
+		
+
+		std::map<std::pair<uint32_t, uint32_t>, uint32_t> indexMap;
+		size_t currentIndex;
+		size_t nextIndex = 0;
 
 		for (auto& shape : shapes)
 		{
+			
 			Model::parsedshape newShape;
+
 			newShape.name = shape.name;
 
-			/*
-			for (size_t it = 0; it < shape.mesh.indices.size(); it++)
+			
+
+			for (auto& index : shape.mesh.indices)
 			{
-				glm::vec3 vertex;
-				glm::vec3 normal;
-				uint32_t combinedIndex = 0;
-
-
-				uint32_t vertex_index = shape.mesh.indices[it].vertex_index;
-				uint32_t normal_index = shape.mesh.indices[it].normal_index;
-				
-				if (uniquePairs[std::pair<uint32_t, uint32_t>(vertex_index, normal_index)])
+				if (uint32_t foundIndex = indexMap[std::pair<uint32_t, uint32_t>(index.vertex_index, index.normal_index)])
 				{
-					combinedIndex = uniquePairs[std::pair<uint32_t, uint32_t>(vertex_index, normal_index)];
+					currentIndex = foundIndex;
 				}
 				else
 				{
-					correctedVertices.push_back(attrib.vertices[vertex_index]);
-					correctedNormals.push_back(attrib.normals[normal_index]);
-					uniquePairs[std::pair<uint32_t, uint32_t>(vertex_index, normal_index)] = combinedIndex;
+					currentIndex = nextIndex;
 					
-					combinedIndex = combinedIndex + 1;
-				}
-			*/
+					uint32_t vertIndex = index.vertex_index;
+					uint32_t normIndex = index.normal_index;
+					
+					indexMap[std::pair<uint32_t, uint32_t>(vertIndex, normIndex)] = currentIndex;
 
-				for (auto& index : shape.mesh.indices)
-					newShape.vertex_indices.push_back(shape.mesh.indices[index].vertex_index);
+					correctedVectors.push_back(glm::vec3(attrib.vertices[vertIndex * 3], attrib.vertices[vertIndex * 3 + 1], attrib.vertices[vertIndex * 3 + 2]));
+					if (attrib.normals.size() > 0)
+						correctedNormals.push_back(glm::vec3(attrib.normals[normIndex * 3], attrib.normals[normIndex * 3 + 1], attrib.normals[normIndex * 3 + 2]));
+					nextIndex++;
+				}
+
+				newShape.vertex_indices.push_back(currentIndex);
 			}
 
 			this->parsedShapes.push_back(newShape);
@@ -94,11 +90,11 @@ namespace os
 
 		this->meshVAO->bind();
 		if (attrib.vertices.size() > 0)
-			this->meshVAO->storeInBuffer(0, 3, attrib.vertices.size(), &attrib.vertices[0]);
+			this->meshVAO->storeInBuffer(0, 3, correctedVectors.size() * 3, &correctedVectors[0][0]);
 		if (attrib.normals.size() > 0)
-			this->meshVAO->storeInBuffer(1, 3, correctedNormals.size(), &correctedNormals[0]);
-		if (attrib.texcoords.size() > 0)
-			this->meshVAO->storeInBuffer(2, 2, attrib.texcoords.size(), &attrib.texcoords[0]);
+			this->meshVAO->storeInBuffer(1, 3, correctedNormals.size() * 3, &correctedNormals[0][0]);
+		//if (attrib.texcoords.size() > 0)
+		//	this->meshVAO->storeInBuffer(2, 2, attrib.texcoords.size(), &attrib.texcoords[0]);
 		//this->meshVAO->storeInElementBuffer(indices.size(), &indices[0]);
 		this->meshVAO->unbind();
 
