@@ -54,6 +54,14 @@ namespace os
 			mVertexCount = vertexCount;
 	}
 
+	void VAO::subBuffer(uint32_t location, float_t *data, uint32_t componentsPerVertex, uint32_t vertexCount, uint32_t offset)
+	{
+		bind();
+		glBindBuffer(GL_ARRAY_BUFFER, mVBOs[location]);
+		glBufferSubData(GL_ARRAY_BUFFER, offset, vertexCount * componentsPerVertex * sizeof(float_t), data);
+		unbind();
+	}
+
 	void VAO::bindEBO() const
 	{
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mEBO);

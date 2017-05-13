@@ -14,6 +14,7 @@ include_directories(GLOB
 
 set(SOURCE_FILES
         src/components/PhysicsComponent.h
+        src/components/PathComponent.h
 		src/main.cpp
 		src/TestApp.cpp
 		src/UI.cpp
