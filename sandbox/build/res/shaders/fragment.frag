@@ -20,6 +20,6 @@ uniform Material material;
 
 void main()
 {
-    //color = texture(material.diffuse_map, pass_texCoord);
-    color = vec4(pass_normal, 1.0f);
+    color = texture(material.diffuse_map, pass_texCoord);
+    //color = vec4(pass_normal, 1.0f);
 }
