@@ -27,6 +27,7 @@ void TestApp::run()
 	std::shared_ptr<Transform<3, double_t>> transform = std::make_shared<Transform<3, double_t>>(Transform<3, double_t>());
 	ent.addComponent("Transform", transform);
 
+    transform->setScale(glm::vec3(0.01f));
 	auto cameraTransform = std::make_shared<Transform<3, float_t>>(Transform<3, float_t>());
 	auto camera = std::make_shared<CameraPerspective>(CameraPerspective(cameraTransform, 60.0f, settings::getAspectRatio(), 0.3f, 100.0f));
 	auto control = std::make_shared<PlayerControlFPV>(PlayerControlFPV(cameraTransform));

@@ -29,8 +29,6 @@ namespace os
 		std::shared_ptr<Texture> emissionMap;
 	public:
 		Material();
-		Material(std::string albedo, std::string normal, std::string specular, std::string height, std::string emission);
-		Material(Texture albedo, Texture normal, Texture specular, Texture height, Texture emission);
 
 		void setDiffuseMap(std::string diffuse);
 		void setDiffuseMap(Texture diffuse);
@@ -47,10 +45,6 @@ namespace os
 		void setSpecularHighlightsMap(std::string highlights);
 		void setSpecularHighlightsMap(Texture highlights);
 		std::shared_ptr<Texture> getSpecularHighlightsMap();
-
-		void setEmissionMap(std::string emission);
-		void setEmissionMap(Texture emission);
-		std::shared_ptr<Texture> getEmissionMap();
 
 		void bind(Shader* shader);
 		void unbind();

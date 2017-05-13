@@ -31,7 +31,7 @@ namespace os
 		glBindBuffer(GL_ARRAY_BUFFER, mVBOs[location]);
 		glBufferData(GL_ARRAY_BUFFER, dataSize * sizeof(float_t), data, GL_STATIC_DRAW);
 
-		glVertexAttribPointer(location, componentsPerVertex, GL_FLOAT, GL_FALSE, componentsPerVertex * sizeof(float_t), (void *) 0);
+		glVertexAttribPointer(location, componentsPerVertex, GL_FLOAT, GL_FALSE, componentsPerVertex * sizeof(float_t), nullptr);
 		glEnableVertexAttribArray(location);
 
 		unbind();

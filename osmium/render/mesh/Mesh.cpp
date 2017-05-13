@@ -57,6 +57,13 @@ namespace os
 
 			if (mat.diffuse_texname.size() > 0)
 			{
+
+                size_t slashLocation = 0;
+                slashLocation = mat.diffuse_texname.find("\\");
+                if (slashLocation != std::string::npos)
+                    mat.diffuse_texname.replace(slashLocation, 1, "/");
+
+
 				newMaterial.setDiffuseMap(basePath + mat.diffuse_texname);
 				newMaterial.setAmbientMap(basePath + mat.ambient_texname);
 				newMaterial.setSpecularMap(basePath + mat.specular_texname);
@@ -88,10 +95,16 @@ namespace os
 
 			newShape.name = shape.name;
 
-			if (shape.mesh.material_ids.size() > 0 && shape.mesh.material_ids.size() > shapeIndex)
-			{
-				newShape.material = parsedMaterials[shape.mesh.material_ids[shapeIndex]];
-			}
+			if (shape.mesh.material_ids.size() > 0 && shape.mesh.material_ids.size() > shapeIndex) {
+                auto materialIndex = shape.mesh.material_ids[shapeIndex];
+                if (materialIndex >= 0) {
+                    newShape.material = parsedMaterials[materialIndex];
+                }
+                else
+                {
+                    newShape.material = parsedMaterials[parsedMaterials.size() + materialIndex];
+                }
+            }
 			else
 			{
 				newShape.material = parsedMaterials[materials.size() - 1];
@@ -104,11 +117,6 @@ namespace os
 				
 				if (currentMaterialId < 0 || (currentMaterialId > materials.size()))
 					currentMaterialId = materials.size() - 1;
-
-				if (i % 3 == 0)
-					diffuseColors.push_back(glm::vec3(materials[currentMaterialId].diffuse[0],
-						materials[currentMaterialId].diffuse[1],
-						materials[currentMaterialId].diffuse[2]));
 				
 				if (uint32_t foundIndex = indexMap[indexMapType(index.vertex_index, index.normal_index, index.texcoord_index)])
 				{
@@ -127,7 +135,7 @@ namespace os
 					correctedVectors.push_back(glm::vec3(attrib.vertices[vertIndex * 3], attrib.vertices[vertIndex * 3 + 1], attrib.vertices[vertIndex * 3 + 2]));
 					if (attrib.normals.size() > 0)
 						correctedNormals.push_back(glm::vec3(attrib.normals[normIndex * 3], attrib.normals[normIndex * 3 + 1], attrib.normals[normIndex * 3 + 2]));
-					if (attrib.texcoords.size() > 0 && attrib.texcoords.size() > texcoordIndex * 2 + 1)
+					if (attrib.texcoords.size() > 0)
 						correctedTexcoords.push_back(glm::vec2(attrib.texcoords[texcoordIndex * 2], attrib.texcoords[texcoordIndex * 2 + 1]));
 					nextIndex++;
 				}
@@ -150,7 +158,7 @@ namespace os
 		if (attrib.normals.size() > 0)
 			this->meshVAO->storeInBuffer(1, 3, correctedNormals.size() * 3, &correctedNormals[0][0]);
 		if (correctedTexcoords.size() > 0)
-			this->meshVAO->storeInBuffer(2, 2, correctedTexcoords.size(), &correctedTexcoords[0][0]);
+			this->meshVAO->storeInBuffer(2, 2, correctedTexcoords.size() * 2, &correctedTexcoords[0][0]);
 		//this->meshVAO->storeInElementBuffer(indices.size(), &indices[0]);
 		this->meshVAO->unbind();
 
