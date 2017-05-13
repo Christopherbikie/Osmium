@@ -13,7 +13,7 @@ using namespace os;
 
 void TestApp::run()
 {
-	auto test = Mesh("res/models/crytek_sponza.obj");
+	auto test = Mesh("res/models/sponza.obj");
 
 	shader = new os::Shader;
 	shader->addSource(VERTEX_SHADER, "res/shaders/vertex.vert");
@@ -37,8 +37,6 @@ void TestApp::run()
 
 	//camera = new CameraPerspective(60.0f, settings::getAspectRatio(), 0.3f, 100.0f);                 // Perspective camera
 //	camera = new CameraOrthographic(glm::vec2(0.0), settings::getViewport() / 100.0f, 0.3f, 100.0f); // Orthographic camera
-
-	texture = new Texture("res/images/default.png");
 
 	keyboard::addKeyHandler(GLFW_KEY_ESCAPE, this);
 
@@ -109,7 +107,6 @@ void TestApp::run()
 	}
 
 	delete shader;
-	delete texture;
 }
 
 void TestApp::windowResizeCallback(glm::vec2 dimensions)

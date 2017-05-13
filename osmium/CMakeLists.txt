@@ -36,6 +36,7 @@ set(SOURCE_FILES
 		render/entity/LogicalEntity.cpp
 		render/scene/SceneManager.cpp
 		render/mesh/Mesh.cpp
+		render/mesh/Material.cpp
 		render/graphics/Shader.cpp
         render/graphics/Texture.cpp
         render/graphics/VAO.cpp

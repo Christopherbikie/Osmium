@@ -6,6 +6,7 @@
 #include <glm/glm.hpp>
 #include "../graphics/Shader.h"
 #include "../graphics/VAO.h"
+#include "Material.h"
 
 
 // We're going to assume all meshes will be 3 Dimensional
@@ -19,6 +20,7 @@ namespace os
 		{
 			std::string name;
 			std::vector<uint32_t> vertex_indices;
+			Material material;
 		};
 	}
 	class Mesh
