@@ -26,6 +26,13 @@ namespace os
 		this->meshVAO = std::make_shared<VAO>();
 	}
 
+	void linuxifyName(std::string& name) {
+		size_t slashLocation = 0;
+		slashLocation = name.find("\\");
+		if (slashLocation != std::string::npos)
+			name.replace(slashLocation, 1, "/");
+	}
+
 	Mesh::Mesh(const char * objPath)
 	{
 		this->meshVAO = std::make_shared<VAO>();
@@ -49,29 +56,36 @@ namespace os
 
 		std::vector<Material> parsedMaterials;
 
-
 		// TODO: Optimise so that we don't have to load textures more than once
-		for (auto& mat : materials)
+		for (auto mat : materials)
 		{
 			Material newMaterial;
 
 			if (mat.diffuse_texname.size() > 0)
 			{
-
-                size_t slashLocation = 0;
-                slashLocation = mat.diffuse_texname.find("\\");
-                if (slashLocation != std::string::npos)
-                    mat.diffuse_texname.replace(slashLocation, 1, "/");
-
-
+				linuxifyName(mat.diffuse_texname);
 				newMaterial.setDiffuseMap(basePath + mat.diffuse_texname);
-				newMaterial.setAmbientMap(basePath + mat.ambient_texname);
-				newMaterial.setSpecularMap(basePath + mat.specular_texname);
-				newMaterial.setSpecularHighlightsMap(basePath + mat.specular_highlight_texname);
 			}
 			else
 			{
 				newMaterial.setDiffuseMap("res/images/default.png");
+			}
+
+			if (mat.ambient_texname.size() > 0)
+			{
+				linuxifyName(mat.ambient_texname);
+				newMaterial.setAmbientMap(basePath + mat.ambient_texname);
+			}
+
+			if (mat.specular_texname.size() > 0)
+			{
+				linuxifyName(mat.specular_texname);
+				newMaterial.setSpecularMap(basePath + mat.specular_texname);
+			}
+			if (mat.specular_highlight_texname.size() > 0)
+			{
+				linuxifyName(mat.specular_highlight_texname);
+				newMaterial.setSpecularHighlightsMap(basePath + mat.specular_highlight_texname);
 			}
 
 			parsedMaterials.push_back(newMaterial);
@@ -90,7 +104,6 @@ namespace os
 		size_t shapeIndex = 0;
 		for (auto& shape : shapes)
 		{
-			shapeIndex++;
 			Model::parsedshape newShape;
 
 			newShape.name = shape.name;
@@ -98,16 +111,16 @@ namespace os
 			if (shape.mesh.material_ids.size() > 0 && shape.mesh.material_ids.size() > shapeIndex) {
                 auto materialIndex = shape.mesh.material_ids[shapeIndex];
                 if (materialIndex >= 0) {
-                    newShape.material = parsedMaterials[materialIndex];
+                    newShape.material = parsedMaterials[materialIndex]; // Material index for this shape
                 }
                 else
                 {
-                    newShape.material = parsedMaterials[parsedMaterials.size() + materialIndex];
+                    newShape.material = parsedMaterials[parsedMaterials.size() - 1 + materialIndex]; // Relative material, minus one because default is last
                 }
             }
 			else
 			{
-				newShape.material = parsedMaterials[materials.size() - 1];
+				newShape.material = parsedMaterials[materials.size() - 1]; // Set to default material
 			}
 
 			for (size_t i = 0; i < shape.mesh.indices.size(); i++)
@@ -158,7 +171,7 @@ namespace os
 		//this->meshVAO->storeInElementBuffer(indices.size(), &indices[0]);
 		this->meshVAO->unbind();
 
-		
+		shapeIndex++;
 	}
 
 	void Mesh::draw(Shader * shader)
@@ -166,14 +179,11 @@ namespace os
 		shader->use();
 		this->meshVAO->bind();
 		this->meshVAO->bindEBO();
-		
-		//Texture * tex = new Texture("res/materials/SP_LUK.jpg");
+
 		for (auto& shape : this->parsedShapes)
 		{
 			shape.material.bind(shader);
-			//tex->bind(shader, "diffuse");
 			glDrawElements(GL_TRIANGLES, shape.vertex_indices.size(), GL_UNSIGNED_INT, &shape.vertex_indices[0]);
-			//tex->unbind();
 			shape.material.unbind();
 		}
 

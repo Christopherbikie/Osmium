@@ -11,8 +11,7 @@ namespace os
 	// Albedo Map
 	void Material::setDiffuseMap(std::string diffuse)
 	{
-		Texture *newTex = new Texture(diffuse);
-		diffuseMap = std::shared_ptr<Texture>(newTex);
+		diffuseMap = std::shared_ptr<Texture>(new Texture(diffuse));
 	}
 
 	void Material::setDiffuseMap(Texture diffuse)
@@ -25,13 +24,13 @@ namespace os
 	}
 
 	// Normal Map
-	void Material::setAmbientMap(std::string normal)
+	void Material::setAmbientMap(std::string ambient)
 	{
-		ambientMap = std::make_shared<Texture>(Texture(normal));
+		ambientMap = std::shared_ptr<Texture>(new Texture(ambient));
 	}
-	void Material::setAmbientMap(Texture normal)
+	void Material::setAmbientMap(Texture ambient)
 	{
-		ambientMap = std::make_shared<Texture>(normal);
+		ambientMap = std::make_shared<Texture>(ambient);
 	}
 	std::shared_ptr<Texture> Material::getAmbientMap()
 	{
@@ -42,7 +41,7 @@ namespace os
 	// Specular Map
 	void Material::setSpecularMap(std::string specular)
 	{
-		specularMap = std::make_shared<Texture>(Texture(specular));
+		specularMap = std::shared_ptr<Texture>(new Texture(specular));
 	}
 	void Material::setSpecularMap(Texture specular)
 	{
@@ -56,7 +55,7 @@ namespace os
 	// Height Map
 	void Material::setSpecularHighlightsMap(std::string highlights)
 	{
-		specularHighlightsMap = std::make_shared<Texture>(Texture(highlights));
+		specularHighlightsMap = std::shared_ptr<Texture>(new Texture(highlights));
 	}
 	void Material::setSpecularHighlightsMap(Texture highlights)
 	{
@@ -74,28 +73,29 @@ namespace os
 
 		if (diffuseMap)
 		{
+			loadFlags = loadFlags | (1 << 0);
 			diffuseMap->bind(shader, "Material.diffuse_map");
 		}
 
 		if (ambientMap)
 		{
 			loadFlags = loadFlags | (1 << 1);
-			//ambientMap->bind(shader, "material.ambient_map");
+			ambientMap->bind(shader, "Material.ambient_map");
 		}
 
 		if (specularMap)
 		{
 			loadFlags = loadFlags | (1 << 2);
-			//specularMap->bind(shader, "material.specular_map");
+			specularMap->bind(shader, "Material.specular_map");
 		}
 
 		if (specularHighlightsMap)
 		{
 			loadFlags = loadFlags | (1 << 3);
-			//specularHighlightsMap->bind(shader, "material.highlight_map");
+			specularHighlightsMap->bind(shader, "Material.highlight_map");
 		}
 
-		shader->loadUniform("material.shader_parameters", loadFlags);
+		shader->loadUniform("Material.shader_parameters", loadFlags);
 	}
 
 	void Material::unbind()
