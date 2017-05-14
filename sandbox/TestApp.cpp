@@ -41,6 +41,9 @@ void TestApp::run()
 
 	keyboard::addKeyHandler(GLFW_KEY_ESCAPE, this);
 
+	uint64_t frameNum = 0;
+	glm::vec2 prevMouseV = glm::vec2(0.0f);
+
 	while (!glfwWindowShouldClose(mWindow))
 	{
 		newFrame();
@@ -96,7 +99,9 @@ void TestApp::run()
 		cameraTransform->setRotation(temp);
 
 		ImGui::InputInt2("Mouse position", (GLint *) &mouse::getPosition());
-		ImGui::InputInt2("Mouse velocity", (GLint *) &mouse::getMovement());
+		if (frameNum % 2 == 0)
+			prevMouseV = (glm::dvec2) mouse::getMovement() * 1000.0 / delta;
+		ImGui::InputFloat2("Mouse velocity (pix/sec)", (GLfloat *) &prevMouseV);
 
 		ImGui::End();
 
@@ -105,6 +110,8 @@ void TestApp::run()
 		// Swap buffers
 
 		glfwSwapBuffers(mWindow);
+
+		frameNum++;
 	}
 
 	delete shader;
