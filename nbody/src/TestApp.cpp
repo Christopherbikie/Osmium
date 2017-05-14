@@ -5,7 +5,7 @@
 #include <render/entity/components/PlayerControlFPV.h>
 #include <input/Mouse.h>
 #include <app/Settings.h>
-#include <render/mesh/OBJLoader.h>
+#include <render/mesh/Mesh.h>
 #include "components/PathComponent.h"
 #include "components/PhysicsComponent.h"
 #include "math/Physics.h"
