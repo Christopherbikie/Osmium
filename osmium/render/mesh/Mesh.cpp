@@ -115,8 +115,12 @@ namespace os
                 }
                 else
                 {
-                    newShape.material = parsedMaterials[parsedMaterials.size() - 1 + materialIndex]; // Relative material, minus one because default is last
+                    newShape.material = parsedMaterials[materials.size() - 1]; // Set to default material
                 }
+                //else
+                //{
+                //    newShape.material = parsedMaterials[parsedMaterials.size() - 1 + materialIndex]; // Relative material, minus one because default is last
+                //}
             }
 			else
 			{
