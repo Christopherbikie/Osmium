@@ -113,10 +113,6 @@ namespace os
 			for (size_t i = 0; i < shape.mesh.indices.size(); i++)
 			{
 				auto index = shape.mesh.indices[i];
-				size_t currentMaterialId = shape.mesh.material_ids[i / 3];
-				
-				if (currentMaterialId < 0 || (currentMaterialId > materials.size()))
-					currentMaterialId = materials.size() - 1;
 				
 				if (uint32_t foundIndex = indexMap[indexMapType(index.vertex_index, index.normal_index, index.texcoord_index)])
 				{
@@ -136,7 +132,7 @@ namespace os
 					if (attrib.normals.size() > 0)
 						correctedNormals.push_back(glm::vec3(attrib.normals[normIndex * 3], attrib.normals[normIndex * 3 + 1], attrib.normals[normIndex * 3 + 2]));
 					if (attrib.texcoords.size() > 0)
-						correctedTexcoords.push_back(glm::vec2(attrib.texcoords[texcoordIndex * 2], attrib.texcoords[texcoordIndex * 2 + 1]));
+						correctedTexcoords.push_back(glm::vec2(attrib.texcoords[texcoordIndex * 2], 1 - attrib.texcoords[texcoordIndex * 2 + 1]));
 					nextIndex++;
 				}
 
