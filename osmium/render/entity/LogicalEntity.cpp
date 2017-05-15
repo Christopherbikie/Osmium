@@ -1,5 +1,9 @@
 #include "LogicalEntity.h"
 
+// Include Components
+#include "components/BaseComponent.h"
+
+
 namespace os
 {
 	void LogicalEntity::addComponent(std::string componentIdentifier, std::shared_ptr<BaseComponent> componentPtr)

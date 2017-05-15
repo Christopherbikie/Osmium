@@ -1,10 +1,8 @@
 #include "BaseComponent.h"
 #include "../LogicalEntity.h"
 
-
 namespace os
 {
-
 	void BaseComponent::setParent(LogicalEntity& parent)
 	{
 		this->parent = std::make_shared<LogicalEntity>(parent);
@@ -13,9 +11,5 @@ namespace os
 	std::shared_ptr<LogicalEntity> BaseComponent::getParent()
 	{
 		return this->parent;
-	}
-
-	void BaseComponent::receiveMessage(BaseMessage message) {
-
 	}
 }
