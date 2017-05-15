@@ -62,6 +62,8 @@ public:
 			currBufferSize = nextBufferSize;
 			mCoords.resize(currCoordShowSize + currBufferSize, glm::vec<D, T>(0.0f));
 			currIndex = 0;
+			mVAO.reset(new os::VAO);
+			mVAO->storeInBuffer(0, D, (currCoordShowSize + currBufferSize) * D, &mCoords.front().x);
 		}
 
 		ImGui::ColorEdit3("Path colour", (float *) &mColour);
