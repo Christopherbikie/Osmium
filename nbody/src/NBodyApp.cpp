@@ -10,14 +10,9 @@
 #include "components/PhysicsComponent.h"
 #include "math/Physics.h"
 #include "UI.h"
+#include "Presets.h"
 
 using namespace os;
-
-const double_t earthMass = 5.97219e24;
-const double_t earthRadius = 6'371'000;
-const double_t moonMass = 7.34767309e22;
-const double_t moonRadius = 1'737'000;
-const double_t moonOrbitalRadius = 3.85e8;
 
 void NBodyApp::run()
 {
@@ -39,53 +34,21 @@ void NBodyApp::run()
 
 	auto sphereModel = Mesh("res/models/sphere.obj");
 
-	scene = std::make_shared<Scene>();
+	int32_t exp = -2;
+	scene = presets::earthMoonSystem(exp);
 
 	{
 		cameraEntity = scene->addLogical("Camera");
 
 		auto cameraTransform = std::make_shared<Transform<3, float_t>>(Transform<3, float_t>());
-		cameraTransform->setPosition(glm::dvec3(moonOrbitalRadius, 0.0, 0.0));
-		auto camera = std::make_shared<CameraPerspective>(CameraPerspective(cameraTransform, 60.0f, settings::getAspectRatio(), 10000.0f, 10'000'000'000.0f));
+		cameraTransform->setPosition(glm::dvec3(0.0, 0.0, presets::earthMoonDistance));
+		auto camera = std::make_shared<CameraPerspective>(CameraPerspective(cameraTransform, 60.0f, settings::getAspectRatio(), 10000.0f, 1000'000'000'000.0f));
 		auto control = std::make_shared<PlayerControlFPV>(PlayerControlFPV(cameraTransform));
 		control->setMoveSpeed(50000000.0f);
 
 		cameraEntity->addComponent("Transform", cameraTransform);
 		cameraEntity->addComponent("Camera", camera);
 		cameraEntity->addComponent("Control", control);
-	}
-
-	int32_t exp = -2;
-
-	{
-		auto entity = scene->addEntity("Earth");
-
-		auto transform = std::make_shared<Transform<3, double_t>>(Transform<3, double_t>());
-		transform->setPosition(glm::dvec3(0.0));
-		transform->setScale(glm::vec3((float) earthRadius));
-		entity->addComponent("Transform", transform);
-
-		auto physics = std::make_shared<PhysicsComponent<3, double_t>>(transform, earthMass);
-		entity->addComponent("Physics", physics);
-
-		auto path = std::make_shared<PathComponent<3, double_t>>(transform);
-		entity->addComponent("Path", path);
-	}
-
-	{
-		auto entity = scene->addEntity("Moon");
-
-		auto transform = std::make_shared<Transform<3, double_t>>(Transform<3, double_t>());
-		transform->setPosition(glm::dvec3(moonOrbitalRadius, 0.0, 0.0));
-		transform->setScale(glm::vec3((float) moonRadius));
-		entity->addComponent("Transform", transform);
-
-		auto physics = std::make_shared<PhysicsComponent<3, double_t>>(transform, moonMass);
-		physics->setVelocity(glm::dvec3(0.0, 0.0, physics::getStableOrbitVelocity(earthMass, moonOrbitalRadius, exp)));
-		entity->addComponent("Physics", physics);
-
-		auto path = std::make_shared<PathComponent<3, double_t>>(transform);
-		entity->addComponent("Path", path);
 	}
 
 	// Get list of entities to apply physics operations to

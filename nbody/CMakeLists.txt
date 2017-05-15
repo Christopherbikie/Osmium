@@ -17,6 +17,7 @@ set(SOURCE_FILES
         src/components/PathComponent.h
 		src/main.cpp
 		src/NBodyApp.cpp
+		src/Presets.cpp
 		src/UI.cpp
 )
 

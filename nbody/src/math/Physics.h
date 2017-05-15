@@ -40,9 +40,16 @@ namespace physics
 		return p + v * delta;
 	}
 
+	// r is distance from barycenter, not between the two masses
 	template <typename type>
-	type getStableOrbitVelocity(type m, type r, float_t exp = -2.0f)
+	type getStableOrbitVelocityNew(type m1, type m2, type r, float_t exp = -2.0f)
 	{
-		return sqrt(G * m * pow(r, exp + 1));
+		return sqrt(G * m2 * m2 * pow(r, exp + 1) / (m1 + m2));
 	};
+
+	template <typename type>
+	type getBarycenterDist(type r, type m1, type m2)
+	{
+		return r / (1 + m1 / m2);
+	}
 }
