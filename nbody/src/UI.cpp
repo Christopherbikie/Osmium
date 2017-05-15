@@ -2,6 +2,7 @@
 #include "components/PhysicsComponent.h"
 #include "components/PathComponent.h"
 #include <imgui.h>
+#include <render/entity/components/PlayerControlFPV.h>
 
 namespace ui
 {
@@ -28,6 +29,13 @@ namespace ui
 				temp = cameraTransform->getRotation();
 				ImGui::InputFloat3("Camera rotation", (GLfloat *) &temp);
 				cameraTransform->setRotation(temp);
+
+				auto playerControl = std::static_pointer_cast<os::PlayerControlFPV>(camera->getComponent("Control"));
+
+				float_t tempFloat = playerControl->getMoveSpeed();
+				ImGui::SliderFloat("Move speed", &tempFloat, 10'000'000.0f, 10'000'000'000.0f, "%.3e m/s", 3);
+				playerControl->setMoveSpeed(tempFloat);
+
 			} else
 			{
 				ImGui::Text("No LogicalEntity \"Camera\" found in scene");

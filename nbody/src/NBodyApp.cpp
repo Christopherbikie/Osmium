@@ -3,9 +3,9 @@
 #include <imgui/imgui_impl_glfw_gl3.h>
 #include <render/entity/components/CameraPerspective.h>
 #include <render/entity/components/PlayerControlFPV.h>
-#include <input/Mouse.h>
 #include <app/Settings.h>
 #include <render/mesh/Mesh.h>
+#include <util/GLMHelpers.h>
 #include "components/PathComponent.h"
 #include "components/PhysicsComponent.h"
 #include "math/Physics.h"
@@ -58,6 +58,7 @@ void NBodyApp::run()
 			physicsEnts.push_back(std::get<1>(ent));
 
 	keyboard::addKeyHandler(GLFW_KEY_ESCAPE, this);
+	mouse::addScrollHandler(this);
 
 	ui::TimeState timeState;
 	timeState.deltaMultiplier = 1.0f;
@@ -151,7 +152,7 @@ void NBodyApp::run()
 
 void NBodyApp::windowResizeCallback(glm::vec2 dimensions)
 {
-	std::shared_ptr<CameraPerspective> camera = std::static_pointer_cast<CameraPerspective>(cameraEntity->getComponent("Camera"));
+	auto camera = std::static_pointer_cast<CameraPerspective>(cameraEntity->getComponent("Camera"));
 	camera->setAspectRatio(settings::getAspectRatio());
 }
 
@@ -159,4 +160,10 @@ void NBodyApp::pressKey(uint32_t key)
 {
 	if (key == GLFW_KEY_ESCAPE)
 		mouse::toggleCaptured();
+}
+
+void NBodyApp::scroll(glm::ivec2 offset)
+{
+	auto control = std::static_pointer_cast<PlayerControlFPV>(cameraEntity->getComponent("Control"));
+	control->setMoveSpeed(control->getMoveSpeed() + control->getMoveSpeed() * 0.2f * offset.y);
 }

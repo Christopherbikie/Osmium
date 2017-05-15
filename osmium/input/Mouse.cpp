@@ -1,31 +1,56 @@
 #include <GLFW/glfw3.h>
+#include <vector>
 #include "Mouse.h"
 #include "../app/AppManager.h"
+#include <imgui.h>
+#include "../imgui/imgui_impl_glfw_gl3.h"
 
 namespace os
 {
 	namespace mouse
 	{
-		glm::ivec2 position;
-		glm::ivec2 difference;
+		glm::ivec2 cursorPosition;
+		glm::ivec2 cursorDifference;
+		glm::ivec2 scrollOffset;
 		bool captured = false;
+
+		std::vector<ScrollEventHandler *> scrollHandlers;
 
 		void mouseMoveCallback(GLFWwindow *window, double xPosition, double yPosition)
 		{
 			glm::ivec2 newPosition = glm::ivec2(xPosition, yPosition);
-			if (position.x != -1)
-				difference = newPosition - position;
-			position = newPosition;
+			if (cursorPosition.x != -1)
+				cursorDifference = newPosition - cursorPosition;
+			cursorPosition = newPosition;
+		}
+
+		void scrollCallback(GLFWwindow *window, double xoffset, double yoffset)
+		{
+			ImGui_ImplGlfwGL3_ScrollCallback(window, xoffset, yoffset);
+
+			ImGuiIO &io = ImGui::GetIO();
+			if (io.WantCaptureMouse)
+				return;
+
+			scrollOffset = glm::ivec2((int) xoffset, (int) yoffset);
+
+			for (ScrollEventHandler *handler : scrollHandlers)
+				handler->scroll(scrollOffset);
+		}
+
+		void addScrollHandler(ScrollEventHandler *handler)
+		{
+			scrollHandlers.push_back(handler);
 		}
 
 		glm::ivec2& getPosition()
 		{
-			return position;
+			return cursorPosition;
 		}
 
 		glm::ivec2& getMovement()
 		{
-			return difference;
+			return cursorDifference;
 		}
 
 		void setCaptured(bool value)
@@ -34,7 +59,7 @@ namespace os
 			if (value)
 			{
 				glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-				position = glm::ivec2(-1, -1);
+				cursorPosition = glm::ivec2(-1, -1);
 			}
 			else
 				glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
@@ -54,7 +79,8 @@ namespace os
 
 		void update()
 		{
-			difference = glm::ivec2(0);
+			cursorDifference = glm::ivec2(0);
+			scrollOffset = glm::ivec2(0);
 		}
 	}
 }

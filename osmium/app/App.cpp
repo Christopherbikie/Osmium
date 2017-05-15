@@ -67,7 +67,7 @@ namespace os
 		glfwSetFramebufferSizeCallback(mWindow, AppManager::framebufferSizeCallback);
 		glfwSetKeyCallback(mWindow, keyboard::keyCallback);
 		glfwSetCursorPosCallback(mWindow, mouse::mouseMoveCallback);
-		glfwSetScrollCallback(mWindow, ImGui_ImplGlfwGL3_ScrollCallback);
+		glfwSetScrollCallback(mWindow, mouse::scrollCallback);
 		glfwSetCharCallback(mWindow, ImGui_ImplGlfwGL3_CharCallback);
 
 		mInitialised = true;
