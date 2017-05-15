@@ -1,7 +1,7 @@
 #include "UI.h"
 #include "components/PhysicsComponent.h"
+#include "components/PathComponent.h"
 #include <imgui.h>
-#include <glad/glad.h>
 
 namespace ui
 {
@@ -90,6 +90,7 @@ namespace ui
 
 			auto transform = std::static_pointer_cast<os::Transform<3, double_t>>(std::get<1>(selectedEnt)->getComponent("Transform"));
 			auto physics = std::static_pointer_cast<PhysicsComponent<3, double_t>>(std::get<1>(selectedEnt)->getComponent("Physics"));
+			auto path = std::static_pointer_cast<PathComponent<3, double_t>>(std::get<1>(selectedEnt)->getComponent("Path"));
 
 			glm::vec3 tempvec = transform->getPosition();
 			ImGui::InputFloat3("Entity position (m)", (GLfloat *) &tempvec);
@@ -108,6 +109,13 @@ namespace ui
 			float_t tempfloat = (float_t) physics->getMass();
 			ImGui::SliderFloat("Entity mass (kg)", &tempfloat, 1.0f, 1e35f, "%.3e kg", 35.0f);
 			physics->setMass(tempfloat); // yes I know this limits mass to float precision, i'll work something out
+
+
+			if (path != nullptr && ImGui::TreeNode("Trail options"))
+			{
+				path->showUIOptions();
+				ImGui::TreePop();
+			}
 		}
 
 		ImGui::Render();
