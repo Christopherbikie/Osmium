@@ -160,10 +160,13 @@ namespace os
 		}
 
 
-		std::cout << objPath << " loaded with: " << std::endl;
-		std::cout << "verts: " << attrib.vertices.size() << std::endl;
-		//std::cout << "normals: " << correctedNormals.size() << std::endl;
-		//std::cout << "texcoords: " << correctedTexCoords.size() << std::endl;
+        std::cout << "TinyObjLoader Loaded a Model" << std::endl;
+		std::cout << "Path: " << objPath << std::endl;
+		std::cout << "Verts: " << attrib.vertices.size() << std::endl;
+		std::cout << "Normals: " << attrib.normals.size() << std::endl;
+		std::cout << "Texcoords: " << attrib.texcoords.size() << std::endl;
+        if (err != "")
+            std::cout << "One or more errors occurred during the loading of this model: " << std::endl << err;
 
 		this->meshVAO->bind();
 		if (attrib.vertices.size() > 0)

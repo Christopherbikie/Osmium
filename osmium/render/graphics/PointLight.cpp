@@ -9,7 +9,7 @@ namespace os
         this->position.z = z;
     }
 
-    void PointLight::setPostion(glm::vec3 position)
+    void PointLight::setPosition(glm::vec3 position)
     {
         this->position = position;
     }

@@ -41,7 +41,7 @@ set(SOURCE_FILES
         render/graphics/Texture.cpp
         render/graphics/VAO.cpp
         util/Loader.cpp
-)
+		render/entity/components/PointLight.cpp render/entity/components/PointLight.h)
 
 add_library(${PROJECT_NAME} ${SOURCE_FILES} ${DEPS_SOURCES})
 target_link_libraries(${PROJECT_NAME} glfw ${GLFW_LIBRARIES} SOIL ${SOIL_LIBRARIES})

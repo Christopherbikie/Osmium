@@ -1,7 +1,5 @@
 #pragma once
-
 #include <memory>
-#include "../messages/Message.h"
 
 namespace os {
 	class LogicalEntity;
@@ -13,6 +11,5 @@ namespace os {
 	public:
 		void setParent(LogicalEntity& parent);
 		std::shared_ptr<LogicalEntity> getParent();
-		void receiveMessage(BaseMessage);
 	};
 }

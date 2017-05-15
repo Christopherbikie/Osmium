@@ -16,6 +16,10 @@ namespace os
 
         const glm::vec3 &getColor();
 
+        void setIntensity(float_t intensity);
+
+        float_t getIntensity();
+
         virtual void loadUniforms(Shader* shader) = 0;
     };
 }

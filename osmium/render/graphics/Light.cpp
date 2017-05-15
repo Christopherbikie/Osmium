@@ -18,4 +18,14 @@ namespace os
     {
         return this->color;
     }
+
+    void setIntensity(float_t intensity)
+    {
+        this->intensity = intensity;
+    }
+
+    float_t getIntensity()
+    {
+        return this->intensity;
+    }
 }
