@@ -13,4 +13,3 @@ namespace os {
 		std::shared_ptr<LogicalEntity> getParent();
 	};
 }
-
