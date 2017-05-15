@@ -16,7 +16,7 @@ set(SOURCE_FILES
         src/components/PhysicsComponent.h
         src/components/PathComponent.h
 		src/main.cpp
-		src/TestApp.cpp
+		src/NBodyApp.cpp
 		src/UI.cpp
 )
 

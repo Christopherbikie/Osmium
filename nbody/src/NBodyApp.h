@@ -9,7 +9,7 @@
 
 class GLFWwindow;
 
-class TestApp : public os::App, public os::keyboard::KeyEventHandler
+class NBodyApp : public os::App, public os::keyboard::KeyEventHandler
 {
 public:
 	void run() override;

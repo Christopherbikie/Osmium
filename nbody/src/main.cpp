@@ -1,12 +1,12 @@
 #include <cstdlib>
 #include "app/AppManager.h"
-#include "TestApp.h"
+#include "NBodyApp.h"
 
 using namespace os;
 
 int main()
 {
-	if(!AppManager::init<TestApp>())
+	if(!AppManager::init<NBodyApp>())
 		return EXIT_FAILURE;
 	AppManager::instance()->run();
 	AppManager::deinit();

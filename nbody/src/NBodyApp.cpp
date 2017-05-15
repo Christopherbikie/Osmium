@@ -1,4 +1,4 @@
-#include "TestApp.h"
+#include "NBodyApp.h"
 #include <imgui.h>
 #include <imgui/imgui_impl_glfw_gl3.h>
 #include <render/entity/components/CameraPerspective.h>
@@ -19,7 +19,7 @@ const double_t moonMass = 7.34767309e22;
 const double_t moonRadius = 1'737'000;
 const double_t moonOrbitalRadius = 3.85e8;
 
-void TestApp::run()
+void NBodyApp::run()
 {
 	settings::setWindowTitle("n-body simulation by Chris and Matt");
 	setWindowSize(glm::ivec2(1600, 900));
@@ -27,17 +27,17 @@ void TestApp::run()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	std::shared_ptr<Shader> shader = std::make_shared<Shader>();
-	shader->addSource(VERTEX_SHADER, "res/shaders/vertex.vert");
-	shader->addSource(FRAGMENT_SHADER, "res/shaders/fragment.frag");
-	shader->link();
+	std::shared_ptr<Shader> entityShader = std::make_shared<Shader>();
+	entityShader->addSource(VERTEX_SHADER, "res/shaders/entity.vert");
+	entityShader->addSource(FRAGMENT_SHADER, "res/shaders/entity.frag");
+	entityShader->link();
 
 	std::shared_ptr<Shader> pathShader = std::make_shared<Shader>();
 	pathShader->addSource(VERTEX_SHADER, "res/shaders/path.vert");
 	pathShader->addSource(FRAGMENT_SHADER, "res/shaders/path.frag");
 	pathShader->link();
 
-	auto mesh = Mesh("res/models/sphere.obj");
+	auto sphereModel = Mesh("res/models/sphere.obj");
 
 	scene = std::make_shared<Scene>();
 
@@ -62,7 +62,7 @@ void TestApp::run()
 
 		auto transform = std::make_shared<Transform<3, double_t>>(Transform<3, double_t>());
 		transform->setPosition(glm::dvec3(0.0));
-		transform->setScale(glm::vec3(earthRadius));
+		transform->setScale(glm::vec3((float) earthRadius));
 		entity->addComponent("Transform", transform);
 
 		auto physics = std::make_shared<PhysicsComponent<3, double_t>>(transform, earthMass);
@@ -77,7 +77,7 @@ void TestApp::run()
 
 		auto transform = std::make_shared<Transform<3, double_t>>(Transform<3, double_t>());
 		transform->setPosition(glm::dvec3(moonOrbitalRadius, 0.0, 0.0));
-		transform->setScale(glm::vec3(moonRadius));
+		transform->setScale(glm::vec3((float) moonRadius));
 		entity->addComponent("Transform", transform);
 
 		auto physics = std::make_shared<PhysicsComponent<3, double_t>>(transform, moonMass);
@@ -150,18 +150,18 @@ void TestApp::run()
 
 		// Render entities
 
-		shader->use();
+		entityShader->use();
 		auto camera = std::static_pointer_cast<CameraPerspective>(cameraEntity->getComponent("Camera"));
-		shader->loadUniform("view", camera->getViewMatrix());
-		shader->loadUniform("projection", camera->getProjMatrix());
+		entityShader->loadUniform("view", camera->getViewMatrix());
+		entityShader->loadUniform("projection", camera->getProjMatrix());
 
 		for (worldEnt ent : scene->getWorldEnts())
 		{
 			if (std::get<0>(ent) == "Camera")
 				continue;
 			auto transform = std::static_pointer_cast<Transform<3, double_t>>(std::get<1>(ent)->getComponent("Transform"));
-			shader->loadUniform("model", transform->getMatrix());
-			mesh.draw(shader.get());
+			entityShader->loadUniform("model", transform->getMatrix());
+			sphereModel.draw(entityShader.get());
 		}
 
 		// Render paths / trails
@@ -182,18 +182,17 @@ void TestApp::run()
 		ui::update(scene, &timeState, &exp);
 
 		// Swap buffers
-
 		glfwSwapBuffers(mWindow);
 	}
 }
 
-void TestApp::windowResizeCallback(glm::vec2 dimensions)
+void NBodyApp::windowResizeCallback(glm::vec2 dimensions)
 {
 	std::shared_ptr<CameraPerspective> camera = std::static_pointer_cast<CameraPerspective>(cameraEntity->getComponent("Camera"));
 	camera->setAspectRatio(settings::getAspectRatio());
 }
 
-void TestApp::pressKey(uint32_t key)
+void NBodyApp::pressKey(uint32_t key)
 {
 	if (key == GLFW_KEY_ESCAPE)
 		mouse::toggleCaptured();
