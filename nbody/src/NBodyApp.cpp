@@ -4,8 +4,7 @@
 #include <render/entity/components/CameraPerspective.h>
 #include <render/entity/components/PlayerControlFPV.h>
 #include <app/Settings.h>
-#include <render/mesh/Mesh.h>
-#include <util/GLMHelpers.h>
+#include <render/entity/components/MeshComponent.h>
 #include "components/PathComponent.h"
 #include "components/PhysicsComponent.h"
 #include "math/Physics.h"
@@ -17,6 +16,7 @@ using namespace os;
 void NBodyApp::run()
 {
 	settings::setWindowTitle("n-body simulation by Chris and Matt");
+	settings::setClearColour(glm::vec3(0.0f));
 	setWindowSize(glm::ivec2(1600, 900));
 
 	glEnable(GL_BLEND);
@@ -31,8 +31,6 @@ void NBodyApp::run()
 	pathShader->addSource(VERTEX_SHADER, "res/shaders/path.vert");
 	pathShader->addSource(FRAGMENT_SHADER, "res/shaders/path.frag");
 	pathShader->link();
-
-	auto sphereModel = Mesh("res/models/sphere.obj");
 
 	int32_t exp = -2;
 	scene = presets::earthMoonSystem(exp);
@@ -125,7 +123,7 @@ void NBodyApp::run()
 				continue;
 			auto transform = std::static_pointer_cast<Transform<3, double_t>>(std::get<1>(ent)->getComponent("Transform"));
 			entityShader->loadUniform("model", transform->getMatrix());
-			sphereModel.draw(entityShader.get());
+			std::static_pointer_cast<MeshComponent>(std::get<1>(ent)->getComponent("Mesh"))->draw(entityShader.get());
 		}
 
 		// Render paths / trails

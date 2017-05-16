@@ -1,3 +1,4 @@
+#include <render/entity/components/MeshComponent.h>
 #include "Presets.h"
 #include "components/PathComponent.h"
 #include "components/PhysicsComponent.h"
@@ -23,6 +24,9 @@ namespace presets
 
 			auto path = std::make_shared<PathComponent<3, double_t>>(transform);
 			entity->addComponent("Path", path);
+
+			auto mesh = std::make_shared<os::MeshComponent>("res/models/earth.obj");
+			entity->addComponent("Mesh", mesh);
 		}
 
 		{
@@ -39,6 +43,9 @@ namespace presets
 
 			auto path = std::make_shared<PathComponent<3, double_t>>(transform);
 			entity->addComponent("Path", path);
+
+			auto mesh = std::make_shared<os::MeshComponent>("res/models/moon.obj");
+			entity->addComponent("Mesh", mesh);
 		}
 
 		return scene;
@@ -62,6 +69,9 @@ namespace presets
 
 			auto path = std::make_shared<PathComponent<3, double_t>>(transform);
 			entity->addComponent("Path", path);
+
+			auto mesh = std::make_shared<os::MeshComponent>("res/models/sun.obj");
+			entity->addComponent("Mesh", mesh);
 		}
 
 		{
@@ -82,6 +92,9 @@ namespace presets
 
 			auto path = std::make_shared<PathComponent<3, double_t>>(transform);
 			entity->addComponent("Path", path);
+
+			auto mesh = std::make_shared<os::MeshComponent>("res/models/earth.obj");
+			entity->addComponent("Mesh", mesh);
 		}
 
 		{
@@ -103,6 +116,9 @@ namespace presets
 
 			auto path = std::make_shared<PathComponent<3, double_t>>(transform);
 			entity->addComponent("Path", path);
+
+			auto mesh = std::make_shared<os::MeshComponent>("res/models/moon.obj");
+			entity->addComponent("Mesh", mesh);
 		}
 
 		return scene;
@@ -126,6 +142,9 @@ namespace presets
 
 			auto path = std::make_shared<PathComponent<3, double_t>>(transform);
 			entity->addComponent("Path", path);
+
+			auto mesh = std::make_shared<os::MeshComponent>("res/models/earth.obj");
+			entity->addComponent("Mesh", mesh);
 		}
 
 		{
@@ -142,6 +161,9 @@ namespace presets
 
 			auto path = std::make_shared<PathComponent<3, double_t>>(transform);
 			entity->addComponent("Path", path);
+
+			auto mesh = std::make_shared<os::MeshComponent>("res/models/earth.obj");
+			entity->addComponent("Mesh", mesh);
 		}
 
 		return scene;

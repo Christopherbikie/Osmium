@@ -31,7 +31,7 @@ set(SOURCE_FILES
 		render/entity/components/Camera.cpp
 		render/entity/components/CameraOrthographic.cpp
 		render/entity/components/CameraPerspective.cpp
-		render/entity/components/Mesh.cpp
+		render/entity/components/MeshComponent.cpp
 		render/entity/components/PlayerControlFPV.cpp
 		render/entity/LogicalEntity.cpp
 		render/scene/SceneManager.cpp
