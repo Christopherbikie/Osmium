@@ -7,6 +7,7 @@
 #include <input/Mouse.h>
 #include <render/mesh/Mesh.h>
 #include <app/Settings.h>
+#include "render/entity/components/PointLight.h"
 
 
 using namespace os;
@@ -28,13 +29,17 @@ void TestApp::run()
 	ent.addComponent("Transform", transform);
 
     transform->setScale(glm::vec3(0.01f));
-	auto cameraTransform = std::make_shared<Transform<3, float_t>>(Transform<3, float_t>());
-	auto camera = std::make_shared<CameraPerspective>(CameraPerspective(cameraTransform, 60.0f, settings::getAspectRatio(), 0.3f, 100.0f));
-	auto control = std::make_shared<PlayerControlFPV>(PlayerControlFPV(cameraTransform));
+	auto cameraTransform = std::shared_ptr<Transform<3, float_t>>(new Transform<3, float_t>());
+	auto camera = std::shared_ptr<CameraPerspective>(new CameraPerspective(cameraTransform, 60.0f, settings::getAspectRatio(), 0.3f, 100.0f));
+	auto control = std::shared_ptr<PlayerControlFPV>(new PlayerControlFPV(cameraTransform));
+	auto light = std::shared_ptr<PointLightComponent>(new PointLightComponent());
+	light->setIntensity(10.0f);
+	light->setColor(1.0f, 1.0f, 1.0f);
 
 	mainCamera->addComponent("Transform", cameraTransform);
 	mainCamera->addComponent("Camera", camera);
 	mainCamera->addComponent("Control", control);
+	mainCamera->addComponent("PointLight", light);
 
 	//camera = new CameraPerspective(60.0f, settings::getAspectRatio(), 0.3f, 100.0f);                 // Perspective camera
 //	camera = new CameraOrthographic(glm::vec2(0.0), settings::getViewport() / 100.0f, 0.3f, 100.0f); // Orthographic camera
@@ -66,6 +71,7 @@ void TestApp::run()
 
 		//texture->bind(shader, "diffuse");
 		glFrontFace(GL_CCW);
+		light->loadUniforms(shader);
 		test.draw(shader);
 		//texture->unbind();
 

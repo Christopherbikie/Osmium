@@ -40,6 +40,8 @@ set(SOURCE_FILES
 		render/graphics/Shader.cpp
         render/graphics/Texture.cpp
         render/graphics/VAO.cpp
+		render/graphics/Light.cpp
+		render/graphics/PointLight.cpp
         util/Loader.cpp
 		render/entity/components/PointLight.cpp render/entity/components/PointLight.h)
 

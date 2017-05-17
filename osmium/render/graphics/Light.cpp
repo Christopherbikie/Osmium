@@ -19,12 +19,12 @@ namespace os
         return this->color;
     }
 
-    void setIntensity(float_t intensity)
+    void Light::setIntensity(float_t intensity)
     {
         this->intensity = intensity;
     }
 
-    float_t getIntensity()
+    float_t Light::getIntensity()
     {
         return this->intensity;
     }

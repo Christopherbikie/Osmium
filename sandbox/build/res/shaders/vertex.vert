@@ -6,6 +6,7 @@ layout (location = 2) in vec2 texCoord;
 
 out vec2 pass_texCoord;
 out vec3 pass_normal;
+out vec3 pass_position;
 
 
 uniform mat4 model;
@@ -17,4 +18,5 @@ void main()
     gl_Position = projection * view * model * vec4(position, 1.0f);
     pass_texCoord = texCoord;
     pass_normal = normal;
-}
+	pass_position = (model * vec4(position, 1.0f)).xyz;
+} 
