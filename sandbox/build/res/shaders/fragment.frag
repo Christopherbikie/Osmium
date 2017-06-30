@@ -14,6 +14,9 @@ struct Light {
 	vec3 position;
 	vec3 color;
 	float intensity;
+    float constant;
+    float linear;
+    float quadratic;
 };
 
 in vec2 pass_texCoord;
@@ -30,9 +33,11 @@ void main()
 {
     vec3 lightVector = light.position - pass_position;
     float lightStrength = clamp(dot(normalize(lightVector), normalize(pass_normal)), 0.0f, 1.0f);
+
     vec4 diffuse_color = texture(material.diffuse_map, pass_texCoord);
+    float lightDistance = length(lightVector);
 
-    vec3 lightDistanceSqr = pow(lightVector.x, 2) + pow(lightVector.y, 2) + pow(lightVector.z, 2);
+    float lightFalloff = 1 / (light.constant + light.linear * lightDistance + light.quadratic * lightDistance * lightDistance);
 
-    color = vec4(diffuse_color * lightStrength, 1.0f) / lightDistanceSqr * light.intensity * light.color;
+    color = vec4((diffuse_color.xyz * lightStrength * lightFalloff) * light.intensity * light.color, 1.0f);
 }
