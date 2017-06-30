@@ -403,3 +403,7 @@ __pycache__/
 # !tools/packages.config
 
 # End of https://www.gitignore.io/api/linux,windows,c++,cmake,clion,visualstudio
+
+cmake-build-debug/
+nbody/build/nbody
+sandbox/build/sandbox
