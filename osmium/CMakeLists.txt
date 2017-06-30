@@ -24,26 +24,27 @@ set(SOURCE_FILES
         app/AppManager.cpp
         app/App.cpp
         app/Settings.cpp
+		assets/TextureStore.cpp
 		input/Keyboard.cpp
 		input/Mouse.cpp
-        render/entity/Entity.cpp
+		render/entity/Entity.cpp
 		render/entity/components/BaseComponent.cpp
 		render/entity/components/Camera.cpp
 		render/entity/components/CameraOrthographic.cpp
 		render/entity/components/CameraPerspective.cpp
 		render/entity/components/MeshComponent.cpp
 		render/entity/components/PlayerControlFPV.cpp
+		render/entity/components/PointLight.cpp
 		render/entity/LogicalEntity.cpp
 		render/scene/SceneManager.cpp
 		render/mesh/Mesh.cpp
 		render/mesh/Material.cpp
 		render/graphics/Shader.cpp
-        render/graphics/Texture.cpp
-        render/graphics/VAO.cpp
+		render/graphics/Texture.cpp
+		render/graphics/VAO.cpp
 		render/graphics/Light.cpp
 		render/graphics/PointLight.cpp
-        util/Loader.cpp
-		render/entity/components/PointLight.cpp render/entity/components/PointLight.h)
+		util/Loader.cpp)
 
 add_library(${PROJECT_NAME} ${SOURCE_FILES} ${DEPS_SOURCES})
 target_link_libraries(${PROJECT_NAME} glfw ${GLFW_LIBRARIES} SOIL ${SOIL_LIBRARIES})

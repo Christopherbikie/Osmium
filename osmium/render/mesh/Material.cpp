@@ -1,4 +1,5 @@
 #include "Material.h"
+#include "../../assets/TextureStore.h"
 
 #include <GLFW/glfw3.h>
 
@@ -11,13 +12,9 @@ namespace os
 	// Albedo Map
 	void Material::setDiffuseMap(std::string diffuse)
 	{
-		diffuseMap = std::shared_ptr<Texture>(new Texture(diffuse));
+		diffuseMap = textureStore::get(diffuse);
 	}
 
-	void Material::setDiffuseMap(Texture diffuse)
-	{
-		diffuseMap = std::make_shared<Texture>(diffuse);
-	}
 	std::shared_ptr<Texture> Material::getDiffuseMap()
 	{
 		return this->diffuseMap;
@@ -26,11 +23,7 @@ namespace os
 	// Normal Map
 	void Material::setAmbientMap(std::string ambient)
 	{
-		ambientMap = std::shared_ptr<Texture>(new Texture(ambient));
-	}
-	void Material::setAmbientMap(Texture ambient)
-	{
-		ambientMap = std::make_shared<Texture>(ambient);
+		ambientMap = textureStore::get(ambient);
 	}
 	std::shared_ptr<Texture> Material::getAmbientMap()
 	{
@@ -41,11 +34,7 @@ namespace os
 	// Specular Map
 	void Material::setSpecularMap(std::string specular)
 	{
-		specularMap = std::shared_ptr<Texture>(new Texture(specular));
-	}
-	void Material::setSpecularMap(Texture specular)
-	{
-		specularMap = std::make_shared<Texture>(specular);
+		specularMap = textureStore::get(specular);
 	}
 	std::shared_ptr<Texture> Material::getSpecularMap()
 	{
@@ -55,11 +44,7 @@ namespace os
 	// Height Map
 	void Material::setSpecularHighlightsMap(std::string highlights)
 	{
-		specularHighlightsMap = std::shared_ptr<Texture>(new Texture(highlights));
-	}
-	void Material::setSpecularHighlightsMap(Texture highlights)
-	{
-		specularHighlightsMap = std::make_shared<Texture>(highlights);
+		specularHighlightsMap = textureStore::get(highlights);
 	}
 	std::shared_ptr<Texture> Material::getSpecularHighlightsMap()
 	{
