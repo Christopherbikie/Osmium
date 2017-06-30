@@ -187,6 +187,7 @@ namespace os
 		this->meshVAO->bind();
 		this->meshVAO->bindEBO();
 
+
 		for (auto& shape : this->parsedShapes)
 		{
 			shape.material.bind(shader);

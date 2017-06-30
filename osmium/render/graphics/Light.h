@@ -8,7 +8,7 @@ namespace os
     {
     protected:
         glm::vec3 color;
-        float_t intensity;
+		float_t intensity;
     public:
         void setColor(float_t r, float_t g, float_t b);
 

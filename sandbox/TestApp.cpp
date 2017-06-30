@@ -33,8 +33,11 @@ void TestApp::run()
 	auto camera = std::shared_ptr<CameraPerspective>(new CameraPerspective(cameraTransform, 60.0f, settings::getAspectRatio(), 0.3f, 100.0f));
 	auto control = std::shared_ptr<PlayerControlFPV>(new PlayerControlFPV(cameraTransform));
 	auto light = std::shared_ptr<PointLightComponent>(new PointLightComponent());
-	light->setIntensity(10.0f);
+	light->setIntensity(1.0f);
 	light->setColor(1.0f, 1.0f, 1.0f);
+
+	light->setLinear(0.14);
+	light->setQuadratic(0.07);
 
 	mainCamera->addComponent("Transform", cameraTransform);
 	mainCamera->addComponent("Camera", camera);
@@ -108,6 +111,11 @@ void TestApp::run()
 		if (frameNum % 2 == 0)
 			prevMouseV = (glm::dvec2) mouse::getMovement() * 1000.0 / delta;
 		ImGui::InputFloat2("Mouse velocity (pix/sec)", (GLfloat *) &prevMouseV);
+
+		if (ImGui::Button("Reload Shaders"))
+		{
+			os::reloadShaders();
+		}
 
 		ImGui::End();
 

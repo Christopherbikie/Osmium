@@ -27,6 +27,7 @@ namespace os
 	{
 		std::shared_ptr<VAO> meshVAO;
 		std::vector<Model::parsedshape> parsedShapes;
+		bool isMeshLoaded = false;
 	public:
 		Mesh();
 		Mesh(const char* objPath);
