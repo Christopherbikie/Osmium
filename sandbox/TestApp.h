@@ -21,8 +21,6 @@ public:
 
 private:
 	os::Shader *shader;
-	os::VAO *vao;
-	os::Texture *texture;
 	os::Scene world;
-	std::shared_ptr<os::Entity> mainCamera;
+	std::shared_ptr<os::LogicalEntity> mainCamera;
 };
