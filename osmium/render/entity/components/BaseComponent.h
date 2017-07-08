@@ -7,9 +7,9 @@ namespace os {
 	class BaseComponent
 	{
 	private:
-		std::shared_ptr<LogicalEntity> parent;
+		LogicalEntity *mParent;
 	public:
-		void setParent(LogicalEntity& parent);
+		void setParent(LogicalEntity *parent);
 		std::shared_ptr<LogicalEntity> getParent();
 	};
 }

@@ -9,7 +9,7 @@ namespace os
 	void LogicalEntity::addComponent(std::string componentIdentifier, std::shared_ptr<BaseComponent> componentPtr)
 	{
 		this->components.insert(std::pair<std::string, std::shared_ptr<BaseComponent>>(componentIdentifier, componentPtr));
-		componentPtr->setParent(*this);
+		componentPtr->setParent(this);
 	}
 
 	void LogicalEntity::removeComponent(const std::string& componentIdentifier)

@@ -3,13 +3,13 @@
 
 namespace os
 {
-	void BaseComponent::setParent(LogicalEntity& parent)
+	void BaseComponent::setParent(LogicalEntity *parent)
 	{
-		this->parent = std::make_shared<LogicalEntity>(parent);
+		this->mParent = parent;
 	}
 
 	std::shared_ptr<LogicalEntity> BaseComponent::getParent()
 	{
-		return this->parent;
+		return std::make_shared<LogicalEntity>(*this->mParent);
 	}
 }
