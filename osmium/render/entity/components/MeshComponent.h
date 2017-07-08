@@ -16,6 +16,8 @@ namespace os
 
 		void draw(Shader * shader);
 
+		const std::shared_ptr<Mesh> &get();
+
 	private:
 		std::shared_ptr<Mesh> mMesh;
 	};

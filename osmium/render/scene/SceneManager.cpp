@@ -22,12 +22,12 @@ namespace os
 		return returnptr;
 	}
 
-	worldList Scene::getWorldEnts()
+	worldList &Scene::getWorldEnts()
 	{
 		return worldEnts;
 	}
 
-	logicalList Scene::getLogicalEnts()
+	logicalList &Scene::getLogicalEnts()
 	{
 		return logicalEnts;
 	}

@@ -33,5 +33,7 @@ namespace os
 		Mesh(const char* objPath);
 		~Mesh();
 		void draw(Shader * shader);
+
+		std::vector<Model::parsedshape> &getParsedShapes();
 	};
 }

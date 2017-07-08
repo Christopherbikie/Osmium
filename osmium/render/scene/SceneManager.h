@@ -22,8 +22,8 @@ namespace os
 		virtual std::shared_ptr<Entity> addEntity(std::string tag = "");
 		virtual std::shared_ptr<LogicalEntity> addLogical(std::string tag = "");
 
-		virtual worldList getWorldEnts();
-		virtual logicalList getLogicalEnts();
+		virtual worldList &getWorldEnts();
+		virtual logicalList &getLogicalEnts();
 
 	private:
 		worldList worldEnts;

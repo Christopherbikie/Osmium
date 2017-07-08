@@ -204,4 +204,8 @@ namespace os
 	{
 	}
 
+	std::vector<Model::parsedshape> &Mesh::getParsedShapes()
+	{
+		return parsedShapes;
+	}
 }

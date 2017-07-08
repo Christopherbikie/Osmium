@@ -12,4 +12,9 @@ namespace os
 	{
 		mMesh->draw(shader);
 	}
+
+	const std::shared_ptr<Mesh> &MeshComponent::get()
+	{
+		return mMesh;
+	}
 }
