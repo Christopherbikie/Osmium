@@ -50,8 +50,13 @@ namespace os
 		return mPath;
 	}
 
-	glm::ivec2 Texture::getDimentions()
+	glm::ivec2 Texture::getDimensions()
 	{
 		return mDimensions;
+	}
+
+	int Texture::getSizeBytes()
+	{
+		return mDimensions.x * mDimensions.y * 3;
 	}
 }

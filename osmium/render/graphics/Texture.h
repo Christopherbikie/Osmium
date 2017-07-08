@@ -17,7 +17,8 @@ namespace os
 
 		GLuint getLocation();
 		std::string getPath();
-		glm::ivec2 getDimentions();
+		glm::ivec2 getDimensions();
+		int getSizeBytes();
 
 	private:
 		GLuint mLocation;
