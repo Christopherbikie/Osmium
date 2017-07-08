@@ -9,6 +9,8 @@ namespace os
 	{
 		std::shared_ptr<Texture> get(std::string path);
 
-		std::map<std::string, std::weak_ptr<Texture>> getTextureMap();
+		static std::map<std::string, std::weak_ptr<Texture>> getTextureMap();
+
+		void showDebugWindow();
 	}
 }

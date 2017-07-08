@@ -7,6 +7,7 @@
 #include <input/Mouse.h>
 #include <render/mesh/Mesh.h>
 #include <app/Settings.h>
+#include <assets/TextureStore.h>
 #include <render/entity/components/MeshComponent.h>
 #include "render/entity/components/PointLight.h"
 
@@ -67,6 +68,8 @@ void TestApp::run()
 
 	uint64_t frameNum = 0;
 	glm::vec2 prevMouseV = glm::vec2(0.0f);
+
+	bool showTextureStoreWindow = false;
 
 	while (!glfwWindowShouldClose(mWindow))
 	{
@@ -130,11 +133,16 @@ void TestApp::run()
 		ImGui::InputFloat2("Mouse velocity (pix/sec)", (GLfloat *) &prevMouseV);
 
 		if (ImGui::Button("Reload Shaders"))
-		{
 			os::reloadShaders();
-		}
+
+		ImGui::SameLine();
+		if (ImGui::Button("Toggle texture window"))
+			showTextureStoreWindow = !showTextureStoreWindow;
 
 		ImGui::End();
+
+		if (showTextureStoreWindow)
+			textureStore::showDebugWindow();
 
 		ImGui::Render();
 
