@@ -8,7 +8,7 @@ namespace os
 		mMesh = std::make_shared<Mesh>(objPath);
 	}
 
-	void MeshComponent::draw(Shader *shader)
+	void MeshComponent::draw(std::shared_ptr<Shader> shader)
 	{
 		mMesh->draw(shader);
 	}

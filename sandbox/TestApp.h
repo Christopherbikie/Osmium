@@ -20,7 +20,7 @@ public:
 	void pressKey(uint32_t key) override;
 
 private:
-	os::Shader *shader;
+	std::shared_ptr<os::Shader> shader;
 	os::Scene world;
 	std::shared_ptr<os::LogicalEntity> mainCamera;
 };

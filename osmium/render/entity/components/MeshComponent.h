@@ -14,7 +14,7 @@ namespace os
 	public:
 		MeshComponent(const char* objPath);
 
-		void draw(Shader * shader);
+		void draw(std::shared_ptr<Shader> shader);
 
 		const std::shared_ptr<Mesh> &get();
 

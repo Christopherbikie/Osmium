@@ -30,7 +30,7 @@ namespace os
 		float_t getQuadratic();
 
 
-        void loadUniforms(Shader* shader); // We're doing it here so we can have it parented to the transform
+        void loadUniforms(std::shared_ptr<Shader> shader); // We're doing it here so we can have it parented to the transform
     };
 }
 

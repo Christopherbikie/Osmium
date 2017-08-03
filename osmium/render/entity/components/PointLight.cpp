@@ -58,7 +58,7 @@ namespace os
 	}
 
 
-    void PointLightComponent::loadUniforms(Shader* shader) {
+    void PointLightComponent::loadUniforms(std::shared_ptr<Shader> shader) {
         std::shared_ptr<Transform<3, float_t>> transformComponent = std::static_pointer_cast<Transform<3, float_t>>(this->getParent()->getComponent("Transform"));
 
     	glm::vec3 pos;

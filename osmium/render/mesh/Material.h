@@ -3,7 +3,6 @@
 #include <string>
 #include "../graphics/Texture.h"
 #include "../graphics/Shader.h"
-//#include <tiny_obj_loader.h>
 #include <array>
 #include <memory>
 
@@ -46,7 +45,7 @@ namespace os
 		void setSpecularHighlightsMap(Texture highlights);
 		std::shared_ptr<Texture> getSpecularHighlightsMap();
 
-		void bind(Shader* shader);
+		void bind(std::shared_ptr<Shader> shader);
 		void unbind();
 
 		inline void setAlbedo(float_t r, float_t g, float_t b, float_t a)

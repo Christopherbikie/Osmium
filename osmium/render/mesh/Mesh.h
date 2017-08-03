@@ -32,7 +32,7 @@ namespace os
 		Mesh();
 		Mesh(const char* objPath);
 		~Mesh();
-		void draw(Shader * shader);
+		void draw(std::shared_ptr<Shader> shader);
 
 		std::vector<Model::parsedshape> &getParsedShapes();
 	};

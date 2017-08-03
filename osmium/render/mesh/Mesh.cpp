@@ -181,7 +181,7 @@ namespace os
 		shapeIndex++;
 	}
 
-	void Mesh::draw(Shader * shader)
+	void Mesh::draw(std::shared_ptr<Shader> shader)
 	{
 		shader->use();
 		this->meshVAO->bind();

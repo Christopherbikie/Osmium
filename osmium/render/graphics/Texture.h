@@ -2,6 +2,7 @@
 
 #include <string>
 #include <glad/glad.h>
+#include <memory>
 #include "Shader.h"
 
 namespace os
@@ -12,7 +13,7 @@ namespace os
 		Texture(std::string path);
 		~Texture();
 
-		void bind(Shader *shader, std::string uniformName) const;
+		void bind(std::shared_ptr<Shader> shader, std::string uniformName) const;
 		void unbind();
 
 		GLuint getLocation();

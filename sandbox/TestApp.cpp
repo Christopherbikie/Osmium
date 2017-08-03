@@ -16,7 +16,7 @@ using namespace os;
 
 void TestApp::run()
 {
-	shader = new os::Shader;
+	shader = std::make_shared<os::Shader>();
 	shader->addSource(VERTEX_SHADER, "res/shaders/vertex.vert");
 	shader->addSource(FRAGMENT_SHADER, "res/shaders/fragment.frag");
 	shader->link();
@@ -42,7 +42,6 @@ void TestApp::run()
 		mainCamera->addComponent("Light", light);
 	}
 
-	std::weak_ptr<BaseComponent> test;
 	{
 		auto sponza = world.addEntity("sponza");
 
@@ -152,8 +151,6 @@ void TestApp::run()
 
 		frameNum++;
 	}
-
-	delete shader;
 }
 
 void TestApp::windowResizeCallback(glm::vec2 dimensions)

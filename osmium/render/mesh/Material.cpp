@@ -52,7 +52,7 @@ namespace os
 	}
 
 	// Load Uniforms
-	void Material::bind(Shader* shader)
+	void Material::bind(std::shared_ptr<Shader> shader)
 	{
 		int32_t loadFlags = 0;
 

@@ -4,6 +4,7 @@
 #include <cmath>
 #include "BaseComponent.h"
 #include "Transform.h"
+#include "../../graphics/Shader.h"
 
 namespace os
 {
@@ -14,6 +15,8 @@ namespace os
 
 		glm::mat4 getProjMatrix();
 		glm::mat4 getViewMatrix();
+
+		void loadUniforms(std::shared_ptr<Shader> shader);
 
 		float_t getNear() const;
 		void setNear(float_t near);

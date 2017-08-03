@@ -27,7 +27,7 @@ namespace os
 		glDeleteTextures(1, &mLocation);
 	}
 
-	void Texture::bind(Shader *shader, std::string uniformName) const
+	void Texture::bind(std::shared_ptr<Shader> shader, std::string uniformName) const
 	{
 		GLint location = glGetUniformLocation(shader->getLocation(), uniformName.c_str());
 		glActiveTexture((GLenum) (GL_TEXTURE0 + location));
