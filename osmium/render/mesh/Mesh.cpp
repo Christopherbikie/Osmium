@@ -76,16 +76,29 @@ namespace os
 				linuxifyName(mat.ambient_texname);
 				newMaterial.setAmbientMap(basePath + mat.ambient_texname);
 			}
+			else
+			{
+				newMaterial.setAmbientMap("res/images/default.png");
+			}
 
 			if (mat.specular_texname.size() > 0)
 			{
 				linuxifyName(mat.specular_texname);
 				newMaterial.setSpecularMap(basePath + mat.specular_texname);
 			}
+			else
+			{
+				newMaterial.setSpecularMap("res/images/default.png");
+			}
+
 			if (mat.specular_highlight_texname.size() > 0)
 			{
 				linuxifyName(mat.specular_highlight_texname);
 				newMaterial.setSpecularHighlightsMap(basePath + mat.specular_highlight_texname);
+			}
+			else
+			{
+				newMaterial.setSpecularHighlightsMap("res/images/default.png");
 			}
 
 			parsedMaterials.push_back(newMaterial);

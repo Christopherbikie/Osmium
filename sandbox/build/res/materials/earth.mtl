@@ -1,0 +1,15 @@
+# Blender MTL File: 'None'
+# Material Count: 1
+
+newmtl None
+	Ns 16
+	Ni 1.5000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000
+	Ka 1 1 1
+	Kd 1 1 1
+	Ks 0.5 0.5 0.5
+	d 1
+	illum 2
+	map_Ks earth/specular4096.png
+	map_Kd earth/diffuse4096.jpg

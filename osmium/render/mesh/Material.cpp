@@ -59,25 +59,25 @@ namespace os
 		if (diffuseMap)
 		{
 			loadFlags = loadFlags | (1 << 0);
-			diffuseMap->bind(shader, "Material.diffuse_map");
+			diffuseMap->bind(shader, "material.diffuse_map");
 		}
 
 		if (ambientMap)
 		{
 			loadFlags = loadFlags | (1 << 1);
-			ambientMap->bind(shader, "Material.ambient_map");
+			ambientMap->bind(shader, "material.ambient_map");
 		}
 
 		if (specularMap)
 		{
 			loadFlags = loadFlags | (1 << 2);
-			specularMap->bind(shader, "Material.specular_map");
+			specularMap->bind(shader, "material.specular_map");
 		}
 
 		if (specularHighlightsMap)
 		{
 			loadFlags = loadFlags | (1 << 3);
-			specularHighlightsMap->bind(shader, "Material.highlight_map");
+			specularHighlightsMap->bind(shader, "material.highlight_map");
 		}
 
 		shader->loadUniform("Material.shader_parameters", loadFlags);

@@ -54,13 +54,13 @@ void TestApp::run()
 	}
 
 	{
-		auto cube = world.addEntity("cube");
+		auto earth = world.addEntity("earth");
 
 		auto transform = std::make_shared<Transform<3, double_t>>(Transform<3, double_t>());
-		cube->addComponent("Transform", transform);
+		earth->addComponent("Transform", transform);
 
-		auto mesh = std::make_shared<MeshComponent>("res/models/cube.obj");
-		cube->addComponent("Mesh", mesh);
+		auto mesh = std::make_shared<MeshComponent>("res/models/earth.obj");
+		earth->addComponent("Mesh", mesh);
 	}
 
 	keyboard::addKeyHandler(GLFW_KEY_ESCAPE, this);
@@ -77,15 +77,14 @@ void TestApp::run()
 
 		std::static_pointer_cast<PlayerControlFPV>(mainCamera->getComponent("Control"))->update((float_t) delta);
 
-		// Cube
+		// Render scene
 
 		shader->use();
 
 		double_t time = glfwGetTime();
 
 		auto camera = std::static_pointer_cast<CameraPerspective>(mainCamera->getComponent("Camera"));
-		shader->loadUniform("view", camera->getViewMatrix());
-		shader->loadUniform("projection", camera->getProjMatrix());
+		camera->loadUniforms(shader);
 
 		std::static_pointer_cast<PointLightComponent>(mainCamera->getComponent("Light"))->loadUniforms(shader);
 

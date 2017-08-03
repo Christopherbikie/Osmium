@@ -2,15 +2,16 @@
 
 struct Material
 {
-    sampler2D diffuse_map;
-    sampler2D ambient_map;
-    sampler2D specular_map;
-    sampler2D highlight_map;
+	sampler2D diffuse_map;
+	sampler2D ambient_map;
+	sampler2D specular_map;
+	sampler2D highlight_map;
 
-    int shader_parameters;
+	int shader_parameters;
 };
 
-struct Light {
+struct Light
+{
 	vec3 position;
 	vec3 color;
 	float intensity;
@@ -27,17 +28,27 @@ out vec4 color;
 
 uniform Material material;
 uniform Light light;
+uniform vec3 cameraPosition;
 
 
 void main()
 {
-    vec3 lightVector = light.position - pass_position;
-    float lightStrength = clamp(dot(normalize(lightVector), normalize(pass_normal)), 0.0f, 1.0f);
+	vec3 albedoColor = texture(material.diffuse_map, pass_texCoord).rgb;
+	vec3 specularColor = texture(material.specular_map, pass_texCoord).rgb;
 
-    vec4 diffuse_color = texture(material.diffuse_map, pass_texCoord);
-    float lightDistance = length(lightVector);
+	vec3 normal = normalize(pass_normal);
+	vec3 lightVector = light.position - pass_position;
+	vec3 lightDirection = normalize(lightVector);
+	float albedoIntensity = max(dot(normal, lightDirection), 0.0f);
+	vec3 albedo = albedoIntensity * light.color * albedoColor;
 
-    float lightFalloff = 1 / (light.constant + light.linear * lightDistance + light.quadratic * lightDistance * lightDistance);
+	vec3 viewDirection = normalize(cameraPosition - pass_position);
+	vec3 reflectDirection = reflect(-lightDirection, normal);
+	float specularIntensity = pow(max(dot(viewDirection, reflectDirection), 0.0f), 20);
+	vec3 specular = specularIntensity * light.color * specularColor;
 
-    color = vec4((diffuse_color.xyz * lightStrength * lightFalloff) * light.intensity * light.color, 1.0f);
+	float lightDistance = length(lightVector);
+	float lightFalloff = 1 / (light.constant + light.linear * lightDistance + light.quadratic * lightDistance * lightDistance);
+
+	color = vec4((albedo + specular) * lightFalloff * light.intensity * light.color, 1.0f);
 }
