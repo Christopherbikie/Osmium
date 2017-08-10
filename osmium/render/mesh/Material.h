@@ -6,15 +6,21 @@
 #include <array>
 #include <memory>
 
+#define DIFFUSE_BIT (1 << 0)
+#define AMBIENT_BIT (1 << 1)
+#define SPECULAR_BIT (1 << 2)
+#define SPECULAR_HIGHLIGHT_BIT (1 << 3)
+
+
 namespace os
 {
 	class Material
 	{
 	private:
-		std::array<float_t, 4> albedo;
-		std::array<float_t, 4> specular;
-		std::array<float_t, 4> transmittance;
-		std::array<float_t, 4> emission;
+		glm::vec4 albedo;
+		glm::vec3 specular;
+		glm::vec3 transmittance;
+		glm::vec3 emission;
 		float_t roughness;
 		float_t ior;
 		float_t transparency;
@@ -30,72 +36,61 @@ namespace os
 		Material();
 
 		void setDiffuseMap(std::string diffuse);
-		void setDiffuseMap(Texture diffuse);
 		std::shared_ptr<Texture> getDiffuseMap();
 
 		void setAmbientMap(std::string ambient);
-		void setAmbientMap(Texture ambient);
 		std::shared_ptr<Texture> getAmbientMap();
 
 		void setSpecularMap(std::string specular);
-		void setSpecularMap(Texture specular);
 		std::shared_ptr<Texture> getSpecularMap();
 		
 		void setSpecularHighlightsMap(std::string highlights);
-		void setSpecularHighlightsMap(Texture highlights);
 		std::shared_ptr<Texture> getSpecularHighlightsMap();
 
 		void bind(std::shared_ptr<Shader> shader);
 		void unbind();
 
-		inline void setAlbedo(float_t r, float_t g, float_t b, float_t a)
+		inline void setAlbedo(glm::vec4 &albedo)
 		{
-			this->albedo[0] = r;
-			this->albedo[1] = g;
-			this->albedo[2] = b;
-			this->albedo[4] = a;
+			Material::albedo = albedo;
 		}
 
-		inline const std::array<float_t, 4>& getAlbedo() const
+		inline void setAlbedo(glm::vec3 &albedo)
+		{
+			Material::albedo = glm::vec4(albedo, 1.0f);
+		}
+
+		inline const glm::vec4& getAlbedo() const
 		{
 			return this->albedo;
 		}
-		
-		inline void setSpecular(float_t r, float_t g, float_t b, float_t a)
-		{
-			this->specular[0] = r;
-			this->specular[1] = g;
-			this->specular[2] = b;
-			this->specular[4] = a;
-		}
 
-		inline const std::array<float_t, 4>& getSpecular() const
+		inline void setSpecular(glm::vec3 &specular)
+		{
+			Material::specular = specular;
+		}
+		
+		inline const glm::vec3& getSpecular() const
 		{
 			return this->specular;
 		}
 
-		inline void setTransmittance(float_t r, float_t g, float_t b, float_t a)
+		inline void setTransmittance(glm::vec3 &transmittance)
 		{
-			this->transmittance[0] = r;
-			this->transmittance[1] = g;
-			this->transmittance[2] = b;
-			this->transmittance[4] = a;
+			Material::transmittance = transmittance;
 		}
 
-		inline const std::array<float_t, 4>& getTransmittance() const
+		inline const glm::vec3& getTransmittance() const
 		{
 			return this->transmittance;
 		}
 
-		inline void setEmission(float_t r, float_t g, float_t b, float_t a)
+		inline void setEmission(glm::vec3 &emission)
 		{
-			this->emission[0] = r;
-			this->emission[1] = g;
-			this->emission[2] = b;
-			this->emission[4] = a;
+			Material::emission = emission;
 		}
 
-		inline const std::array<float_t, 4>& getEmission() const
+		inline const glm::vec3& getEmission() const
 		{
 			return this->emission;
 		}

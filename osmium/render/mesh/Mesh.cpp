@@ -56,19 +56,19 @@ namespace os
 
 		std::vector<Material> parsedMaterials;
 
-		// TODO: Optimise so that we don't have to load textures more than once
 		for (auto mat : materials)
 		{
 			Material newMaterial;
+
+			newMaterial.setAlbedo(*reinterpret_cast<glm::vec3 *>(mat.diffuse));
+			newMaterial.setSpecular(*reinterpret_cast<glm::vec3 *>(mat.specular));
+			newMaterial.setTransmittance(*reinterpret_cast<glm::vec3 *>(mat.transmittance));
+			newMaterial.setEmission(*reinterpret_cast<glm::vec3 *>(mat.emission));
 
 			if (mat.diffuse_texname.size() > 0)
 			{
 				linuxifyName(mat.diffuse_texname);
 				newMaterial.setDiffuseMap(basePath + mat.diffuse_texname);
-			}
-			else
-			{
-				newMaterial.setDiffuseMap("res/images/default.png");
 			}
 
 			if (mat.ambient_texname.size() > 0)
@@ -76,29 +76,17 @@ namespace os
 				linuxifyName(mat.ambient_texname);
 				newMaterial.setAmbientMap(basePath + mat.ambient_texname);
 			}
-			else
-			{
-				newMaterial.setAmbientMap("res/images/default.png");
-			}
 
 			if (mat.specular_texname.size() > 0)
 			{
 				linuxifyName(mat.specular_texname);
 				newMaterial.setSpecularMap(basePath + mat.specular_texname);
 			}
-			else
-			{
-				newMaterial.setSpecularMap("res/images/default.png");
-			}
 
 			if (mat.specular_highlight_texname.size() > 0)
 			{
 				linuxifyName(mat.specular_highlight_texname);
 				newMaterial.setSpecularHighlightsMap(basePath + mat.specular_highlight_texname);
-			}
-			else
-			{
-				newMaterial.setSpecularHighlightsMap("res/images/default.png");
 			}
 
 			parsedMaterials.push_back(newMaterial);

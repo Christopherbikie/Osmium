@@ -58,29 +58,33 @@ namespace os
 
 		if (diffuseMap)
 		{
-			loadFlags = loadFlags | (1 << 0);
+			loadFlags = loadFlags | DIFFUSE_BIT;
 			diffuseMap->bind(shader, "material.diffuse_map");
-		}
+		} else
+			shader->loadUniform("material.diffuse", albedo);
 
 		if (ambientMap)
 		{
-			loadFlags = loadFlags | (1 << 1);
+			loadFlags = loadFlags | AMBIENT_BIT;
 			ambientMap->bind(shader, "material.ambient_map");
-		}
+		} else
+			shader->loadUniform("material.ambient", albedo);
 
 		if (specularMap)
 		{
-			loadFlags = loadFlags | (1 << 2);
+			loadFlags = loadFlags | SPECULAR_BIT;
 			specularMap->bind(shader, "material.specular_map");
-		}
+		} else
+			shader->loadUniform("material.specular", specular);
 
 		if (specularHighlightsMap)
 		{
-			loadFlags = loadFlags | (1 << 3);
+			loadFlags = loadFlags | SPECULAR_HIGHLIGHT_BIT;
 			specularHighlightsMap->bind(shader, "material.highlight_map");
-		}
+		} else
+			shader->loadUniform("material.highlight", specular);
 
-		shader->loadUniform("Material.shader_parameters", loadFlags);
+		shader->loadUniform("material.shader_parameters", loadFlags);
 	}
 
 	void Material::unbind()

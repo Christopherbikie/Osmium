@@ -46,6 +46,7 @@ void TestApp::run()
 		auto sponza = world.addEntity("sponza");
 
 		auto transform = std::make_shared<Transform<3, double_t>>(Transform<3, double_t>());
+		transform->setPosition(glm::vec3(0, 0, 0.45f));
 		transform->setScale(glm::vec3(0.01f));
 		sponza->addComponent("Transform", transform);
 
@@ -61,6 +62,19 @@ void TestApp::run()
 
 		auto mesh = std::make_shared<MeshComponent>("res/models/earth.obj");
 		earth->addComponent("Mesh", mesh);
+	}
+
+	{
+		auto mitsuba = world.addEntity("mitsuba");
+
+		auto transform = std::make_shared<Transform<3, double_t>>(Transform<3, double_t>());
+		transform->setPosition(glm::vec3(-3, 0, 0));
+		transform->setRotation(glm::vec3(0, M_PI / 2, 0));
+		transform->setScale(glm::vec3(0.7f));
+		mitsuba->addComponent("Transform", transform);
+
+		auto mesh = std::make_shared<MeshComponent>("res/models/mitsuba-sphere.obj");
+		mitsuba->addComponent("Mesh", mesh);
 	}
 
 	keyboard::addKeyHandler(GLFW_KEY_ESCAPE, this);
