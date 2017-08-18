@@ -11,6 +11,7 @@ namespace os
 	{
 	public:
 		Texture(std::string path);
+		Texture(glm::ivec2 dimensions);
 		~Texture();
 
 		void bind(std::shared_ptr<Shader> shader, std::string uniformName) const;

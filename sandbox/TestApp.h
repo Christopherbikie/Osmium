@@ -24,3 +24,21 @@ private:
 	os::Scene world;
 	std::shared_ptr<os::LogicalEntity> mainCamera;
 };
+
+static float quadVertices[] = {
+	-1.0f, 1.0f,
+	-1.0f, -1.0f,
+	1.0f, -1.0f,
+	-1.0f, 1.0f,
+	1.0f, -1.0f,
+	1.0f, 1.0f,
+};
+
+static float quadTexCoords[] = {
+	 0.0f, 1.0f,
+	 0.0f, 0.0f,
+	 1.0f, 0.0f,
+	 0.0f, 1.0f,
+	 1.0f, 0.0f,
+	 1.0f, 1.0f,
+};

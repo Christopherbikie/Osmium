@@ -9,6 +9,7 @@
 #include <app/Settings.h>
 #include <assets/TextureStore.h>
 #include <render/entity/components/MeshComponent.h>
+#include <render/graphics/Framebuffer.h>
 #include "render/entity/components/PointLight.h"
 
 
@@ -20,6 +21,11 @@ void TestApp::run()
 	shader->addSource(VERTEX_SHADER, "res/shaders/vertex.vert");
 	shader->addSource(FRAGMENT_SHADER, "res/shaders/fragment.frag");
 	shader->link();
+
+	std::shared_ptr<Shader> screenShader = std::make_shared<Shader>();
+	screenShader->addSource(VERTEX_SHADER, "res/shaders/quad.vert");
+	screenShader->addSource(FRAGMENT_SHADER, "res/shaders/quad.frag");
+	screenShader->link();
 
 	world = Scene();
 
@@ -77,6 +83,17 @@ void TestApp::run()
 		mitsuba->addComponent("Mesh", mesh);
 	}
 
+	std::shared_ptr<Framebuffer> fb = std::make_shared<Framebuffer>();
+	size_t screenTextureIndex = fb->addTextureAttachment();
+	fb->addDepthStencilBuffer();
+	fb->setClearColour(glm::vec3(1.0f, 0.0f, 0.0f));
+	fb->checkComplete();
+	fb->bindDefault();
+
+	std::shared_ptr<VAO> quadVAO = std::make_shared<VAO>();
+	quadVAO->storeInBuffer(0, 2, 12, quadVertices);
+	quadVAO->storeInBuffer(1, 2, 12, quadTexCoords);
+
 	keyboard::addKeyHandler(GLFW_KEY_ESCAPE, this);
 
 	uint64_t frameNum = 0;
@@ -91,7 +108,10 @@ void TestApp::run()
 
 		std::static_pointer_cast<PlayerControlFPV>(mainCamera->getComponent("Control"))->update((float_t) delta);
 
-		// Render scene
+		// Render scene to framebuffer
+
+		fb->bind();
+		fb->clear();
 
 		shader->use();
 
@@ -157,6 +177,14 @@ void TestApp::run()
 			textureStore::showDebugWindow();
 
 		ImGui::Render();
+
+		// Render framebuffer to screen
+
+		fb->bindDefault();
+		screenShader->use();
+		quadVAO->bind();
+		fb->getTexture(screenTextureIndex)->bind(screenShader, "screenTexture");
+		glDrawArrays(GL_TRIANGLES, 0, 6);
 
 		// Swap buffers
 
