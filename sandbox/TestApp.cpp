@@ -64,6 +64,7 @@ void TestApp::run()
 		auto earth = world.addEntity("earth");
 
 		auto transform = std::make_shared<Transform<3, double_t>>(Transform<3, double_t>());
+		transform->setPosition(glm::vec3(2, 0, 0));
 		earth->addComponent("Transform", transform);
 
 		auto mesh = std::make_shared<MeshComponent>("res/models/earth.obj");
@@ -75,7 +76,6 @@ void TestApp::run()
 
 		auto transform = std::make_shared<Transform<3, double_t>>(Transform<3, double_t>());
 		transform->setPosition(glm::vec3(-3, 0, 0));
-		transform->setRotation(glm::vec3(0, M_PI / 2, 0));
 		transform->setScale(glm::vec3(0.7f));
 		mitsuba->addComponent("Transform", transform);
 
@@ -83,8 +83,8 @@ void TestApp::run()
 		mitsuba->addComponent("Mesh", mesh);
 	}
 
-	std::shared_ptr<Framebuffer> fb = std::make_shared<Framebuffer>();
-	size_t screenTextureIndex = fb->addTextureAttachment();
+	fb = framebufferManager::createFramebuffer();
+	screenTextureIndex = fb->addTextureAttachment();
 	fb->addDepthStencilBuffer();
 	fb->setClearColour(glm::vec3(1.0f, 0.0f, 0.0f));
 	fb->checkComplete();
@@ -100,6 +100,7 @@ void TestApp::run()
 	glm::vec2 prevMouseV = glm::vec2(0.0f);
 
 	bool showTextureStoreWindow = false;
+	bool showFramebufferWindow = false;
 
 	while (!glfwWindowShouldClose(mWindow))
 	{
@@ -111,7 +112,6 @@ void TestApp::run()
 		// Render scene to framebuffer
 
 		fb->bind();
-		fb->clear();
 
 		shader->use();
 
@@ -126,10 +126,22 @@ void TestApp::run()
 		{
 			if (std::get<0>(ent) == "Camera")
 				continue;
+			if (std::get<0>(ent) == "earth")
+				std::static_pointer_cast<Transform<3, double_t>>(std::get<1>(ent)->getComponent("Transform"))->setPosition(glm::vec3(sin(glfwGetTime()), 0, 0));
+			if (std::get<0>(ent) == "mitsuba")
+				std::static_pointer_cast<Transform<3, double_t>>(std::get<1>(ent)->getComponent("Transform"))->setRotation(glm::vec3(0, sin(glfwGetTime()), 0));
 			auto transform = std::static_pointer_cast<Transform<3, double_t>>(std::get<1>(ent)->getComponent("Transform"));
 			shader->loadUniform("model", transform->getMatrix());
 			std::static_pointer_cast<MeshComponent>(std::get<1>(ent)->getComponent("Mesh"))->draw(shader);
 		}
+
+		// Render framebuffer to screen
+
+		fb->bindDefault();
+		screenShader->use();
+		quadVAO->bind();
+		fb->getTexture(screenTextureIndex)->bind(screenShader, "screenTexture");
+		glDrawArrays(GL_TRIANGLES, 0, 6);
 
 		// GUI
 
@@ -167,24 +179,21 @@ void TestApp::run()
 		if (ImGui::Button("Reload Shaders"))
 			os::reloadShaders();
 
-		ImGui::SameLine();
 		if (ImGui::Button("Toggle texture window"))
 			showTextureStoreWindow = !showTextureStoreWindow;
+		ImGui::SameLine();
+		if (ImGui::Button("Toggle framebuffer window"))
+			showFramebufferWindow = !showFramebufferWindow;
 
 		ImGui::End();
 
 		if (showTextureStoreWindow)
 			textureStore::showDebugWindow();
+		if (showFramebufferWindow)
+			framebufferManager::showDebugWindow();
 
+		shader->use();
 		ImGui::Render();
-
-		// Render framebuffer to screen
-
-		fb->bindDefault();
-		screenShader->use();
-		quadVAO->bind();
-		fb->getTexture(screenTextureIndex)->bind(screenShader, "screenTexture");
-		glDrawArrays(GL_TRIANGLES, 0, 6);
 
 		// Swap buffers
 
@@ -198,6 +207,8 @@ void TestApp::windowResizeCallback(glm::vec2 dimensions)
 {
 	std::shared_ptr<CameraPerspective> camera = std::static_pointer_cast<CameraPerspective>(mainCamera->getComponent("Camera"));
 	camera->setAspectRatio(settings::getAspectRatio());
+	glm::ivec2 intDimensions((int) dimensions.x, (int) dimensions.y);
+	fb->resize(intDimensions);
 }
 
 void TestApp::pressKey(uint32_t key)

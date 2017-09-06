@@ -17,6 +17,8 @@ namespace os
 		void bind(std::shared_ptr<Shader> shader, std::string uniformName) const;
 		void unbind();
 
+		void resize(glm::ivec2 &dimensions);
+
 		GLuint getLocation();
 		std::string getPath();
 		glm::ivec2 getDimensions();

@@ -7,6 +7,7 @@
 #include <render/entity/Entity.h>
 #include <render/scene/SceneManager.h>
 #include <input/Keyboard.h>
+#include <render/graphics/Framebuffer.h>
 
 class GLFWwindow;
 
@@ -23,6 +24,8 @@ private:
 	std::shared_ptr<os::Shader> shader;
 	os::Scene world;
 	std::shared_ptr<os::LogicalEntity> mainCamera;
+	std::shared_ptr<os::Framebuffer> fb;
+	size_t screenTextureIndex;
 };
 
 static float quadVertices[] = {

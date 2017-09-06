@@ -10,6 +10,7 @@
 
 #include "../input/Mouse.h"
 #include "../input/Keyboard.h"
+#include "../render/graphics/Framebuffer.h"
 
 namespace os
 {
@@ -86,6 +87,7 @@ namespace os
 		glm::vec3 clearColour = settings::getClearColour();
 		glClearColor(clearColour.r, clearColour.g, clearColour.b, 1.0f);
 		glClear(settings::getClearBits());
+		framebufferManager::clearBuffers();
 
 		mouse::update();
 		glfwPollEvents();

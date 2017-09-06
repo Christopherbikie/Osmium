@@ -52,6 +52,13 @@ Texture::Texture(glm::ivec2 dimensions)
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
+	void Texture::resize(glm::ivec2 &dimensions)
+	{
+		mDimensions = dimensions;
+		glBindTexture(GL_TEXTURE_2D, mLocation);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, mDimensions.x, mDimensions.y, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
+	}
+
 	GLuint Texture::getLocation()
 	{
 		return mLocation;

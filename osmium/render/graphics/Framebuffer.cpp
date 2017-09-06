@@ -1,13 +1,11 @@
 #include <iostream>
+#include <imgui.h>
 #include "Framebuffer.h"
 
 namespace os
 {
-
-	Framebuffer::Framebuffer() : Framebuffer(settings::getViewport())
-	{ }
-
-	Framebuffer::Framebuffer(glm::ivec2 dimensions)
+	Framebuffer::Framebuffer(bool clearOnRefresh)
+			: mClearOnRefresh(clearOnRefresh)
 	{
 		glGenFramebuffers(1, &mLocation);
 	}
@@ -70,6 +68,30 @@ namespace os
 		return 0;
 	}
 
+	void Framebuffer::setClearOnRefresh(bool value)
+	{
+		mClearOnRefresh = value;
+	}
+
+	void Framebuffer::refresh()
+	{
+		if (mClearOnRefresh)
+			clear();
+	}
+
+	void Framebuffer::resize(glm::ivec2 &dimensions)
+	{
+		for (auto texture : mTextures)
+			texture->resize(dimensions);
+		if (mRBO)
+		{
+			glDeleteRenderbuffers(1, &mRBO);
+			this->addDepthStencilBuffer(dimensions);
+		}
+		checkComplete();
+		bindDefault();
+	}
+
 	void Framebuffer::setClearColour(glm::vec3 clearColour)
 	{
 		mClearColour = clearColour;
@@ -92,5 +114,76 @@ namespace os
 	uint32_t Framebuffer::getLocation() const
 	{
 		return mLocation;
+	}
+
+	std::vector<std::shared_ptr<Texture>> &Framebuffer::getTextures()
+	{
+		return mTextures;
+	}
+
+	namespace framebufferManager
+	{
+		std::vector<std::weak_ptr<Framebuffer>> framebuffers;
+
+		std::shared_ptr<Framebuffer> createFramebuffer(bool clearOnRefresh)
+		{
+			auto framebuffer = std::make_shared<Framebuffer>(clearOnRefresh);
+			std::weak_ptr<Framebuffer> wptr = framebuffer;
+			framebuffers.push_back(wptr);
+			return framebuffer;
+		}
+
+		void clearBuffers()
+		{
+			for (auto it = framebuffers.begin(); it < framebuffers.end(); it++)
+			{
+				if ((*it).expired())
+					framebuffers.erase(it);
+				else
+					(*it).lock()->refresh();
+			}
+		}
+
+		void showDebugWindow()
+		{
+			// Size is about right to view a framebuffer with 4 textures without scrolling or resizing
+			ImGui::SetNextWindowSize(ImVec2(800, 475), ImGuiSetCond_Once);
+			ImGui::Begin("Framebuffers");
+
+			float width = -1;
+
+			for (auto it = framebuffers.begin(); it < framebuffers.end(); it++)
+			{
+				int index = (int) (it - framebuffers.begin());
+				char bufferName[5];
+				sprintf(bufferName, "[%d]", index);
+				if (ImGui::TreeNodeEx(bufferName, ImGuiTreeNodeFlags_DefaultOpen))
+				{
+					if ((*it).expired())
+						framebuffers.erase(it);
+					else
+					{
+						bool nextOnNewLine = true;
+						for (auto texture : (*it).lock()->getTextures())
+						{
+							glm::vec2 size = texture->getDimensions();
+							if (width == -1)
+								width = ImGui::GetContentRegionAvailWidth() / 2 - ImGui::GetStyle().ItemSpacing.x;
+							float scale = width / size.x;
+							size *= scale;
+
+							ImGui::Image((void *) texture->getLocation(), ImVec2(size.x, size.y), ImVec2(0, 1),
+							             ImVec2(1, 0), ImColor(255, 255, 255, 255), ImColor(255, 255, 255, 128));
+							if (nextOnNewLine)
+								ImGui::SameLine();
+							nextOnNewLine = !nextOnNewLine;
+						}
+					}
+					ImGui::TreePop();
+				}
+			}
+
+			ImGui::End();
+		}
 	}
 }
