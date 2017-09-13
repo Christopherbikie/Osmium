@@ -27,7 +27,7 @@ namespace os
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
 
-	size_t Framebuffer::addTextureAttachment(glm::ivec2 dimensions)
+	size_t Framebuffer::addTextureAttachment(bool floatingPoint, glm::ivec2 dimensions)
 	{
 		GLint maxAttachments;
 		glGetIntegerv(GL_MAX_COLOR_ATTACHMENTS, &maxAttachments);
@@ -38,11 +38,16 @@ namespace os
 		}
 
 		bind();
-		std::shared_ptr<Texture> texture = std::make_shared<Texture>(dimensions);
+		std::shared_ptr<Texture> texture = std::make_shared<Texture>(dimensions, floatingPoint);
 		texture->unbind();
 		size_t index = mTextures.size();
 		mTextures.push_back(texture);
-		glFramebufferTexture2D(GL_FRAMEBUFFER, (GLenum) (GL_COLOR_ATTACHMENT0 + index), GL_TEXTURE_2D, texture->getLocation(), 0);
+		GLenum attachment = (GLenum) (GL_COLOR_ATTACHMENT0 + index);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, attachment, GL_TEXTURE_2D, texture->getLocation(), 0);
+
+		mDrawBuffers.push_back(attachment);
+		glDrawBuffers((GLsizei) (index + 1), &mDrawBuffers.front());
+
 		return index;
 	}
 

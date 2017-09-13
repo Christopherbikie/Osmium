@@ -22,13 +22,13 @@ namespace os
 		SOIL_free_image_data(image);
 	}
 
-Texture::Texture(glm::ivec2 dimensions)
+Texture::Texture(glm::ivec2 dimensions, bool floatingPoint)
 		: mDimensions(dimensions), mPath("n/a")
 	{
 		glGenTextures(1, &mLocation);
 		glBindTexture(GL_TEXTURE_2D, mLocation);
 
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, mDimensions.x, mDimensions.y, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
+		glTexImage2D(GL_TEXTURE_2D, 0, floatingPoint ? GL_RGB16F : GL_RGB, mDimensions.x, mDimensions.y, 0, GL_RGB, floatingPoint ? GL_FLOAT : GL_UNSIGNED_BYTE, nullptr);
 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);

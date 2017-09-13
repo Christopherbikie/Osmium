@@ -16,7 +16,7 @@ namespace os
 		void bind();
 		static void bindDefault();
 
-		size_t addTextureAttachment(glm::ivec2 dimensions = settings::getViewport());
+		size_t addTextureAttachment(bool floatingPoint = false, glm::ivec2 dimensions = settings::getViewport());
 		void addDepthStencilBuffer(glm::ivec2 dimensions = settings::getViewport());
 
 		int checkComplete();
@@ -38,6 +38,7 @@ namespace os
 	private:
 		uint32_t mLocation;
 		std::vector<std::shared_ptr<Texture>> mTextures;
+		std::vector<GLenum> mDrawBuffers;
 		uint32_t mRBO;
 
 		bool mClearOnRefresh;

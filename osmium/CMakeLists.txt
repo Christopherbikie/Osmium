@@ -40,6 +40,7 @@ set(SOURCE_FILES
 		render/mesh/Mesh.cpp
 		render/mesh/Material.cpp
 		render/graphics/Framebuffer.cpp
+		render/graphics/GBuffer.cpp
 		render/graphics/Shader.cpp
 		render/graphics/Texture.cpp
 		render/graphics/VAO.cpp

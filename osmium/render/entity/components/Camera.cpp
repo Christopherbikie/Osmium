@@ -63,10 +63,14 @@ namespace os
 		matrixCacheNeedsRefresh = true;
 	}
 
-	void Camera::loadUniforms(std::shared_ptr<Shader> shader)
+	void Camera::loadMatrices(std::shared_ptr<Shader> shader)
 	{
 		shader->loadUniform("view", getViewMatrix());
 		shader->loadUniform("projection", getProjMatrix());
+	}
+
+	void Camera::loadPosition(std::shared_ptr<Shader> shader)
+	{
 		shader->loadUniform("cameraPosition", mTransform->getPosition());
 	}
 }

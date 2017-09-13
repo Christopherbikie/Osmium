@@ -8,6 +8,7 @@
 #include <render/scene/SceneManager.h>
 #include <input/Keyboard.h>
 #include <render/graphics/Framebuffer.h>
+#include <render/graphics/GBuffer.h>
 
 class GLFWwindow;
 
@@ -21,27 +22,7 @@ public:
 	void pressKey(uint32_t key) override;
 
 private:
-	std::shared_ptr<os::Shader> shader;
 	os::Scene world;
 	std::shared_ptr<os::LogicalEntity> mainCamera;
-	std::shared_ptr<os::Framebuffer> fb;
-	size_t screenTextureIndex;
-};
-
-static float quadVertices[] = {
-	-1.0f, 1.0f,
-	-1.0f, -1.0f,
-	1.0f, -1.0f,
-	-1.0f, 1.0f,
-	1.0f, -1.0f,
-	1.0f, 1.0f,
-};
-
-static float quadTexCoords[] = {
-	 0.0f, 1.0f,
-	 0.0f, 0.0f,
-	 1.0f, 0.0f,
-	 0.0f, 1.0f,
-	 1.0f, 0.0f,
-	 1.0f, 1.0f,
+	std::shared_ptr<os::GBuffer> gBuffer;
 };

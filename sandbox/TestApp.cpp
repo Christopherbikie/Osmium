@@ -17,15 +17,17 @@ using namespace os;
 
 void TestApp::run()
 {
-	shader = std::make_shared<os::Shader>();
-	shader->addSource(VERTEX_SHADER, "res/shaders/vertex.vert");
-	shader->addSource(FRAGMENT_SHADER, "res/shaders/fragment.frag");
-	shader->link();
+	std::shared_ptr<Shader> geometryShader = std::make_shared<os::Shader>();
+	geometryShader->addSource(VERTEX_SHADER, "res/shaders/geometry.vert");
+	geometryShader->addSource(FRAGMENT_SHADER, "res/shaders/geometry.frag");
+	geometryShader->link();
 
-	std::shared_ptr<Shader> screenShader = std::make_shared<Shader>();
-	screenShader->addSource(VERTEX_SHADER, "res/shaders/quad.vert");
-	screenShader->addSource(FRAGMENT_SHADER, "res/shaders/quad.frag");
-	screenShader->link();
+	std::shared_ptr<Shader> lightShader = std::make_shared<Shader>();
+	lightShader->addSource(VERTEX_SHADER, "res/shaders/light.vert");
+	lightShader->addSource(FRAGMENT_SHADER, "res/shaders/light.frag");
+	lightShader->link();
+
+	gBuffer = std::make_shared<GBuffer>();
 
 	world = Scene();
 
@@ -83,17 +85,6 @@ void TestApp::run()
 		mitsuba->addComponent("Mesh", mesh);
 	}
 
-	fb = framebufferManager::createFramebuffer();
-	screenTextureIndex = fb->addTextureAttachment();
-	fb->addDepthStencilBuffer();
-	fb->setClearColour(glm::vec3(1.0f, 0.0f, 0.0f));
-	fb->checkComplete();
-	fb->bindDefault();
-
-	std::shared_ptr<VAO> quadVAO = std::make_shared<VAO>();
-	quadVAO->storeInBuffer(0, 2, 12, quadVertices);
-	quadVAO->storeInBuffer(1, 2, 12, quadTexCoords);
-
 	keyboard::addKeyHandler(GLFW_KEY_ESCAPE, this);
 
 	uint64_t frameNum = 0;
@@ -109,18 +100,15 @@ void TestApp::run()
 
 		std::static_pointer_cast<PlayerControlFPV>(mainCamera->getComponent("Control"))->update((float_t) delta);
 
-		// Render scene to framebuffer
+		// Render scene to GBuffer
 
-		fb->bind();
-
-		shader->use();
+		gBuffer->bindBuffer();
+		geometryShader->use();
 
 		double_t time = glfwGetTime();
 
 		auto camera = std::static_pointer_cast<CameraPerspective>(mainCamera->getComponent("Camera"));
-		camera->loadUniforms(shader);
-
-		std::static_pointer_cast<PointLightComponent>(mainCamera->getComponent("Light"))->loadUniforms(shader);
+		camera->loadMatrices(geometryShader);
 
 		for (worldEnt ent : world.getWorldEnts())
 		{
@@ -131,17 +119,17 @@ void TestApp::run()
 			if (std::get<0>(ent) == "mitsuba")
 				std::static_pointer_cast<Transform<3, double_t>>(std::get<1>(ent)->getComponent("Transform"))->setRotation(glm::vec3(0, sin(glfwGetTime()), 0));
 			auto transform = std::static_pointer_cast<Transform<3, double_t>>(std::get<1>(ent)->getComponent("Transform"));
-			shader->loadUniform("model", transform->getMatrix());
-			std::static_pointer_cast<MeshComponent>(std::get<1>(ent)->getComponent("Mesh"))->draw(shader);
+			geometryShader->loadUniform("model", transform->getMatrix());
+			std::static_pointer_cast<MeshComponent>(std::get<1>(ent)->getComponent("Mesh"))->draw(geometryShader);
 		}
 
-		// Render framebuffer to screen
+		// Run light pass and render to screen
 
-		fb->bindDefault();
-		screenShader->use();
-		quadVAO->bind();
-		fb->getTexture(screenTextureIndex)->bind(screenShader, "screenTexture");
-		glDrawArrays(GL_TRIANGLES, 0, 6);
+		Framebuffer::bindDefault();
+		lightShader->use();
+		std::static_pointer_cast<PointLightComponent>(mainCamera->getComponent("Light"))->loadUniforms(lightShader);
+		camera->loadPosition(lightShader);
+		gBuffer->runLightPass(lightShader);
 
 		// GUI
 
@@ -192,7 +180,7 @@ void TestApp::run()
 		if (showFramebufferWindow)
 			framebufferManager::showDebugWindow();
 
-		shader->use();
+		geometryShader->use();
 		ImGui::Render();
 
 		// Swap buffers
@@ -208,7 +196,7 @@ void TestApp::windowResizeCallback(glm::vec2 dimensions)
 	std::shared_ptr<CameraPerspective> camera = std::static_pointer_cast<CameraPerspective>(mainCamera->getComponent("Camera"));
 	camera->setAspectRatio(settings::getAspectRatio());
 	glm::ivec2 intDimensions((int) dimensions.x, (int) dimensions.y);
-	fb->resize(intDimensions);
+	gBuffer->resize(intDimensions);
 }
 
 void TestApp::pressKey(uint32_t key)

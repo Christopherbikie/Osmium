@@ -16,7 +16,8 @@ namespace os
 		glm::mat4 getProjMatrix();
 		glm::mat4 getViewMatrix();
 
-		void loadUniforms(std::shared_ptr<Shader> shader);
+		void loadMatrices(std::shared_ptr<Shader> shader);
+		void loadPosition(std::shared_ptr<Shader> shader);
 
 		float_t getNear() const;
 		void setNear(float_t near);
