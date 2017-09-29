@@ -28,5 +28,6 @@ namespace os
 		GLuint mLocation;
 		std::string mPath;
 		glm::ivec2 mDimensions;
+		bool mFloatingPoint;
 	};
 }

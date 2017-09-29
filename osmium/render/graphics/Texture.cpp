@@ -4,7 +4,7 @@
 namespace os
 {
 	Texture::Texture(std::string path)
-		: mPath(path)
+		: mPath(path), mFloatingPoint(false)
 	{
 		glGenTextures(1, &mLocation);
 		unsigned char *image = SOIL_load_image(mPath.c_str(), &mDimensions.x, &mDimensions.y, 0, SOIL_LOAD_RGB);
@@ -23,12 +23,12 @@ namespace os
 	}
 
 Texture::Texture(glm::ivec2 dimensions, bool floatingPoint)
-		: mDimensions(dimensions), mPath("n/a")
+		: mDimensions(dimensions), mPath("n/a"), mFloatingPoint(floatingPoint)
 	{
 		glGenTextures(1, &mLocation);
 		glBindTexture(GL_TEXTURE_2D, mLocation);
 
-		glTexImage2D(GL_TEXTURE_2D, 0, floatingPoint ? GL_RGB16F : GL_RGB, mDimensions.x, mDimensions.y, 0, GL_RGB, floatingPoint ? GL_FLOAT : GL_UNSIGNED_BYTE, nullptr);
+		glTexImage2D(GL_TEXTURE_2D, 0, mFloatingPoint ? GL_RGB16F : GL_RGB, mDimensions.x, mDimensions.y, 0, GL_RGB, mFloatingPoint ? GL_FLOAT : GL_UNSIGNED_BYTE, nullptr);
 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -56,7 +56,7 @@ Texture::Texture(glm::ivec2 dimensions, bool floatingPoint)
 	{
 		mDimensions = dimensions;
 		glBindTexture(GL_TEXTURE_2D, mLocation);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, mDimensions.x, mDimensions.y, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
+		glTexImage2D(GL_TEXTURE_2D, 0, mFloatingPoint ? GL_RGB16F : GL_RGB, mDimensions.x, mDimensions.y, 0, GL_RGB, mFloatingPoint ? GL_FLOAT : GL_UNSIGNED_BYTE, nullptr);
 	}
 
 	GLuint Texture::getLocation()
