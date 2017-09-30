@@ -394,7 +394,10 @@ void ImGui_ImplGlfwGL3_NewFrame()
     g_MouseWheel = 0.0f;
 
     // Hide OS mouse cursor if ImGui is drawing it
-    glfwSetInputMode(g_Window, GLFW_CURSOR, io.MouseDrawCursor ? GLFW_CURSOR_HIDDEN : GLFW_CURSOR_NORMAL);
+//    glfwSetInputMode(g_Window, GLFW_CURSOR, io.MouseDrawCursor ? GLFW_CURSOR_HIDDEN : GLFW_CURSOR_NORMAL);
+	// (modification) Doing this instead so it preserves the current state of GLFW_CURSOR if we're not using MouseDrawCursor
+	if (io.MouseDrawCursor && glfwGetInputMode(g_Window, GLFW_CURSOR) == GLFW_CURSOR_NORMAL)
+        glfwSetInputMode(g_Window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
     // Start the frame
     ImGui::NewFrame();
