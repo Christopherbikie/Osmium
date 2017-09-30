@@ -119,7 +119,7 @@ void TestApp::run()
 			if (std::get<0>(ent) == "mitsuba")
 				std::static_pointer_cast<Transform<3, double_t>>(std::get<1>(ent)->getComponent("Transform"))->setRotation(glm::vec3(0, sin(glfwGetTime()), 0));
 			auto transform = std::static_pointer_cast<Transform<3, double_t>>(std::get<1>(ent)->getComponent("Transform"));
-			geometryShader->loadUniform("model", transform->getMatrix());
+			transform->loadMatrices(geometryShader);
 			std::static_pointer_cast<MeshComponent>(std::get<1>(ent)->getComponent("Mesh"))->draw(geometryShader);
 		}
 

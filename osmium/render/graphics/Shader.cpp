@@ -177,6 +177,12 @@ namespace os
 		glUniform4f(uniformLocation, vector.x, vector.y, vector.z, vector.w);
 	}
 
+	void Shader::loadUniform(std::string name, glm::mat3 matrix) const
+	{
+		GLint uniformLocation = glGetUniformLocation(mProgram, name.c_str());
+		glUniformMatrix3fv(uniformLocation, 1, GL_FALSE, glm::value_ptr(matrix));
+	}
+
 	void Shader::loadUniform(std::string name, glm::mat4 matrix) const
 	{
 		GLint uniformLocation = glGetUniformLocation(mProgram, name.c_str());

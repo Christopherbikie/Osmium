@@ -1,11 +1,14 @@
 #pragma once
 
+#define GLM_ENABLE_EXPERIMENTAL
+
 #include "BaseComponent.h"
+#include "../../graphics/Shader.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/matrix_inverse.hpp>
 #include <cmath>
 #include <glm/vec3.hpp>
-#include "../../../util/GLMHelpers.h"
 #include <glm/gtx/quaternion.hpp>
 
 namespace os
@@ -21,7 +24,7 @@ namespace os
 			mScale = glm::vec<D, float>(1);
 		}
 
-		glm::mat<D + 1, D + 1, T> getMatrix()
+		void loadMatrices(std::shared_ptr<Shader> shader)
 		{
 			if (D == 2)
 			{
@@ -30,14 +33,17 @@ namespace os
 			}
 			else if (D == 3)
 			{
-				glm::mat4 trans;
+				glm::mat4 model;
 
-				trans = glm::translate(trans, (glm::vec3) mPosition);
+				model = glm::translate(model, (glm::vec3) mPosition);
 				if (mRotation.x != 0 || mRotation.y != 0 || mRotation.z != 0)
-					trans *= glm::toMat4(glm::quat(mRotation));
-				trans = glm::scale(trans, (glm::vec3) mScale);
+					model *= glm::toMat4(glm::quat(mRotation));
+				model = glm::scale(model, (glm::vec3) mScale);
 
-				return trans;
+				glm::mat3 normal = glm::inverseTranspose(glm::mat3(model));
+
+				shader->loadUniform("model", model);
+				shader->loadUniform("normalMat", normal);
 			}
 		}
 

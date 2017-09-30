@@ -11,6 +11,7 @@ out vec3 pass_normal;
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
+uniform mat3 normalMat;
 
 void main()
 {
@@ -18,5 +19,5 @@ void main()
 	gl_Position = projection * view * worldPosition;
 	pass_position = worldPosition.xyz;
 	pass_texCoord = texCoord;
-	pass_normal = normal;
+	pass_normal = normalMat * normal;
 }
