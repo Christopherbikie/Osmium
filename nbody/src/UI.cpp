@@ -21,7 +21,7 @@ namespace ui
 
 			if (camera.get() != nullptr)
 			{
-				auto cameraTransform = std::static_pointer_cast<os::Transform<3, float_t>>(camera->getComponent("Transform"));
+				auto cameraTransform = camera->getComponent<os::Transform<3, float_t>>("Transform");
 
 				glm::vec3 temp = cameraTransform->getPosition();
 				ImGui::InputFloat3("Camera position", (GLfloat *) &temp);
@@ -30,7 +30,7 @@ namespace ui
 				ImGui::InputFloat3("Camera rotation", (GLfloat *) &temp);
 				cameraTransform->setRotation(temp);
 
-				auto playerControl = std::static_pointer_cast<os::PlayerControlFPV>(camera->getComponent("Control"));
+				auto playerControl = camera->getComponent<os::PlayerControlFPV>("Control");
 
 				float_t tempFloat = playerControl->getMoveSpeed();
 				ImGui::SliderFloat("Move speed", &tempFloat, 10'000'000.0f, 10'000'000'000.0f, "%.3e m/s", 3);
@@ -73,7 +73,7 @@ namespace ui
 		{
 			worldList physicsEnts;
 			for (worldEnt ent : scene->getWorldEnts())
-				if (std::get<1>(ent)->getComponent("Physics") != nullptr)
+				if (std::get<1>(ent)->getComponent<PhysicsComponent<3, double_t>>("Physics") != nullptr)
 					physicsEnts.push_back(ent);
 
 			if (physicsEnts.size() == 0)
@@ -96,9 +96,9 @@ namespace ui
 			ImGui::SameLine();
 			ImGui::Text("%d: \"%s\"", entitySelectionIndex, std::get<0>(selectedEnt).c_str());
 
-			auto transform = std::static_pointer_cast<os::Transform<3, double_t>>(std::get<1>(selectedEnt)->getComponent("Transform"));
-			auto physics = std::static_pointer_cast<PhysicsComponent<3, double_t>>(std::get<1>(selectedEnt)->getComponent("Physics"));
-			auto path = std::static_pointer_cast<PathComponent<3, double_t>>(std::get<1>(selectedEnt)->getComponent("Path"));
+			auto transform = std::get<1>(selectedEnt)->getComponent<os::Transform<3, double_t>>("Transform");
+			auto physics = std::get<1>(selectedEnt)->getComponent<PhysicsComponent<3, double_t>>("Physics");
+			auto path = std::get<1>(selectedEnt)->getComponent<PathComponent<3, double_t>>("Path");
 
 			glm::vec3 tempvec = transform->getPosition();
 			ImGui::InputFloat3("Entity position (m)", (GLfloat *) &tempvec);

@@ -17,14 +17,6 @@ namespace os
 		this->components.erase(componentIdentifier);
 	}
 
-	std::shared_ptr<BaseComponent> LogicalEntity::getComponent(const std::string& componentIdentifier)
-	{
-		auto t = components.find(componentIdentifier);
-		if (t == components.end())
-			return nullptr;
-		return t->second;
-	}
-
 	void LogicalEntity::remove()
 	{
 		this->markedForDelete = true;

@@ -4,7 +4,7 @@
 - Make framebuffer resize callbacks use `glm::ivec2`
 
 ##ECS
-- Less tedious `getComponent()` method
+good
 
 ##Framebuffers
 - Fix occasional flickering on framebuffer resize
@@ -16,6 +16,9 @@ good
 good
 
 #Completed
+
+##ECS
+- Less tedious `getComponent()` method
 
 ##Framebuffers
 - Framebuffer manager

@@ -14,7 +14,14 @@ namespace os {
 		void addComponent(std::string, componentPtr);
 		void removeComponent(const std::string& componentIdentifier);
 		void removeAllComponents();
-		std::shared_ptr<BaseComponent> getComponent(const std::string& componentIdentifier);
+		template<typename T>
+		std::shared_ptr<T> getComponent(const std::string& componentIdentifier)
+		{
+			auto t = components.find(componentIdentifier);
+			if (t == components.end())
+				return nullptr;
+			return std::static_pointer_cast<T>(t->second);
+		}
 		
 		void remove();
 		bool shouldRemove();

@@ -52,7 +52,7 @@ void NBodyApp::run()
 	// Get list of entities to apply physics operations to
 	std::vector<std::shared_ptr<Entity>> physicsEnts;
 	for (worldEnt ent : scene->getWorldEnts())
-		if (std::get<1>(ent)->getComponent("Physics") != nullptr)
+		if (std::get<1>(ent)->getComponent<PhysicsComponent<3, double_t>>("Physics") != nullptr)
 			physicsEnts.push_back(std::get<1>(ent));
 
 	keyboard::addKeyHandler(GLFW_KEY_ESCAPE, this);
@@ -70,14 +70,14 @@ void NBodyApp::run()
 		timeState.scaledDelta = timeState.paused ? 0.0 : timeState.delta * timeState.deltaMultiplier / 1000.0;
 		if (timeState.reversed) timeState.scaledDelta *= -1;
 
-		auto control = std::static_pointer_cast<PlayerControlFPV>(cameraEntity->getComponent("Control"));
+		auto control = cameraEntity->getComponent<PlayerControlFPV>("Control");
 		control->update((float_t) timeState.delta);
 
 		// Do physics
 
 		// Set all forces to 0
 		for (auto &&ent : physicsEnts)
-			std::static_pointer_cast<PhysicsComponent<3, double_t>>(ent->getComponent("Physics"))->setForce(glm::dvec3(0));
+			ent->getComponent<PhysicsComponent<3, double_t>>("Physics")->setForce(glm::dvec3(0));
 
 		// Sum forces for each entity
 		for (auto i = physicsEnts.begin(); i != physicsEnts.end(); ++i)
@@ -85,12 +85,12 @@ void NBodyApp::run()
 			for (auto j = (i + 1); j != physicsEnts.end(); ++j)
 			{
 				std::shared_ptr<Entity> ent1 = *i;
-				auto phys1 = std::static_pointer_cast<PhysicsComponent<3, double_t>>(ent1->getComponent("Physics"));
-				auto trans1 = std::static_pointer_cast<Transform<3, double_t>>(ent1->getComponent("Transform"));
+				auto phys1 = ent1->getComponent<PhysicsComponent<3, double_t>>("Physics");
+				auto trans1 = ent1->getComponent<Transform<3, double_t>>("Transform");
 
 				std::shared_ptr<Entity> ent2 = *j;
-				auto phys2 = std::static_pointer_cast<PhysicsComponent<3, double_t>>(ent2->getComponent("Physics"));
-				auto trans2 = std::static_pointer_cast<Transform<3, double_t>>(ent2->getComponent("Transform"));
+				auto phys2 = ent2->getComponent<PhysicsComponent<3, double_t>>("Physics");
+				auto trans2 = ent2->getComponent<Transform<3, double_t>>("Transform");
 
 				glm::dvec3 force = physics::getGravityForce(phys1->getMass(), phys2->getMass(), trans1->getPosition(), trans2->getPosition(), exp);
 				phys1->getForce() += force;
@@ -101,8 +101,8 @@ void NBodyApp::run()
 		// Calculate acceleration, velocity and position for each entity
 		for (auto &&ent : physicsEnts)
 		{
-			auto phys = std::static_pointer_cast<PhysicsComponent<3, double_t>>(ent->getComponent("Physics"));
-			auto trans = std::static_pointer_cast<Transform<3, double_t>>(ent->getComponent("Transform"));
+			auto phys = ent->getComponent<PhysicsComponent<3, double_t>>("Physics");
+			auto trans = ent->getComponent<Transform<3, double_t>>("Transform");
 
 			glm::dvec3 acceleration = physics::getAcceleration(phys->getForce(), phys->getMass());
 			phys->setAcceleration(acceleration); // Not used for calculations, just saved to be displayed to user
@@ -113,7 +113,7 @@ void NBodyApp::run()
 		// Render entities
 
 		entityShader->use();
-		auto camera = std::static_pointer_cast<CameraPerspective>(cameraEntity->getComponent("Camera"));
+		auto camera = cameraEntity->getComponent<CameraPerspective>("Camera");
 		entityShader->loadUniform("view", camera->getViewMatrix());
 		entityShader->loadUniform("projection", camera->getProjMatrix());
 
@@ -121,9 +121,9 @@ void NBodyApp::run()
 		{
 			if (std::get<0>(ent) == "Camera")
 				continue;
-			auto transform = std::static_pointer_cast<Transform<3, double_t>>(std::get<1>(ent)->getComponent("Transform"));
-			entityShader->loadUniform("model", transform->getMatrix());
-			std::static_pointer_cast<MeshComponent>(std::get<1>(ent)->getComponent("Mesh"))->draw(entityShader.get());
+			auto transform = std::get<1>(ent)->getComponent<Transform<3, double_t>>("Transform");
+			transform->loadMatrices(entityShader);
+			std::get<1>(ent)->getComponent<MeshComponent>("Mesh")->draw(entityShader);
 		}
 
 		// Render paths / trails
@@ -134,7 +134,7 @@ void NBodyApp::run()
 
 		for (worldEnt ent : scene->getWorldEnts())
 		{
-			auto path = std::static_pointer_cast<PathComponent<3, double_t>>(std::get<1>(ent)->getComponent("Path"));
+			auto path = std::get<1>(ent)->getComponent<PathComponent<3, double_t>>("Path");
 			if (path == nullptr) continue;
 			path->updatePath();
 			path->renderPath(pathShader);
@@ -150,7 +150,7 @@ void NBodyApp::run()
 
 void NBodyApp::windowResizeCallback(glm::vec2 dimensions)
 {
-	auto camera = std::static_pointer_cast<CameraPerspective>(cameraEntity->getComponent("Camera"));
+	auto camera = cameraEntity->getComponent<CameraPerspective>("Camera");
 	camera->setAspectRatio(settings::getAspectRatio());
 }
 
@@ -162,6 +162,6 @@ void NBodyApp::pressKey(uint32_t key)
 
 void NBodyApp::scroll(glm::ivec2 offset)
 {
-	auto control = std::static_pointer_cast<PlayerControlFPV>(cameraEntity->getComponent("Control"));
+	auto control = cameraEntity->getComponent<PlayerControlFPV>("Control");
 	control->setMoveSpeed(control->getMoveSpeed() + control->getMoveSpeed() * 0.2f * offset.y);
 }

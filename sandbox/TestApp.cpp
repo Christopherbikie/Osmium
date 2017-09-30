@@ -98,7 +98,7 @@ void TestApp::run()
 		newFrame();
 		double_t delta = 1000.0f / ImGui::GetIO().Framerate;
 
-		std::static_pointer_cast<PlayerControlFPV>(mainCamera->getComponent("Control"))->update((float_t) delta);
+		mainCamera->getComponent<PlayerControlFPV>("Control")->update((float_t) delta);
 
 		// Render scene to GBuffer
 
@@ -107,7 +107,7 @@ void TestApp::run()
 
 		double_t time = glfwGetTime();
 
-		auto camera = std::static_pointer_cast<CameraPerspective>(mainCamera->getComponent("Camera"));
+		auto camera = mainCamera->getComponent<CameraPerspective>("Camera");
 		camera->loadMatrices(geometryShader);
 
 		for (worldEnt ent : world.getWorldEnts())
@@ -115,19 +115,19 @@ void TestApp::run()
 			if (std::get<0>(ent) == "Camera")
 				continue;
 			if (std::get<0>(ent) == "earth")
-				std::static_pointer_cast<Transform<3, double_t>>(std::get<1>(ent)->getComponent("Transform"))->setPosition(glm::vec3(sin(glfwGetTime()), 0, 0));
+				std::get<1>(ent)->getComponent<Transform<3, double_t>>("Transform")->setPosition(glm::vec3(sin(glfwGetTime()), 0, 0));
 			if (std::get<0>(ent) == "mitsuba")
-				std::static_pointer_cast<Transform<3, double_t>>(std::get<1>(ent)->getComponent("Transform"))->setRotation(glm::vec3(0, sin(glfwGetTime()), 0));
-			auto transform = std::static_pointer_cast<Transform<3, double_t>>(std::get<1>(ent)->getComponent("Transform"));
+				std::get<1>(ent)->getComponent<Transform<3, double_t>>("Transform")->setRotation(glm::vec3(0, sin(glfwGetTime()), 0));
+			auto transform = std::get<1>(ent)->getComponent<Transform<3, double_t>>("Transform");
 			transform->loadMatrices(geometryShader);
-			std::static_pointer_cast<MeshComponent>(std::get<1>(ent)->getComponent("Mesh"))->draw(geometryShader);
+			std::get<1>(ent)->getComponent<MeshComponent>("Mesh")->draw(geometryShader);
 		}
 
 		// Run light pass and render to screen
 
 		Framebuffer::bindDefault();
 		lightShader->use();
-		std::static_pointer_cast<PointLightComponent>(mainCamera->getComponent("Light"))->loadUniforms(lightShader);
+		mainCamera->getComponent<PointLightComponent>("Light")->loadUniforms(lightShader);
 		camera->loadPosition(lightShader);
 		gBuffer->runLightPass(lightShader);
 
@@ -150,7 +150,7 @@ void TestApp::run()
 
 		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", delta, ImGui::GetIO().Framerate);
 
-		auto cameraTransform = std::static_pointer_cast<os::Transform<3, float_t>>(mainCamera->getComponent("Transform"));
+		auto cameraTransform = mainCamera->getComponent<os::Transform<3, float_t>>("Transform");
 
 		glm::vec3 temp = cameraTransform->getPosition();
 		ImGui::InputFloat3("Camera position", (GLfloat *) &temp);
@@ -193,7 +193,7 @@ void TestApp::run()
 
 void TestApp::windowResizeCallback(glm::vec2 dimensions)
 {
-	std::shared_ptr<CameraPerspective> camera = std::static_pointer_cast<CameraPerspective>(mainCamera->getComponent("Camera"));
+	std::shared_ptr<CameraPerspective> camera = mainCamera->getComponent<CameraPerspective>("Camera");
 	camera->setAspectRatio(settings::getAspectRatio());
 	glm::ivec2 intDimensions((int) dimensions.x, (int) dimensions.y);
 	gBuffer->resize(intDimensions);
