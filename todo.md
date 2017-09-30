@@ -11,7 +11,7 @@
 - GBuffer
 
 ##Player
-- Limit vertical viewing angles
+- Fix movement when looking directly up or down
 
 ##Renderer
 - Load normal matrix uniform correctly adjusted for scaled objects [link](https://learnopengl.com/#!Lighting/Basic-Lighting)
@@ -23,3 +23,7 @@
 	- Clear automatically on each frame
 	- ImGUI browser/viewer
 	- Resize with viewport
+
+##Player
+- Limit vertical viewing angles
+- Fix mouse not hiding (issue with ImGUI)

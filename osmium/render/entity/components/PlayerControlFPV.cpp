@@ -3,7 +3,7 @@
 #include "../../../input/Mouse.h"
 
 #define _USE_MATH_DEFINES
-#include <math.h>
+#include <cmath>
 
 namespace os
 {
@@ -20,8 +20,14 @@ namespace os
 		// Rotation
 		if (mouse::isCaptured())
 		{
+			glm::vec3 &rot = mTransform->getRotation();
 			glm::vec2 mouseDiff = ((glm::vec2) mouse::getMovement()) * mSensitivity;
-			mTransform->getRotation() += glm::vec3(mouseDiff.y, mouseDiff.x, 0.0f);
+			rot += glm::vec3(mouseDiff.y, mouseDiff.x, 0.0f);
+
+			// Clamp pitch to ±π/2
+			rot.x = static_cast<float_t>(rot.x <= -M_PI_2 ? -M_PI_2 : (rot.x > M_PI_2 ? M_PI_2 : rot.x));
+			// Clamp yaw to ±π
+			rot.y = static_cast<float>(rot.y <= -M_PI ? rot.y + 2 * M_PI : rot.y > M_PI ? rot.y - 2 * M_PI : rot.y);
 		}
 
 		// Position
