@@ -33,15 +33,15 @@ namespace os
 		// Position
 		if (keyboard::isKeyDown(GLFW_KEY_W))
 		{
-			mTransform->getPosition().x += std::sin(mTransform->getRotation().y) * delta * mMoveSpeed;
+			mTransform->getPosition().x += std::sin(mTransform->getRotation().y) * std::cos(mTransform->getRotation().x) * delta * mMoveSpeed;
 			mTransform->getPosition().y -= std::sin(mTransform->getRotation().x) * delta * mMoveSpeed;
-			mTransform->getPosition().z -= std::cos(mTransform->getRotation().y) * delta * mMoveSpeed;
+			mTransform->getPosition().z -= std::cos(mTransform->getRotation().y) * std::cos(mTransform->getRotation().x) * delta * mMoveSpeed;
 		}
 		if (keyboard::isKeyDown(GLFW_KEY_S))
 		{
-			mTransform->getPosition().x -= std::sin(mTransform->getRotation().y) * delta * mMoveSpeed;
+			mTransform->getPosition().x -= std::sin(mTransform->getRotation().y) * std::cos(mTransform->getRotation().x) * delta * mMoveSpeed;
 			mTransform->getPosition().y += std::sin(mTransform->getRotation().x) * delta * mMoveSpeed;
-			mTransform->getPosition().z += std::cos(mTransform->getRotation().y) * delta * mMoveSpeed;
+			mTransform->getPosition().z += std::cos(mTransform->getRotation().y) * std::cos(mTransform->getRotation().x) * delta * mMoveSpeed;
 		}
 		if (keyboard::isKeyDown(GLFW_KEY_A))
 		{
