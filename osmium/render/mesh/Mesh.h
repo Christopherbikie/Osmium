@@ -30,7 +30,7 @@ namespace os
 		bool isMeshLoaded = false;
 	public:
 		Mesh();
-		Mesh(const char* objPath);
+		Mesh(std::string objPath);
 		~Mesh();
 		void draw(std::shared_ptr<Shader> shader);
 

@@ -12,7 +12,7 @@ namespace os
 	class MeshComponent : public BaseComponent
 	{
 	public:
-		MeshComponent(const char* objPath);
+		MeshComponent(std::string objPath);
 
 		void draw(std::shared_ptr<Shader> shader);
 

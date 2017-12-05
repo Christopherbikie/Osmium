@@ -3,7 +3,7 @@
 namespace os
 {
 
-	MeshComponent::MeshComponent(const char *objPath)
+	MeshComponent::MeshComponent(std::string objPath)
 	{
 		mMesh = std::make_shared<Mesh>(objPath);
 	}

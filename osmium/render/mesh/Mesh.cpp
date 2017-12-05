@@ -33,18 +33,19 @@ namespace os
 			name.replace(slashLocation, 1, "/");
 	}
 
-	Mesh::Mesh(const char * objPath)
+	Mesh::Mesh(std::string objPath)
 	{
 		this->meshVAO = std::make_shared<VAO>();
 		tinyobj::attrib_t attrib;
 		std::vector<tinyobj::shape_t> shapes;
 		std::vector<tinyobj::material_t> materials;
 
-		std::string basePath = "res/materials/";
+		unsigned long finalSlash = objPath.find_last_of("//");
+		std::string basePath = objPath.substr(0, finalSlash + 1);
 
 		std::string err;
 
-		tinyobj::LoadObj(&attrib, &shapes, &materials, &err, objPath, basePath.c_str(), true);
+		tinyobj::LoadObj(&attrib, &shapes, &materials, &err, objPath.c_str(), basePath.c_str(), true);
 		// correctedVertices has to have an individual vertex for each vertex-normal pair
 		// loop through the shapes and then loop through indices take the vertex index and the normal index as 'i'
 		// take attrib.vertices[i] and attrib.normals[i]
