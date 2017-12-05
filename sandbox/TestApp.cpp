@@ -58,7 +58,7 @@ void TestApp::run()
 		transform->setScale(glm::vec3(0.01f));
 		sponza->addComponent("Transform", transform);
 
-		auto mesh = std::make_shared<MeshComponent>("res/models/sponza.obj");
+		auto mesh = std::make_shared<MeshComponent>("res/models/sponza/sponza.obj");
 		sponza->addComponent("Mesh", mesh);
 	}
 
@@ -69,7 +69,7 @@ void TestApp::run()
 		transform->setPosition(glm::vec3(2, 0, 0));
 		earth->addComponent("Transform", transform);
 
-		auto mesh = std::make_shared<MeshComponent>("res/models/earth.obj");
+		auto mesh = std::make_shared<MeshComponent>("res/models/earth/earth.obj");
 		earth->addComponent("Mesh", mesh);
 	}
 
